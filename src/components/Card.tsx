@@ -1,12 +1,7 @@
 import React from "react";
 import { apiUrl, Service } from "@hex-labs/core";
 import axios from "axios";
-import {
-  Box,
-  Flex,
-  HStack,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Flex, Text, Divider } from "@chakra-ui/react";
 
 type Props = {
   name: string;
@@ -28,88 +23,46 @@ const Card: React.FC<Props> = ({
   return (
     <Box
       borderWidth="1px"
+      borderStyle="solid"
       rounded="lg"
       boxShadow="lg"
-      height="175px"
+      height="400px"
+      width="400px"
       fontWeight="bold"
       alignItems="center"
+      backgroundColor="white"
     >
       <Flex padding="2" flexDirection="column">
-        <HStack align="flex-end" justify="space-between">
-          <Text fontSize="xl">{name}</Text>
-          <Text fontSize="sm">{`${college}, ${year}`}</Text>
-        </HStack>
-        <Text fontSize="sm" fontWeight="semibold" mt="2">
-          {description}
+        <Text fontSize="3xl" fontWeight="bold">
+          {name}
         </Text>
         <Text fontSize="sm" mt="2">
+          {`${college}, ${year}`}
+        </Text>
+        <Divider mt="2" borderColor="gray.300" borderWidth="2px" />
+        <Box
+          mt="2"
+          bg="green.400" // Set background color to green
+          color="white" // Set text color to white
+          borderRadius="md" // Apply rounded edges
+          px="2" // Horizontal padding
+          py="1" // Vertical padding
+          display="inline-block" // Display as inline-block
+        >
+          <Text fontSize="sm">
+            <strong>Commitment Level:</strong> {commitmentLevel}
+          </Text>
+        </Box>
+        <Text fontSize="sm" mt="2" color="gray.500">
           <strong>Skills:</strong> {skills.join(", ")}
         </Text>
-        <Text fontSize="sm" mt="2">
-          <strong>Commitment Level:</strong> {commitmentLevel}
+        <Text fontSize="sm" mt="2" color="gray.500">
+          <strong>Description:</strong> {description}
         </Text>
+        <Divider mt="2" borderColor="gray.300" borderWidth="2px" />
       </Flex>
     </Box>
   );
 };
 
 export default Card;
-
-
-// import {
-//     Box,
-//     Flex,
-//     HStack,
-//     Text,
-//     Modal,
-//     ModalOverlay,
-//     ModalContent,
-//     ModalHeader,
-//     ModalBody,
-//     ModalCloseButton,
-//     Link,
-//     Button,
-//   } from "@chakra-ui/react";
-// import { apiUrl, Service } from "@hex-labs/core";
-// import axios from "axios";
-// import React, { useState } from "react";
-// import { unstable_renderSubtreeIntoContainer } from "react-dom";
-
-// type Props = {
-//   user: any;
-// };
-
-
-// const ProfileCard: React.FC<Props> = (props: Props) => {
-  
-
-//   return (
-//     <>
-//     <Box
-//     borderWidth="1px"
-//     rounded="lg"
-//     boxShadow="lg"
-//     height="175px"
-//     fontWeight="bold"
-//     alignItems="center"
-//     >
-//       <Flex padding="2" flexDirection="column">
-//         <HStack align="flex-end" justify="space-between">
-//           <Text fontSize='xl'>{`${props.user.name.first} ${props.user.name.last}`}</Text>
-//         </HStack>
-//         <Text
-//           fontSize="sm"
-//           fontWeight="semibold"
-//           justifyContent="justify"
-//           mt="2"
-//         >
-//           {props.user.email}
-//         </Text>
-//       </Flex>
-//     </Box>
-//     </>
-//   );
-// };
-
-  
-//   export default ProfileCard;
