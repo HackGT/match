@@ -10,7 +10,12 @@ const AppOutline: React.FC = () => {
     <>
       <Navigation />
       <Display />
-      <Card name={"Dummy"} description={"Quite dumb"} college={"GT"} year={"Sophomore"} skills={["literate", "not smart"]} commitmentLevel={"little to none"} />
+      <Card 
+        name={"Dummy"} 
+        description={"Quite dumb"} 
+        college={"GT"} year={"Sophomore"} 
+        skills={["literate", "not smart", "tset", "testing again", "another test"]} 
+        commitmentLevel={"Some"} />
       <Footer />
     </>
   );
