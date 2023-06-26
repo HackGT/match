@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { apiUrl, Service } from "@hex-labs/core";
 import axios from "axios";
 import { Box, Flex, Text, Divider, Tag } from "@chakra-ui/react";
@@ -20,6 +20,24 @@ const Card: React.FC<Props> = ({
   skills,
   commitmentLevel,
 }: Props) => {
+
+  const [users, setUsers] = useState([]);
+
+  const fetchData = async () => {
+    try {
+      const requestUrl = apiUrl(Service.USERS, "/users");
+      const response = await axios.get(requestUrl);
+      const data = response?.data?.profiles;
+      setUsers(data);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <Box
       borderWidth="1px"
