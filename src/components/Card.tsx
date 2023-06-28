@@ -21,22 +21,32 @@ const Card: React.FC<Props> = ({
   commitmentLevel,
 }: Props) => {
 
-  const [users, setUsers] = useState([]);
-
-  const fetchData = async () => {
-    try {
-      const requestUrl = apiUrl(Service.USERS, "/users");
-      const response = await axios.get(requestUrl);
-      const data = response?.data?.profiles;
-      setUsers(data);
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    }
-  };
+  const [users, setUsers] = useState<any[]>([]);
 
   useEffect(() => {
-    fetchData();
+    const getUsers = async () => {
+      const requestUrl = apiUrl(Service.USERS, "/users");
+      const data = await axios.get(requestUrl);
+      console.log(data);
+      setUsers(data?.data?.profiles);
+    };
+    getUsers();
   }, []);
+
+  // const fetchData = async () => {
+  //   try {
+  //     const requestUrl = apiUrl(Service.USERS, "/users");
+  //     const response = await axios.get(requestUrl);
+  //     const data = response?.data?.profiles;
+  //     setUsers(data);
+  //   } catch (error) {
+  //     console.error("Error fetching user data:", error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
   return (
     <Box
