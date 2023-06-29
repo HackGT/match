@@ -27,7 +27,6 @@ const Card: React.FC<Props> = ({
     const getUsers = async () => {
       const requestUrl = apiUrl(Service.USERS, "/users");
       const data = await axios.get(requestUrl);
-      console.log(data);
       setUsers(data?.data?.profiles);
     };
     getUsers();
