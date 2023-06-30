@@ -6,7 +6,7 @@ import { Box, Flex, Text, Divider, Tag } from "@chakra-ui/react";
 type Props = {
   name: string;
   description: string;
-  college: string;
+  school: string;
   year: string;
   skills: string[];
   commitmentLevel: string;
@@ -15,7 +15,7 @@ type Props = {
 const Card: React.FC<Props> = ({
   name,
   description,
-  college,
+  school,
   year,
   skills,
   commitmentLevel,
@@ -31,21 +31,6 @@ const Card: React.FC<Props> = ({
     };
     getUsers();
   }, []);
-
-  // const fetchData = async () => {
-  //   try {
-  //     const requestUrl = apiUrl(Service.USERS, "/users");
-  //     const response = await axios.get(requestUrl);
-  //     const data = response?.data?.profiles;
-  //     setUsers(data);
-  //   } catch (error) {
-  //     console.error("Error fetching user data:", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
 
   return (
     <Box
@@ -65,7 +50,7 @@ const Card: React.FC<Props> = ({
           {name}
         </Text>
         <Text fontSize="sm" mb="2">
-          {`${college}, ${year}`}
+          {`${school}, ${year}`}
         </Text>
         <Divider borderColor="gray.300" borderWidth="2px" mb="2" />
         <Flex alignItems="center" flexWrap="wrap" mb="2">
@@ -75,8 +60,8 @@ const Card: React.FC<Props> = ({
             borderRadius="md"
             px="2"
             py="1"
-            mr="2" // Add margin right for spacing
-            mb="2" // Add margin bottom for vertical spacing
+            mr="2" 
+            mb="2" 
           >
             <Text fontSize="sm">
               <strong>Commitment:</strong> {commitmentLevel}
@@ -90,8 +75,8 @@ const Card: React.FC<Props> = ({
               borderRadius="md"
               px="2"
               py="1"
-              mr="2" // Add margin right for spacing
-              mb="2" // Add margin bottom for vertical spacing
+              mr="2" 
+              mb="2" 
             >
               <Text fontSize="sm">{skill}</Text>
             </Tag>

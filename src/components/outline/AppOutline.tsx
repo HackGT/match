@@ -7,31 +7,33 @@ import Display from "./Display";
 import Card from "../Card";
 
 const AppOutline: React.FC = () => {
-
-
   const [users, setUsers] = useState<any[]>([]);
-  const [firstName, setFirstName] = useState("");
-  //expect object, when u set the data of the object, then querry
 
+  // HACKGTX ID: 647fee51768e521dc8ef88e0
+  // HACKGT 9 ID: 62d9ed68d0a69b88c06bdfb2
 
   useEffect(() => {
     const getUsers = async () => {
       const requestUrl = apiUrl(Service.USERS, "/users");
       const data = await axios.get(requestUrl);
-      console.log(data?.data?.profiles[0]?.name?.first);
-      setFirstName(data?.data?.profiles[0]?.name);
+      const hexUrl = apiUrl(Service.HEXATHONS, "hexathon-users/647fee51768e521dc8ef88e0/users");
+      const hexData = await axios.get(hexUrl);
+      console.log(data);
       setUsers(data?.data?.profiles);
     };
     getUsers();
   }, []);
 
+  // Temporarily resorting to regular users since hackGTX has 0 users
+  // Also temporarily using the first user in the lists of users 
+  // However, the API calls were made above to help
   const userData = {
-    name: users[0]?.name?.first,
-    description: "Quite dumb",
-    college: "GT",
-    year: "Sophomore",
-    skills: ["literate", "not smart", "test", "testing again", "another test"],
-    commitmentLevel: "A lot",
+    name: users[0]?.name?.first + " " + users[0]?.name?.last, 
+    description: "TEMPORARY DESCRIPTION",
+    school: "TEMPORARY SCHOOL",
+    year: "TEMPORARY YEAR",
+    skills: ["test", "test", "test", "testing again", "another test"],
+    commitmentLevel: "test",  //planning on dealing with commitment type and background conditionals
   };
 
   return (
