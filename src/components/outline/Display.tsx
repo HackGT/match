@@ -2,7 +2,7 @@ import React from "react";
 import { Card, Flex, Input, MenuList, MenuItem, InputGroup, Text, Icon, Button, Menu, Box, SimpleGrid, MenuButton, CardBody, InputRightElement } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 
-const Display: React.FC = () => {
+const Display: React.FC = (Props: any) => {
   return (
     <Card width={"96%"} height={"795px"} top={"50px"} left={"2%"} boxShadow={"0px 4px 8px 0px rgba(33, 36, 41, 0.1)"}>
       <CardBody>
@@ -62,17 +62,15 @@ const Display: React.FC = () => {
           <Text fontSize={32} fontFamily="Roobert">HackGT 9 Team Formation</Text>
           <br></br>
           <SimpleGrid columns={4} spacing={"50px"}>
-            <Box bg="blue" width={"100%"} height="150px"></Box>
-            <Box bg="blue" width={"100%"} height="150px"></Box>
-            <Box bg="blue" width={"100%"} height="150px"></Box>
-            <Box bg="blue" width={"100%"} height="150px"></Box>
-            <Box bg="blue" width={"100%"} height="150px"></Box>
-            <Box bg="blue" width={"100%"} height="150px"></Box>
+            {props.users.map((user) => {
+              <Card {...user} />
+            }},
           </SimpleGrid>
         </Box>
       </CardBody>
     </Card>
   );
 };
-
+//card component in lines 64 ish
+// 
 export default Display;

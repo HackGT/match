@@ -27,20 +27,19 @@ const AppOutline: React.FC = () => {
   // Temporarily resorting to regular users since hackGTX has 0 users
   // Also temporarily using the first user in the lists of users 
   // However, the API calls were made above to help
-  const userData = {
+  const userData = [{
     name: users[0]?.name?.first + " " + users[0]?.name?.last, 
-    description: "TEMPORARY DESCRIPTIONasdfj ;alskdjf;asdjflk a;sdf j;laksdj;flkajs;dlkf ja;sdlkf j;askdf kasd;f",
+    description: "TEMPORARY DESCRIPTION",
     school: "TEMPORARY SCHOOL",
     year: "TEMPORARY YEAR",
     skills: ["test", "test", "test", "testing again", "another test"],
     commitmentLevel: "test",  //planning on dealing with commitment type and background conditionals
-  };
+  }];
 
   return (
     <>
       <Navigation />
-      <Display />
-      <Card {...userData} />
+      <Display users={userData} />
       <Footer />
     </>
   );
