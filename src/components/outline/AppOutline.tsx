@@ -18,7 +18,7 @@ const AppOutline: React.FC = () => {
       const data = await axios.get(requestUrl);
       const hexUrl = apiUrl(Service.HEXATHONS, "hexathon-users/647fee51768e521dc8ef88e0/users");
       const hexData = await axios.get(hexUrl);
-      console.log(data);
+      console.log(hexData);
       setUsers(data?.data?.profiles);
     };
     getUsers();
@@ -29,7 +29,7 @@ const AppOutline: React.FC = () => {
   // However, the API calls were made above to help
   const userData = {
     name: users[0]?.name?.first + " " + users[0]?.name?.last, 
-    description: "TEMPORARY DESCRIPTION",
+    description: "TEMPORARY DESCRIPTIONasdfj ;alskdjf;asdjflk a;sdf j;laksdj;flkajs;dlkf ja;sdlkf j;askdf kasd;f",
     school: "TEMPORARY SCHOOL",
     year: "TEMPORARY YEAR",
     skills: ["test", "test", "test", "testing again", "another test"],
