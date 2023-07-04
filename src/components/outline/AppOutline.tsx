@@ -1,6 +1,6 @@
 import { Footer } from "@hex-labs/core";
-import { Flex } from "@chakra-ui/react";
 import React from "react";
+import { Flex } from "@chakra-ui/react";
 
 import Navigation from "./Navigation";
 import Display from "./Display";
@@ -11,8 +11,8 @@ const AppOutline: React.FC = () => {
     <>
       <Navigation />
       <Flex>
-      <Filters />
-      <Display />
+        <Filters />
+        <Display />
       </Flex>
       <Footer />
     </>
