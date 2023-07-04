@@ -1,36 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { apiUrl, Service } from "@hex-labs/core";
-import axios from "axios";
+import React from "react";
 import { Box, Flex, Text, Divider, Tag } from "@chakra-ui/react";
+import { UserCardType } from "../types/UserCard";
 
-type Props = {
-  name: string;
-  description: string;
-  school: string;
-  year: string;
-  skills: string[];
-  commitmentLevel: string;
-};
-
-const Card: React.FC<Props> = ({
-  name,
-  description,
-  school,
-  year,
-  skills,
-  commitmentLevel,
-}: Props) => {
-
-  const [users, setUsers] = useState<any[]>([]);
-
-  useEffect(() => {
-    const getUsers = async () => {
-      const requestUrl = apiUrl(Service.USERS, "/users");
-      const data = await axios.get(requestUrl);
-      setUsers(data?.data?.profiles);
-    };
-    getUsers();
-  }, []);
+const UserCard: React.FC<UserCardType> = (props: UserCardType) => {
+  const { name, profile } = props;
+  const { description, school, year, skills, commitmentLevel } = profile;
 
   return (
     <Box
@@ -60,8 +34,8 @@ const Card: React.FC<Props> = ({
             borderRadius="md"
             px="2"
             py="1"
-            mr="2" 
-            mb="2" 
+            mr="2"
+            mb="2"
           >
             <Text fontSize="sm">
               <strong>Commitment:</strong> {commitmentLevel}
@@ -75,8 +49,8 @@ const Card: React.FC<Props> = ({
               borderRadius="md"
               px="2"
               py="1"
-              mr="2" 
-              mb="2" 
+              mr="2"
+              mb="2"
             >
               <Text fontSize="sm">{skill}</Text>
             </Tag>
@@ -91,4 +65,4 @@ const Card: React.FC<Props> = ({
   );
 };
 
-export default Card;
+export default UserCard;
