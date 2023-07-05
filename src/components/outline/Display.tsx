@@ -1,22 +1,58 @@
 import React from "react";
-import { Card, Flex, Input, MenuList, MenuItem, InputGroup, Text, Icon, Button, Menu, Box, SimpleGrid, MenuButton, CardBody, InputRightElement } from "@chakra-ui/react";
+import {
+  Card,
+  Flex,
+  Input,
+  MenuList,
+  MenuItem,
+  InputGroup,
+  Text,
+  Menu,
+  Box,
+  SimpleGrid,
+  MenuButton,
+  CardBody,
+  InputRightElement,
+} from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import { UserCardType, UserListType } from "../../types/UserCard";
+import UserCard from "../UserCard";
 
-const Display: React.FC = () => {
+const Display: React.FC<UserListType> = ({ users }: any) => {
+  console.log("users lol: ", users);
   return (
-    <Card width={"96%"} height={"795px"} top={"50px"} left={"2%"} boxShadow={"0px 4px 8px 0px rgba(33, 36, 41, 0.1)"}>
+    <Card
+      width={"96%"}
+      height={"795px"}
+      top={"50px"}
+      left={"2%"}
+      boxShadow={"0px 4px 8px 0px rgba(33, 36, 41, 0.1)"}
+    >
       <CardBody>
         <Flex>
-          <Input placeholder="Search" width={"256px"} height={"40px"} borderRadius={"4px"} border={"1px solid rgba(123, 105, 236, 1)"}/>
+          <Input
+            placeholder="Search"
+            width={"256px"}
+            height={"40px"}
+            borderRadius={"4px"}
+            border={"1px solid rgba(123, 105, 236, 1)"}
+          />
           <Menu>
             <Box display="flex" alignItems="center">
               <InputGroup padding={"0px 0px 0px 10px"}>
-                <Input placeholder="Skills" padding={"0px 0px 0px 10px"} width={"256px"} height={"40px"} borderRadius={"4px"} border={"1px solid rgba(123, 105, 236, 1)"}/>
-                  <InputRightElement>
-                    <MenuButton height="40px" display="flex" alignItems="center">
-                      <ChevronDownIcon />
-                    </MenuButton>
-                  </InputRightElement>
+                <Input
+                  placeholder="Skills"
+                  padding={"0px 0px 0px 10px"}
+                  width={"256px"}
+                  height={"40px"}
+                  borderRadius={"4px"}
+                  border={"1px solid rgba(123, 105, 236, 1)"}
+                />
+                <InputRightElement>
+                  <MenuButton height="40px" display="flex" alignItems="center">
+                    <ChevronDownIcon />
+                  </MenuButton>
+                </InputRightElement>
               </InputGroup>
             </Box>
             <MenuList>
@@ -27,12 +63,19 @@ const Display: React.FC = () => {
           <Menu>
             <Box display="flex" alignItems="center">
               <InputGroup padding={"0px 0px 0px 10px"}>
-                <Input placeholder="Track" padding={"0px 0px 0px 10px"} width={"256px"} height={"40px"} borderRadius={"4px"} border={"1px solid rgba(123, 105, 236, 1)"}/>
-                  <InputRightElement>
-                    <MenuButton height="40px" display="flex" alignItems="center">
-                      <ChevronDownIcon />
-                    </MenuButton>
-                  </InputRightElement>
+                <Input
+                  placeholder="Track"
+                  padding={"0px 0px 0px 10px"}
+                  width={"256px"}
+                  height={"40px"}
+                  borderRadius={"4px"}
+                  border={"1px solid rgba(123, 105, 236, 1)"}
+                />
+                <InputRightElement>
+                  <MenuButton height="40px" display="flex" alignItems="center">
+                    <ChevronDownIcon />
+                  </MenuButton>
+                </InputRightElement>
               </InputGroup>
             </Box>
             <MenuList>
@@ -43,12 +86,19 @@ const Display: React.FC = () => {
           <Menu>
             <Box display="flex" alignItems="center">
               <InputGroup padding={"0px 0px 0px 10px"}>
-                <Input placeholder="Schools" padding={"0px 0px 0px 10px"} width={"256px"} height={"40px"} borderRadius={"4px"} border={"1px solid rgba(123, 105, 236, 1)"}/>
-                  <InputRightElement>
-                    <MenuButton height="40px" display="flex" alignItems="center">
-                      <ChevronDownIcon />
-                    </MenuButton>
-                  </InputRightElement>
+                <Input
+                  placeholder="Schools"
+                  padding={"0px 0px 0px 10px"}
+                  width={"256px"}
+                  height={"40px"}
+                  borderRadius={"4px"}
+                  border={"1px solid rgba(123, 105, 236, 1)"}
+                />
+                <InputRightElement>
+                  <MenuButton height="40px" display="flex" alignItems="center">
+                    <ChevronDownIcon />
+                  </MenuButton>
+                </InputRightElement>
               </InputGroup>
             </Box>
             <MenuList>
@@ -59,15 +109,14 @@ const Display: React.FC = () => {
         </Flex>
         <br></br>
         <Box paddingLeft={"5%"} paddingRight={"5%"}>
-          <Text fontSize={32} fontFamily="Roobert">HackGT 9 Team Formation</Text>
+          <Text fontSize={32} fontFamily="Roobert">
+            HackGT 9 Team Formation
+          </Text>
           <br></br>
           <SimpleGrid columns={4} spacing={"50px"}>
-            <Box bg="blue" width={"100%"} height="150px"></Box>
-            <Box bg="blue" width={"100%"} height="150px"></Box>
-            <Box bg="blue" width={"100%"} height="150px"></Box>
-            <Box bg="blue" width={"100%"} height="150px"></Box>
-            <Box bg="blue" width={"100%"} height="150px"></Box>
-            <Box bg="blue" width={"100%"} height="150px"></Box>
+            {users.map((user: UserCardType) => (
+              <UserCard {...user} />
+            ))}
           </SimpleGrid>
         </Box>
       </CardBody>
