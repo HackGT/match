@@ -12,28 +12,30 @@ const AppOutline: React.FC = () => {
 
   // TODO: We need to get the hexathon users from the API
 
-  // useEffect(() => {
-  //   const getUsers = async () => {
-  //     const hexUrl = apiUrl(Service.HEXATHONS, "hexathon-users/647fee51768e521dc8ef88e0/users");
-  //     const hexData = await axios.get(hexUrl);
-  //     console.log(hexData);
-  //     setUsers(data?.data?.profiles);
-  //   };
-  //   getUsers();
-  // }, []);
+  // 647fee51768e521dc8ef88e0
 
-  // Temporarily resorting to regular users since hackGTX has 0 users
-  // However, the API calls were made above to help
+  useEffect(() => {
+    const getUsers = async () => {
+      const hexUrl = apiUrl(Service.HEXATHONS, "/hexathon-users/647fee51768e521dc8ef88e0/users");
+      const hexData = await axios.get(hexUrl);
+      const tempUrl = apiUrl(Service.USERS, "/users/TL9Yj7E1fOSNND1kemfXIOA7B5m1");
+      const tempData = await axios.get(tempUrl);
+      console.log(tempData);
+      setUsers(hexData?.data?.hexathonUsers);
+    };
+    getUsers();
+  }, []);
+
   const userData: UserCardType[] = [
     {
-      name: "TEMPORARY USER",
+      name: users[0]?.name,
       profile: {
         school: "TEMPORARY SCHOOL",
         year: "TEMPORARY YEAR",
         major: "TEMPORARY MAJOR",
         description: "TEMPORARY DESCRIPTION",
-        skills: ["test", "test", "test", "testing again", "another test"],
-        commitmentLevel: "test", //planning on dealing with commitment type and background conditionals
+        skills: users[0]?.profile?.skills,
+        commitmentLevel: "test", 
       }
     },
   ];

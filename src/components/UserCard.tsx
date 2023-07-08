@@ -44,7 +44,7 @@ const UserCard: React.FC<UserCardType> = (props: UserCardType) => {
           {skills.map((skill) => (
             <Tag
               key={skill}
-              bg="green.400"
+              bg="blue.400"
               color="white"
               borderRadius="md"
               px="2"
