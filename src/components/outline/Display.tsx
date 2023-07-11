@@ -1,25 +1,64 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   Card,
   Flex,
   Input,
-  MenuList,
-  MenuItem,
-  InputGroup,
   Text,
-  Menu,
   Box,
   SimpleGrid,
-  MenuButton,
   CardBody,
-  InputRightElement,
 } from "@chakra-ui/react";
-import { ChevronDownIcon } from "@chakra-ui/icons";
+import { GroupBase, OptionBase, Select } from "chakra-react-select";
 import { UserCardType, UserListType } from "../../types/UserCard";
 import UserCard from "../UserCard";
 
 const Display: React.FC<UserListType> = ({ users }: any) => {
-  console.log("users lol: ", users);
+  const title = process.env.REACT_APP_EVENT_NAME;
+  // options must match -> https://github.com/HackGT/api/blob/main/common/src/commonDefinitions.ts
+  const skillOptions = useMemo(
+    () => [
+      {
+        label: "Skill 1",
+        value: "SKILL_1",
+      },
+      {
+        label: "Skill 2",
+        value: "SKILL_2",
+      },
+    ],
+    []
+  );
+  const trackOptions = useMemo(
+    () => [
+      {
+        label: "Track 1",
+        value: "TRACK_1",
+      },
+      {
+        label: "Track 2",
+        value: "TRACK_2",
+      },
+    ],
+    []
+  );
+  const schoolOptions = useMemo(
+    () => [
+      {
+        label: "School 1",
+        value: "SCHOOL_1",
+      },
+      {
+        label: "School 2",
+        value: "SCHOOL_2",
+      },
+    ],
+    []
+  );
+  interface GroupOption extends OptionBase {
+    label: string;
+    value: string;
+  }
+
   return (
     <Card
       width={"96%"}
@@ -30,93 +69,52 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
     >
       <CardBody>
         <Flex>
-          <Input
-            placeholder="Search"
-            width={"256px"}
-            height={"40px"}
-            borderRadius={"4px"}
-            border={"1px solid rgba(123, 105, 236, 1)"}
-          />
-          <Menu>
-            <Box display="flex" alignItems="center">
-              <InputGroup padding={"0px 0px 0px 10px"}>
-                <Input
-                  placeholder="Skills"
-                  padding={"0px 0px 0px 10px"}
-                  width={"256px"}
-                  height={"40px"}
-                  borderRadius={"4px"}
-                  border={"1px solid rgba(123, 105, 236, 1)"}
-                />
-                <InputRightElement>
-                  <MenuButton height="40px" display="flex" alignItems="center">
-                    <ChevronDownIcon />
-                  </MenuButton>
-                </InputRightElement>
-              </InputGroup>
-            </Box>
-            <MenuList>
-              <MenuItem>Skill 1</MenuItem>
-              <MenuItem>Skill 2</MenuItem>
-            </MenuList>
-          </Menu>
-          <Menu>
-            <Box display="flex" alignItems="center">
-              <InputGroup padding={"0px 0px 0px 10px"}>
-                <Input
-                  placeholder="Track"
-                  padding={"0px 0px 0px 10px"}
-                  width={"256px"}
-                  height={"40px"}
-                  borderRadius={"4px"}
-                  border={"1px solid rgba(123, 105, 236, 1)"}
-                />
-                <InputRightElement>
-                  <MenuButton height="40px" display="flex" alignItems="center">
-                    <ChevronDownIcon />
-                  </MenuButton>
-                </InputRightElement>
-              </InputGroup>
-            </Box>
-            <MenuList>
-              <MenuItem>Track 1</MenuItem>
-              <MenuItem>Track 2</MenuItem>
-            </MenuList>
-          </Menu>
-          <Menu>
-            <Box display="flex" alignItems="center">
-              <InputGroup padding={"0px 0px 0px 10px"}>
-                <Input
-                  placeholder="Schools"
-                  padding={"0px 0px 0px 10px"}
-                  width={"256px"}
-                  height={"40px"}
-                  borderRadius={"4px"}
-                  border={"1px solid rgba(123, 105, 236, 1)"}
-                />
-                <InputRightElement>
-                  <MenuButton height="40px" display="flex" alignItems="center">
-                    <ChevronDownIcon />
-                  </MenuButton>
-                </InputRightElement>
-              </InputGroup>
-            </Box>
-            <MenuList>
-              <MenuItem>School 1</MenuItem>
-              <MenuItem>School 2</MenuItem>
-            </MenuList>
-          </Menu>
+          <Input placeholder="Search" width={"256px"} height={"40px"} />
+
+          <Box pl="10px" w="256px">
+            <Select<GroupOption, true, GroupBase<GroupOption>>
+              isMulti
+              options={skillOptions}
+              placeholder="Skills"
+              closeMenuOnSelect={false}
+              selectedOptionStyle="check"
+              hideSelectedOptions={false}
+              useBasicStyles
+            />
+          </Box>
+
+          <Box pl="10px" w="256px">
+            <Select<GroupOption, true, GroupBase<GroupOption>>
+              isMulti
+              options={trackOptions}
+              placeholder="Tracks"
+              closeMenuOnSelect={false}
+              selectedOptionStyle="check"
+              hideSelectedOptions={false}
+              useBasicStyles
+            />
+          </Box>
+
+          <Box pl="10px" w="256px">
+            <Select<GroupOption, true, GroupBase<GroupOption>>
+              isMulti
+              options={schoolOptions}
+              placeholder="Schools"
+              closeMenuOnSelect={false}
+              selectedOptionStyle="check"
+              hideSelectedOptions={false}
+              useBasicStyles
+            />
+          </Box>
         </Flex>
         <br></br>
         <Box paddingLeft={"5%"} paddingRight={"5%"}>
-          <Text fontSize={32} fontFamily="Roobert">
-            HackGT 9 Team Formation
-          </Text>
+          <Text fontSize={32}>{title}</Text>
           <br></br>
           <SimpleGrid columns={4} spacing={"50px"}>
             {users.map((user: UserCardType) => (
-              <UserCard {...user} />
-            ))}
+                <UserCard {...user} />
+              ))}
           </SimpleGrid>
         </Box>
       </CardBody>
