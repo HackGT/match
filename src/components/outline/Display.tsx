@@ -9,9 +9,12 @@ import {
   CardBody,
 } from "@chakra-ui/react";
 import { GroupBase, OptionBase, Select } from "chakra-react-select";
+import { UserCardType, UserListType } from "../../types/UserCard";
+import UserCard from "../UserCard";
 
-const Display: React.FC = () => {
+const Display: React.FC<UserListType> = ({ users }: any) => {
   const title = process.env.REACT_APP_EVENT_NAME;
+  // options must match -> https://github.com/HackGT/api/blob/main/common/src/commonDefinitions.ts
   const skillOptions = useMemo(
     () => [
       {
@@ -108,7 +111,11 @@ const Display: React.FC = () => {
         <Box paddingLeft={"5%"} paddingRight={"5%"}>
           <Text fontSize={32}>{title}</Text>
           <br></br>
-          <SimpleGrid columns={4} spacing={"50px"}></SimpleGrid>
+          <SimpleGrid columns={4} spacing={"50px"}>
+            {users.map((user: UserCardType) => (
+                <UserCard {...user} />
+              ))}
+          </SimpleGrid>
         </Box>
       </CardBody>
     </Card>
