@@ -11,20 +11,29 @@ import {
 import { GroupBase, OptionBase, Select } from "chakra-react-select";
 import { UserCardType, UserListType } from "../../types/UserCard";
 import UserCard from "../UserCard";
+import { skills } from "../../definitions/Skills";
 
 const Display: React.FC<UserListType> = ({ users }: any) => {
   const title = process.env.REACT_APP_EVENT_NAME;
   // options must match -> https://github.com/HackGT/api/blob/main/common/src/commonDefinitions.ts
   const skillOptions = useMemo(
+    () => skills,
+    []
+  );
+  const commitmentOptions = useMemo(
     () => [
       {
-        label: "Skill 1",
-        value: "SKILL_1",
+        label: "Low",
+        value: "low",
       },
       {
-        label: "Skill 2",
-        value: "SKILL_2",
+        label: "Medium",
+        value: "medium",
       },
+      {
+        label: "High",
+        value: "high",
+      }
     ],
     []
   );
@@ -76,6 +85,18 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
               isMulti
               options={skillOptions}
               placeholder="Skills"
+              closeMenuOnSelect={false}
+              selectedOptionStyle="check"
+              hideSelectedOptions={false}
+              useBasicStyles
+            />
+          </Box>
+
+          <Box pl="10px" w="256px">
+            <Select<GroupOption, true, GroupBase<GroupOption>>
+              isMulti
+              options={commitmentOptions}
+              placeholder="Commitment Level"
               closeMenuOnSelect={false}
               selectedOptionStyle="check"
               hideSelectedOptions={false}
