@@ -27,6 +27,7 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
     GroupOption[]
   >([]);
   const [skillSelectValue, setSkillSelectValue] = useState<GroupOption[]>([]);
+  const [schoolSelectValue, setSchoolSelectValue] = useState<GroupOption[]>([]);
 
   const skillOptions = useMemo(
     () => Skills, 
@@ -65,7 +66,12 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
         searchParams.get("skill")?.includes(skill.value)
       )
     );
-  }, [searchParams, commitmentOptions, skillOptions]);
+    setSchoolSelectValue(
+      schoolOptions.filter((school) =>
+        searchParams.get("school")?.includes(school.value)
+      )
+    );
+  }, [searchParams, commitmentOptions, skillOptions, schoolOptions]);
 
   const filteredProfiles = users.filter((user: UserCardType) => {
     if (
@@ -81,6 +87,15 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
       skillSelectValue.length > 0 &&
       !user.profile.skills.some((skill) =>
         skillSelectValue.some((option) => option.value === skill)
+      )
+    ) {
+      return false;
+    }
+
+    if (
+      schoolSelectValue.length > 0 &&
+      !schoolSelectValue.find(
+        (option) => option.value === user.profile.school
       )
     ) {
       return false;
@@ -196,6 +211,28 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
               selectedOptionStyle="check"
               hideSelectedOptions={false}
               useBasicStyles
+              onChange={(e: any) => {
+                const schools: GroupOption[] = [];
+                if (e !== null) {
+                  e.forEach((val: any) => {
+                    schools.push({
+                      label: val.label,
+                      value: val.value,
+                    });
+                  });
+
+                  const newParams = createSearchParams(searchParams);
+
+                  schools.length > 0
+                    ? newParams.set(
+                        "school",
+                        schools.map((school) => school.value).join()
+                      )
+                    : newParams.delete("school");
+
+                  setSearchParams(newParams);
+                }
+              }}
             />
           </Box>
         </Flex>

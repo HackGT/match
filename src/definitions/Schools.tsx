@@ -1,7 +1,6 @@
 type schoolType = { value: string, label: string };
 
 const Schools : schoolType[] = [
-    { value: "Georgia Institute of Technology", label: "Georgia Institute of Technology" },
     { value: "Abraham Baldwin Agricultural College", label: "Abraham Baldwin Agricultural College" },
     { value: "Albany Medical College", label: "Albany Medical College" },
     { value: "Albany State University", label: "Albany State University" },
@@ -58,6 +57,7 @@ const Schools : schoolType[] = [
     { value: "Georgia College & State University", label: "Georgia College & State University" },
     { value: "Georgia Gwinnett College", label: "Georgia Gwinnett College" },
     { value: "Georgia Highlands College", label: "Georgia Highlands College" },
+    { value: "Georgia Institute of Technology", label: "Georgia Institute of Technology" },
     { value: "Georgia Southern University", label: "Georgia Southern University" },
     { value: "Georgia Southwestern State University", label: "Georgia Southwestern State University" },
     { value: "Georgia State University", label: "Georgia State University" },
