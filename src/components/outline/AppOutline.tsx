@@ -25,12 +25,12 @@ const AppOutline: React.FC = () => {
   // Temporarily resorting to regular users since hackGTX has 0 users
   // However, the API calls were made above to help
   const userData: UserCardType[] = [
-    { name: "User 1", profile: {matched: true, school: "Georgia Institute of Technology", year: "3rd year", major: "Computer Science", description: "Hello, my name is bleh bleh bleh", commitmentLevel: "high",  skills: ["Java", "Python", "Node"], isJudging: true }},
-    { name: "User 2", profile: {matched: true, school: "UGA", year: "2nd year", major: "Computational Media", description: "Hello, my name is bleh bleh bleh", commitmentLevel: "medium",  skills: ["C", "JavaScript"], isJudging: true }},
-    { name: "User 3", profile: {matched: true, school: "Georgia Institute of Technology", year: "1st year", major: "Computer Science", description: "Hello, my name is bleh bleh bleh", commitmentLevel: "low",  skills: ["React", "Node", "Express"], isJudging: true }},
-    { name: "User 4", profile: {matched: true, school: "USG", year: "3rd year", major: "Computer Science", description: "Hello, my name is bleh bleh bleh", commitmentLevel: "high",  skills: ["Machine Learning", "Python", "Node"], isJudging: true }},
-    { name: "User 5", profile: {matched: true, school: "University of Maryland", year: "4th year", major: "Computer Science", description: "Hello, my name is bleh bleh bleh", commitmentLevel: "medium",  skills: ["HTML/CSS", "C#", "C++"], isJudging: true }},
-    { name: "User 6", profile: {matched: true, school: "Emory", year: "3rd year", major: "Computer Science", description: "Hello, my name is bleh bleh bleh", commitmentLevel: "low",  skills: ["Java", "Python", "Node"], isJudging: true }},
+    { name: "User 1", profile: {matched: true, school: "Georgia Institute of Technology", year: "3rd year", major: "Computer Science", description: "Hello, my name is bleh bleh bleh", commitmentLevel: "High",  skills: ["Java", "Python", "Node"], isJudging: true }},
+    { name: "User 2", profile: {matched: true, school: "UGA", year: "2nd year", major: "Computational Media", description: "Hello, my name is bleh bleh bleh", commitmentLevel: "Medium",  skills: ["C", "JavaScript"], isJudging: true }},
+    { name: "User 3", profile: {matched: true, school: "Georgia Institute of Technology", year: "1st year", major: "Computer Science", description: "Hello, my name is bleh bleh bleh", commitmentLevel: "Low",  skills: ["React", "Node", "Express"], isJudging: true }},
+    { name: "User 4", profile: {matched: true, school: "USG", year: "3rd year", major: "Computer Science", description: "Hello, my name is bleh bleh bleh", commitmentLevel: "High",  skills: ["Machine Learning", "Python", "Node"], isJudging: true }},
+    { name: "User 5", profile: {matched: true, school: "University of Maryland", year: "4th year", major: "Computer Science", description: "Hello, my name is bleh bleh bleh", commitmentLevel: "Medium",  skills: ["HTML/CSS", "C#", "C++"], isJudging: true }},
+    { name: "User 6", profile: {matched: true, school: "Emory", year: "3rd year", major: "Computer Science", description: "Hello, my name is bleh bleh bleh", commitmentLevel: "Low",  skills: ["Java", "Python", "Node"], isJudging: true }},
   ];
   // const userData: UserCardType[] = [
   //   {
