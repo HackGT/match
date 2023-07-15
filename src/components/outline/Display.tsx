@@ -80,9 +80,6 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
   }, [searchParams, commitmentOptions, skillOptions]);
 
   const filteredProfiles = users.filter((user : UserCardType) => {
-    // console.log('commitmentSelectValue', commitmentSelectValue);
-    // console.log('user', {label: user.profile.commitmentLevel, value: user.profile.commitmentLevel})
-
     if (commitmentSelectValue.length > 0 && !commitmentSelectValue.find(option => option.value === user.profile.commitmentLevel)) {
       return false;
     }
@@ -90,9 +87,6 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
     if (skillSelectValue.length > 0 && !user.profile.skills.some(skill => skillSelectValue.some(option => option.value === skill))) {
       return false;
     }
-    // if (filters.skill.length > 0 && !profile.skills.some((s) => filters.skill.includes(s))) {
-    //   return false;
-    // }
 
     return true;
   });
