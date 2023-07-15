@@ -11,9 +11,7 @@ import {
 import { GroupBase, OptionBase, Select } from "chakra-react-select";
 import { UserCardType, UserListType } from "../../types/UserCard";
 import UserCard from "../UserCard";
-import { skills } from "../../definitions/Skills";
-import { commitmentLevels } from "../../definitions/Commitment";
-import { schools } from "../../definitions/Schools";
+import { CommitmentLevels, Schools, Skills } from "../../definitions";
 import {
   createSearchParams,
   Link,
@@ -30,9 +28,12 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
   >([]);
   const [skillSelectValue, setSkillSelectValue] = useState<GroupOption[]>([]);
 
-  const skillOptions = useMemo(() => skills, []);
+  const skillOptions = useMemo(
+    () => Skills, 
+    []
+  );
   const commitmentOptions = useMemo(
-    () => commitmentLevels,
+    () => CommitmentLevels,
     []
   );
   const trackOptions = useMemo(
@@ -49,7 +50,7 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
     []
   );
   const schoolOptions = useMemo(
-    () => schools,
+    () => Schools,
     []
   );
 

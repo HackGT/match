@@ -1,6 +1,6 @@
-export type schoolType = { value: string, label: string };
+type schoolType = { value: string, label: string };
 
-export const schools : schoolType[] = [
+const Schools : schoolType[] = [
     { value: "Georgia Institute of Technology", label: "Georgia Institute of Technology" },
     { value: "Abraham Baldwin Agricultural College", label: "Abraham Baldwin Agricultural College" },
     { value: "Albany Medical College", label: "Albany Medical College" },
@@ -14,6 +14,7 @@ export const schools : schoolType[] = [
     { value: "Bainbridge State College", label: "Bainbridge State College" },
     { value: "Baylor College of Medicine", label: "Baylor College of Medicine" },
     { value: "Baylor University", label: "Baylor University" },
+    { value: "Berry College", label: "Berry College" },
     { value: "Binghamton University", label: "Binghamton University" },
     { value: "Boston College", label: "Boston College" },
     { value: "Boston University", label: "Boston University" },
@@ -123,6 +124,7 @@ export const schools : schoolType[] = [
     { value: "Saint Louis University", label: "Saint Louis University" },
     { value: "San Diego State University", label: "San Diego State University" },
     { value: "San Francisco State University", label: "San Francisco State University" },
+    { value: "Savannah College of Art and Design", label: "Savannah College of Art and Design" },
     { value: "Savannah State University", label: "Savannah State University" },
     { value: "South Georgia State College", label: "South Georgia State College" },
     { value: "Southern Illinois University Carbondale", label: "Southern Illinois University Carbondale" },
@@ -253,13 +255,6 @@ export const schools : schoolType[] = [
     { value: "Wright State University", label: "Wright State University" },
     { value: "Yale University", label: "Yale University" },
     { value: "Yeshiva University", label: "Yeshiva University" },
-    { value: "Georgia Institute of Technology", label: "Georgia Institute of Technology" },
-    { value: "Georgia State University", label: "Georgia State University" },
-    { value: "University of Georgia", label: "University of Georgia" },
-    { value: "Emory University", label: "Emory University" },
-    { value: "Savannah College of Art and Design", label: "Savannah College of Art and Design" },
-    { value: "Georgia Southern University", label: "Georgia Southern University" },
-    { value: "Berry College", label: "Berry College" },
-    { value: "University of North Georgia", label: "University of North Georgia" },
-    { value: "Kennesaw State University", label: "Kennesaw State University" },
 ];
+
+export default Schools;
