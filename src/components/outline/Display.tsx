@@ -12,20 +12,23 @@ import { GroupBase, OptionBase, Select } from "chakra-react-select";
 import { UserCardType, UserListType } from "../../types/UserCard";
 import UserCard from "../UserCard";
 import { skills } from "../../definitions/Skills";
-import { createSearchParams, Link, useParams, useSearchParams } from "react-router-dom";
+import {
+  createSearchParams,
+  Link,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { User } from "firebase/auth";
 
 const Display: React.FC<UserListType> = ({ users }: any) => {
   const title = process.env.REACT_APP_EVENT_NAME;
-  // options must match -> https://github.com/HackGT/api/blob/main/common/src/commonDefinitions.ts
   const [searchParams, setSearchParams] = useSearchParams();
-  const [commitmentSelectValue, setCommitmentSelectValue] = useState<GroupOption[]>([]);
+  const [commitmentSelectValue, setCommitmentSelectValue] = useState<
+    GroupOption[]
+  >([]);
   const [skillSelectValue, setSkillSelectValue] = useState<GroupOption[]>([]);
 
-  const skillOptions = useMemo(
-    () => skills,
-    []
-  );
+  const skillOptions = useMemo(() => skills, []);
   const commitmentOptions = useMemo(
     () => [
       {
@@ -39,7 +42,7 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
       {
         label: "High",
         value: "High",
-      }
+      },
     ],
     []
   );
@@ -72,25 +75,38 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
 
   useEffect(() => {
     setCommitmentSelectValue(
-      commitmentOptions.filter(commitment => searchParams.get("commitment")?.includes(commitment.value))
+      commitmentOptions.filter((commitment) =>
+        searchParams.get("commitment")?.includes(commitment.value)
+      )
     );
     setSkillSelectValue(
-      skillOptions.filter(skill => searchParams.get("skill")?.includes(skill.value))
+      skillOptions.filter((skill) =>
+        searchParams.get("skill")?.includes(skill.value)
+      )
     );
   }, [searchParams, commitmentOptions, skillOptions]);
 
-  const filteredProfiles = users.filter((user : UserCardType) => {
-    if (commitmentSelectValue.length > 0 && !commitmentSelectValue.find(option => option.value === user.profile.commitmentLevel)) {
+  const filteredProfiles = users.filter((user: UserCardType) => {
+    if (
+      commitmentSelectValue.length > 0 &&
+      !commitmentSelectValue.find(
+        (option) => option.value === user.profile.commitmentLevel
+      )
+    ) {
       return false;
     }
 
-    if (skillSelectValue.length > 0 && !user.profile.skills.some(skill => skillSelectValue.some(option => option.value === skill))) {
+    if (
+      skillSelectValue.length > 0 &&
+      !user.profile.skills.some((skill) =>
+        skillSelectValue.some((option) => option.value === skill)
+      )
+    ) {
       return false;
     }
 
     return true;
   });
-
 
   interface GroupOption extends OptionBase {
     label: string;
@@ -127,13 +143,16 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
                       value: val.value,
                     });
                   });
-  
+
                   const newParams = createSearchParams(searchParams);
-  
+
                   skills.length > 0
-                    ? newParams.set("skill", skills.map(skill => skill.value).join())
+                    ? newParams.set(
+                        "skill",
+                        skills.map((skill) => skill.value).join()
+                      )
                     : newParams.delete("skill");
-  
+
                   setSearchParams(newParams);
                 }
               }}
@@ -159,13 +178,16 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
                       value: val.value,
                     });
                   });
-  
+
                   const newParams = createSearchParams(searchParams);
-  
+
                   commitments.length > 0
-                    ? newParams.set("commitment", commitments.map(commitment => commitment.value).join())
+                    ? newParams.set(
+                        "commitment",
+                        commitments.map((commitment) => commitment.value).join()
+                      )
                     : newParams.delete("commitment");
-  
+
                   setSearchParams(newParams);
                 }
               }}
@@ -202,8 +224,8 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
           <br></br>
           <SimpleGrid columns={4} spacing={"50px"}>
             {filteredProfiles.map((user: UserCardType) => (
-                <UserCard {...user} />
-              ))}
+              <UserCard {...user} />
+            ))}
           </SimpleGrid>
         </Box>
       </CardBody>
