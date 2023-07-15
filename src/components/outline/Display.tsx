@@ -12,6 +12,7 @@ import { GroupBase, OptionBase, Select } from "chakra-react-select";
 import { UserCardType, UserListType } from "../../types/UserCard";
 import UserCard from "../UserCard";
 import { skills } from "../../definitions/Skills";
+import { commitmentLevels } from "../../definitions/Commitment";
 import {
   createSearchParams,
   Link,
@@ -30,20 +31,7 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
 
   const skillOptions = useMemo(() => skills, []);
   const commitmentOptions = useMemo(
-    () => [
-      {
-        label: "Low",
-        value: "Low",
-      },
-      {
-        label: "Medium",
-        value: "Medium",
-      },
-      {
-        label: "High",
-        value: "High",
-      },
-    ],
+    () => commitmentLevels,
     []
   );
   const trackOptions = useMemo(
