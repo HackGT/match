@@ -9,15 +9,13 @@ import {
   CardBody,
 } from "@chakra-ui/react";
 import { GroupBase, OptionBase, Select } from "chakra-react-select";
-import { UserCardType, UserListType } from "../../types/UserCard";
-import UserCard from "../UserCard";
-import { CommitmentLevels, Schools, Skills } from "../../definitions";
 import {
   createSearchParams,
-  Link,
-  useParams,
   useSearchParams,
 } from "react-router-dom";
+import { UserCardType, UserListType } from "../../types/UserCard";
+import { CommitmentLevels, Schools, Skills } from "../../definitions";
+import UserCard from "../UserCard";
 import { User } from "firebase/auth";
 
 const Display: React.FC<UserListType> = ({ users }: any) => {
