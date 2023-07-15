@@ -13,6 +13,7 @@ import { UserCardType, UserListType } from "../../types/UserCard";
 import UserCard from "../UserCard";
 import { skills } from "../../definitions/Skills";
 import { commitmentLevels } from "../../definitions/Commitment";
+import { schools } from "../../definitions/Schools";
 import {
   createSearchParams,
   Link,
@@ -48,16 +49,7 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
     []
   );
   const schoolOptions = useMemo(
-    () => [
-      {
-        label: "School 1",
-        value: "SCHOOL_1",
-      },
-      {
-        label: "School 2",
-        value: "SCHOOL_2",
-      },
-    ],
+    () => schools,
     []
   );
 
