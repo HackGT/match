@@ -1,6 +1,6 @@
-export type skillType = { value: string, label: string };
+type skillType = { value: string, label: string };
 
-export const skills : skillType[] = [
+const Skills : skillType[] = [
     { value: "Android", label: "Android" },
     { value: "Bash", label: "Bash" },
     { value: "C", label: "C" },
@@ -28,3 +28,5 @@ export const skills : skillType[] = [
     { value: "Swift", label: "Swift" },
     { value: "TypeScript", label: "TypeScript" }
 ];
+
+export default Skills;

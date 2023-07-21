@@ -9,15 +9,13 @@ import {
   CardBody,
 } from "@chakra-ui/react";
 import { GroupBase, OptionBase, Select } from "chakra-react-select";
-import { UserCardType, UserListType } from "../../types/UserCard";
-import UserCard from "../UserCard";
-import { skills } from "../../definitions/Skills";
 import {
   createSearchParams,
-  Link,
-  useParams,
   useSearchParams,
 } from "react-router-dom";
+import { UserCardType, UserListType } from "../../types/UserCard";
+import { CommitmentLevels, Schools, Skills } from "../../definitions";
+import UserCard from "../UserCard";
 import { User } from "firebase/auth";
 
 const Display: React.FC<UserListType> = ({ users }: any) => {
@@ -27,23 +25,14 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
     GroupOption[]
   >([]);
   const [skillSelectValue, setSkillSelectValue] = useState<GroupOption[]>([]);
+  const [schoolSelectValue, setSchoolSelectValue] = useState<GroupOption[]>([]);
 
-  const skillOptions = useMemo(() => skills, []);
+  const skillOptions = useMemo(
+    () => Skills, 
+    []
+  );
   const commitmentOptions = useMemo(
-    () => [
-      {
-        label: "Low",
-        value: "Low",
-      },
-      {
-        label: "Medium",
-        value: "Medium",
-      },
-      {
-        label: "High",
-        value: "High",
-      },
-    ],
+    () => CommitmentLevels,
     []
   );
   const trackOptions = useMemo(
@@ -60,16 +49,7 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
     []
   );
   const schoolOptions = useMemo(
-    () => [
-      {
-        label: "School 1",
-        value: "SCHOOL_1",
-      },
-      {
-        label: "School 2",
-        value: "SCHOOL_2",
-      },
-    ],
+    () => Schools,
     []
   );
 
@@ -84,7 +64,12 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
         searchParams.get("skill")?.includes(skill.value)
       )
     );
-  }, [searchParams, commitmentOptions, skillOptions]);
+    setSchoolSelectValue(
+      schoolOptions.filter((school) =>
+        searchParams.get("school")?.includes(school.value)
+      )
+    );
+  }, [searchParams, commitmentOptions, skillOptions, schoolOptions]);
 
   const filteredProfiles = users.filter((user: UserCardType) => {
     if (
@@ -100,6 +85,15 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
       skillSelectValue.length > 0 &&
       !user.profile.skills.some((skill) =>
         skillSelectValue.some((option) => option.value === skill)
+      )
+    ) {
+      return false;
+    }
+
+    if (
+      schoolSelectValue.length > 0 &&
+      !schoolSelectValue.find(
+        (option) => option.value === user.profile.school
       )
     ) {
       return false;
@@ -215,6 +209,28 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
               selectedOptionStyle="check"
               hideSelectedOptions={false}
               useBasicStyles
+              onChange={(e: any) => {
+                const schools: GroupOption[] = [];
+                if (e !== null) {
+                  e.forEach((val: any) => {
+                    schools.push({
+                      label: val.label,
+                      value: val.value,
+                    });
+                  });
+
+                  const newParams = createSearchParams(searchParams);
+
+                  schools.length > 0
+                    ? newParams.set(
+                        "school",
+                        schools.map((school) => school.value).join()
+                      )
+                    : newParams.delete("school");
+
+                  setSearchParams(newParams);
+                }
+              }}
             />
           </Box>
         </Flex>

@@ -18,7 +18,7 @@ export const userData: UserCardType[] = [
       name: "User 2",
       profile: {
         matched: true,
-        school: "UGA",
+        school: "Western Illinois University",
         year: "2nd year",
         major: "Computational Media",
         description: "Hello, my name is bleh bleh bleh",
@@ -44,7 +44,7 @@ export const userData: UserCardType[] = [
       name: "User 4",
       profile: {
         matched: true,
-        school: "USG",
+        school: "University of California, Berkeley",
         year: "3rd year",
         major: "Computer Science",
         description: "Hello, my name is bleh bleh bleh",
@@ -57,7 +57,7 @@ export const userData: UserCardType[] = [
       name: "User 5",
       profile: {
         matched: true,
-        school: "University of Maryland",
+        school: "University of Maryland, Baltimore County",
         year: "4th year",
         major: "Computer Science",
         description: "Hello, my name is bleh bleh bleh",
@@ -70,7 +70,7 @@ export const userData: UserCardType[] = [
       name: "User 6",
       profile: {
         matched: true,
-        school: "Emory",
+        school: "Emory University",
         year: "3rd year",
         major: "Computer Science",
         description: "Hello, my name is bleh bleh bleh",
