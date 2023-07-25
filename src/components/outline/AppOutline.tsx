@@ -30,12 +30,12 @@ const AppOutline: React.FC = () => {
     {
       name: users[0]?.name,
       profile: {
-        school: "TEMPORARY SCHOOL",
-        year: "TEMPORARY YEAR",
-        major: "TEMPORARY MAJOR",
-        description: "TEMPORARY DESCRIPTION",
+        school: users[0]?.profile?.school,
+        year: users[0]?.profile?.year,
+        major: users[0]?.profile?.major,
+        description: users[0]?.profile?.description,
         skills: users[0]?.profile?.skills,
-        commitmentLevel: "test", 
+        commitmentLevel: users[0]?.profile?.commitmentLevel, 
       }
     },
   ];
