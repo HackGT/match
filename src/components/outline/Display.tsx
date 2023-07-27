@@ -9,10 +9,7 @@ import {
   CardBody,
 } from "@chakra-ui/react";
 import { GroupBase, OptionBase, Select } from "chakra-react-select";
-import {
-  createSearchParams,
-  useSearchParams,
-} from "react-router-dom";
+import { createSearchParams, useSearchParams } from "react-router-dom";
 import { UserCardType, UserListType } from "../../types/UserCard";
 import { CommitmentLevels, Schools, Skills } from "../../definitions";
 import UserCard from "../UserCard";
@@ -27,31 +24,9 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
   const [skillSelectValue, setSkillSelectValue] = useState<GroupOption[]>([]);
   const [schoolSelectValue, setSchoolSelectValue] = useState<GroupOption[]>([]);
 
-  const skillOptions = useMemo(
-    () => Skills, 
-    []
-  );
-  const commitmentOptions = useMemo(
-    () => CommitmentLevels,
-    []
-  );
-  const trackOptions = useMemo(
-    () => [
-      {
-        label: "Track 1",
-        value: "TRACK_1",
-      },
-      {
-        label: "Track 2",
-        value: "TRACK_2",
-      },
-    ],
-    []
-  );
-  const schoolOptions = useMemo(
-    () => Schools,
-    []
-  );
+  const skillOptions = useMemo(() => Skills, []);
+  const commitmentOptions = useMemo(() => CommitmentLevels, []);
+  const schoolOptions = useMemo(() => Schools, []);
 
   useEffect(() => {
     setCommitmentSelectValue(
@@ -92,9 +67,7 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
 
     if (
       schoolSelectValue.length > 0 &&
-      !schoolSelectValue.find(
-        (option) => option.value === user.profile.school
-      )
+      !schoolSelectValue.find((option) => option.value === user.profile.school)
     ) {
       return false;
     }
@@ -185,18 +158,6 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
                   setSearchParams(newParams);
                 }
               }}
-            />
-          </Box>
-
-          <Box pl="10px" w="256px">
-            <Select<GroupOption, true, GroupBase<GroupOption>>
-              isMulti
-              options={trackOptions}
-              placeholder="Tracks"
-              closeMenuOnSelect={false}
-              selectedOptionStyle="check"
-              hideSelectedOptions={false}
-              useBasicStyles
             />
           </Box>
 
