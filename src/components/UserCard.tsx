@@ -1,10 +1,20 @@
 import React from "react";
-import { Box, Flex, Text, Divider, Tag } from "@chakra-ui/react";
+import { Box, Flex, Text, Divider, Tag, Button,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure, } from "@chakra-ui/react";
 import { UserCardType } from "../types/UserCard";
+import UserModal from "./UserModal";
 
 const UserCard: React.FC<UserCardType> = (props: UserCardType) => {
   const { name, profile } = props;
   const { description, school, year, skills, commitmentLevel } = profile;
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <Box
@@ -12,7 +22,7 @@ const UserCard: React.FC<UserCardType> = (props: UserCardType) => {
       borderStyle="solid"
       rounded="lg"
       boxShadow="lg"
-      height="275px"
+      height="315px"
       width="300px"
       fontWeight="bold"
       alignItems="center"
@@ -60,6 +70,8 @@ const UserCard: React.FC<UserCardType> = (props: UserCardType) => {
           <strong>Description:</strong> {description}
         </Text>
         <Divider borderColor="gray.300" borderWidth="2px" />
+        <Button variant="ghost" onClick={onOpen}>see profile</Button>
+        <UserModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} name={name} profile={profile} />
       </Flex>
     </Box>
   );
