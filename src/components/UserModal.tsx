@@ -61,10 +61,10 @@ export default function UserModal(props: any) {
             </ModalBody>
   
             <ModalFooter>
-              <Button variant='ghost'>Message on Slack</Button>
-              <Button colorScheme='blue' mr={3} onClick={onClose}>
+              <Button colorScheme='blue'>Ask to Team Up</Button>
+              {/* <Button colorScheme='blue' mr={3} onClick={onClose}>
                 Close
-              </Button>
+              </Button> */}
             </ModalFooter>
           </ModalContent>
         </Modal>
