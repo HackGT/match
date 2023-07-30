@@ -70,7 +70,7 @@ const UserCard: React.FC<UserCardType> = (props: UserCardType) => {
           <strong>Description:</strong> {description}
         </Text>
         <Divider borderColor="gray.300" borderWidth="2px" />
-        <Button variant="ghost" onClick={onOpen}>see profile</Button>
+        <Button pos="relative" bottom ="0" variant="ghost" onClick={onOpen}>see profile</Button>
         <UserModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} name={name} profile={profile} />
       </Flex>
     </Box>
