@@ -41,7 +41,7 @@ const UserCard: React.FC<UserCardType> = (props: UserCardType) => {
               <strong>Commitment:</strong> {commitmentLevel}
             </Text>
           </Tag>
-          {skills.map((skill) => (
+          {skills?.map((skill) => (
             <Tag
               key={skill}
               bg="blue.400"
