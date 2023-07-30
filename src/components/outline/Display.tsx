@@ -109,8 +109,8 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
         </Flex>
         <br></br>
         <Box paddingLeft={"5%"} paddingRight={"5%"}>
-          <Text fontSize={32} fontFamily="Roobert">
-            HackGT 9 Team Formation
+          <Text fontSize={32} fontWeight="bold">
+            HackGT X Team Formation
           </Text>
           <br></br>
           <SimpleGrid columns={4} spacing={"50px"}>
