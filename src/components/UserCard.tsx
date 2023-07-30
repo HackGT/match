@@ -4,7 +4,16 @@ import { UserCardType } from "../types/UserCard";
 
 const UserCard: React.FC<UserCardType> = (props: UserCardType) => {
   const { name, profile } = props;
-  const { description, school, year, skills, commitmentLevel } = profile;
+  const { description, school, year, major, skills, commitmentLevel } = profile;
+
+  // Custom style for the school section if it's "Georgia Institute of Technology"
+  const schoolStyle =
+    school === "Georgia Institute of Technology"
+      ? {
+          color: "gold.600",
+          fontWeight: "bold",
+        }
+      : {};
 
   return (
     <Box
@@ -23,8 +32,14 @@ const UserCard: React.FC<UserCardType> = (props: UserCardType) => {
         <Text fontSize="3xl" fontWeight="bold" mb="2">
           {name}
         </Text>
+        <Text fontSize="sm" mb="2" style={schoolStyle}>
+          {school}
+        </Text>
         <Text fontSize="sm" mb="2">
-          {`${school}, ${year}`}
+          {year}
+        </Text>
+        <Text fontSize="sm" mb="2">
+          {major}
         </Text>
         <Divider borderColor="gray.300" borderWidth="2px" mb="2" />
         <Flex alignItems="center" flexWrap="wrap" mb="2">
