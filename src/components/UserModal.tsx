@@ -15,7 +15,7 @@ export default function UserModal(props: any) {
     const { isOpen, onOpen, onClose, name, profile } = props;
     return (
       <>
-      <Modal size="sm" isOpen={isOpen} onClose={onClose}>
+      <Modal size="xl" isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>{name}</ModalHeader>
@@ -62,9 +62,6 @@ export default function UserModal(props: any) {
   
             <ModalFooter>
               <Button colorScheme='blue'>Ask to Team Up</Button>
-              {/* <Button colorScheme='blue' mr={3} onClick={onClose}>
-                Close
-              </Button> */}
             </ModalFooter>
           </ModalContent>
         </Modal>
