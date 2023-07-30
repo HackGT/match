@@ -33,11 +33,11 @@ const UserCard: React.FC<UserCardType> = (props: UserCardType) => {
         <Text fontSize="3xl" fontWeight="bold" mb="2">
           {name}
         </Text>
-        <Text fontSize="sm" mb="2">
+        <Text fontSize="sm" mb="2" height="40px">
           {`${school}, ${year}`}
         </Text>
         <Divider borderColor="gray.300" borderWidth="2px" mb="2" />
-        <Flex alignItems="center" flexWrap="wrap" mb="2">
+        <Flex alignItems="center" flexWrap="wrap" mb="2" height="60px">
           <Tag
             bg="green.400"
             color="white"
@@ -66,7 +66,7 @@ const UserCard: React.FC<UserCardType> = (props: UserCardType) => {
             </Tag>
           ))}
         </Flex>
-        <Text fontSize="sm" color="gray.500" mb="2">
+        <Text fontSize="sm" color="gray.500" mb="2" height="50px">
           <strong>Description:</strong> {description}
         </Text>
         <Divider borderColor="gray.300" borderWidth="2px" />
