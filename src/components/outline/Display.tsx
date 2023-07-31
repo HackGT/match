@@ -1,26 +1,15 @@
 import React, { useState, useEffect, useMemo } from "react";
-import {
-  Card,
-  Flex,
-  Input,
-  Text,
-  Box,
-  SimpleGrid,
-  CardBody,
-} from "@chakra-ui/react";
+import { Card, Flex, Input, Text, Box, SimpleGrid, CardBody } from "@chakra-ui/react";
 import { GroupBase, OptionBase, Select } from "chakra-react-select";
 import { createSearchParams, useSearchParams } from "react-router-dom";
 import { UserCardType, UserListType } from "../../types/UserCard";
 import { CommitmentLevels, Schools, Skills } from "../../definitions";
 import UserCard from "../UserCard";
-import { User } from "firebase/auth";
 
 const Display: React.FC<UserListType> = ({ users }: any) => {
   const title = process.env.REACT_APP_EVENT_NAME;
   const [searchParams, setSearchParams] = useSearchParams();
-  const [commitmentSelectValue, setCommitmentSelectValue] = useState<
-    GroupOption[]
-  >([]);
+  const [commitmentSelectValue, setCommitmentSelectValue] = useState<GroupOption[]>([]);
   const [skillSelectValue, setSkillSelectValue] = useState<GroupOption[]>([]);
   const [schoolSelectValue, setSchoolSelectValue] = useState<GroupOption[]>([]);
 
@@ -30,44 +19,36 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
 
   useEffect(() => {
     setCommitmentSelectValue(
-      commitmentOptions.filter((commitment) =>
-        searchParams.get("commitment")?.includes(commitment.value)
+      commitmentOptions.filter(
+        commitment => searchParams.get("commitment")?.includes(commitment.value)
       )
     );
     setSkillSelectValue(
-      skillOptions.filter((skill) =>
-        searchParams.get("skill")?.includes(skill.value)
-      )
+      skillOptions.filter(skill => searchParams.get("skill")?.includes(skill.value))
     );
     setSchoolSelectValue(
-      schoolOptions.filter((school) =>
-        searchParams.get("school")?.includes(school.value)
-      )
+      schoolOptions.filter(school => searchParams.get("school")?.includes(school.value))
     );
   }, [searchParams, commitmentOptions, skillOptions, schoolOptions]);
 
   const filteredProfiles = users.filter((user: UserCardType) => {
     if (
       commitmentSelectValue.length > 0 &&
-      !commitmentSelectValue.find(
-        (option) => option.value === user.profile.commitmentLevel
-      )
+      !commitmentSelectValue.find(option => option.value === user.profile.commitmentLevel)
     ) {
       return false;
     }
 
     if (
       skillSelectValue.length > 0 &&
-      !user.profile.skills.some((skill) =>
-        skillSelectValue.some((option) => option.value === skill)
-      )
+      !user.profile.skills.some(skill => skillSelectValue.some(option => option.value === skill))
     ) {
       return false;
     }
 
     if (
       schoolSelectValue.length > 0 &&
-      !schoolSelectValue.find((option) => option.value === user.profile.school)
+      !schoolSelectValue.find(option => option.value === user.profile.school)
     ) {
       return false;
     }
@@ -114,10 +95,7 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
                   const newParams = createSearchParams(searchParams);
 
                   skills.length > 0
-                    ? newParams.set(
-                        "skill",
-                        skills.map((skill) => skill.value).join()
-                      )
+                    ? newParams.set("skill", skills.map(skill => skill.value).join())
                     : newParams.delete("skill");
 
                   setSearchParams(newParams);
@@ -151,7 +129,7 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
                   commitments.length > 0
                     ? newParams.set(
                         "commitment",
-                        commitments.map((commitment) => commitment.value).join()
+                        commitments.map(commitment => commitment.value).join()
                       )
                     : newParams.delete("commitment");
 
@@ -183,10 +161,7 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
                   const newParams = createSearchParams(searchParams);
 
                   schools.length > 0
-                    ? newParams.set(
-                        "school",
-                        schools.map((school) => school.value).join()
-                      )
+                    ? newParams.set("school", schools.map(school => school.value).join())
                     : newParams.delete("school");
 
                   setSearchParams(newParams);
