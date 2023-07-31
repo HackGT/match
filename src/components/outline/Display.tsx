@@ -83,7 +83,7 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
   return (
     <Card
       width={"96%"}
-      height={"795px"}
+      height={"900px"}
       top={"50px"}
       left={"2%"}
       boxShadow={"0px 4px 8px 0px rgba(33, 36, 41, 0.1)"}
