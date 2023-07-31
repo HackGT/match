@@ -27,13 +27,6 @@ const AppOutline: React.FC = () => {
     getUsers();
   }, []);
 
-  // users[0]?.name
-  // users[0]?.profile?.school
-  // users[0]?.profile?.year
-  // users[0]?.profile?.major
-  // users[0]?.profile?.description
-  // users[0]?.profile?.skills
-  // users[0]?.profile?.commitmentLevel
 
   const userData: UserCardType[] = [
     {
