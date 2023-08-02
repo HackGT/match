@@ -20,6 +20,7 @@ import UserCard from "../UserCard";
 
 const Display: React.FC<UserListType> = ({ users }: any) => {
   console.log("users lol: ", users);
+  
   return (
     <Card
       width={"96%"}
@@ -113,11 +114,11 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
             HackGT X Team Formation
           </Text>
           <br></br>
-          <SimpleGrid columns={4} spacing={"50px"}>
+          <Flex flexWrap="wrap" justifyContent="space-around">
             {users.map((user: UserCardType) => (
-              <UserCard {...user} />
+              <UserCard key={user.name} {...user} />
             ))}
-          </SimpleGrid>
+          </Flex>
         </Box>
       </CardBody>
     </Card>

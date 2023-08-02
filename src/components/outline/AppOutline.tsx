@@ -10,8 +10,6 @@ import { UserCardType } from "../../types/UserCard";
 const AppOutline: React.FC = () => {
   const [users, setUsers] = useState<any[]>([]);
 
-  // TODO: We need to get the hexathon users from the API
-
   // 647fee51768e521dc8ef88e0 hackGTX
   // 62d9ed68d0a69b88c06bdfb2 HackGT9
   // 640680f0c791f79de667dfa9 Test1
@@ -21,35 +19,24 @@ const AppOutline: React.FC = () => {
     const getUsers = async () => {
       const hexUrl = apiUrl(Service.HEXATHONS, "/hexathon-users/647fee51768e521dc8ef88e0/users");
       const hexData = await axios.get(hexUrl);
-      console.log(hexData);
       setUsers(hexData?.data?.hexathonUsers);
     };
     getUsers();
   }, []);
 
 
-  const userData: UserCardType[] = [
-    {
-      name: users[0]?.name,
-      profile: {
-        school: users[0]?.profile?.school,
-        year: users[0]?.profile?.year,
-        major: users[0]?.profile?.major,
-        description: users[0]?.profile?.description,
-        skills: users[0]?.profile?.skills,
-        commitmentLevel: users[0]?.profile?.commitmentLevel, 
-      }
-      // name: "test",
-      // profile: {
-      //   school: "test",
-      //   year: "test",
-      //   major: "test",
-      //   description: "test",
-      //   skills: ["test", "test"],
-      //   commitmentLevel: "test", 
-      // }
-    },
-  ];
+  // Modify userData to dynamically create an object for each user in the users array
+  const userData: UserCardType[] = users.map((user) => ({
+    name: user?.name,
+    profile: {
+      school: user?.profile?.school,
+      year: user?.profile?.year,
+      major: user?.profile?.major,
+      description: user?.profile?.description,
+      skills: user?.profile?.skills,
+      commitmentLevel: user?.profile?.commitmentLevel, 
+    }
+  }));
 
   return (
     <>

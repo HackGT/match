@@ -21,12 +21,13 @@ const UserCard: React.FC<UserCardType> = (props: UserCardType) => {
       borderStyle="solid"
       rounded="lg"
       boxShadow="lg"
-      height="400px"
-      width="400px"
+      height="350px"
+      width="350px"
       fontWeight="bold"
       alignItems="center"
       backgroundColor="white"
       padding="4"
+      marginBottom="20px"
     >
       <Flex flexDirection="column">
         <Text fontSize="3xl" fontWeight="bold" mb="2">
