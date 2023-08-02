@@ -114,7 +114,7 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
             HackGT X Team Formation
           </Text>
           <br></br>
-          <Flex flexWrap="wrap" justifyContent="space-around">
+          <Flex flexWrap="wrap" justifyContent="space-evenly">
             {users.map((user: UserCardType) => (
               <UserCard key={user.name} {...user} />
             ))}

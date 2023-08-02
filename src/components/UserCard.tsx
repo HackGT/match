@@ -10,10 +10,30 @@ const UserCard: React.FC<UserCardType> = (props: UserCardType) => {
   const schoolStyle =
     school === "Georgia Institute of Technology"
       ? {
-          color: "gold.600",
+          color: "gold",
           fontWeight: "bold",
         }
       : {};
+
+  // Custom style for the commitment tag based on the commitment level
+  const commitmentStyle = 
+  commitmentLevel === "low"
+    ? {
+        bg: "red.400",
+        color: "white",
+      }
+    : commitmentLevel === "medium"
+    ? {
+        bg: "yellow.400",
+        color: "black",
+      }
+    : commitmentLevel === "high"
+    ? {
+        bg: "green.400",
+        color: "white",
+      }
+    : {};
+
 
   return (
     <Box
@@ -45,6 +65,7 @@ const UserCard: React.FC<UserCardType> = (props: UserCardType) => {
         <Divider borderColor="gray.300" borderWidth="2px" mb="2" />
         <Flex alignItems="center" flexWrap="wrap" mb="2">
           <Tag
+            style={commitmentStyle}
             bg="green.400"
             color="white"
             borderRadius="md"
