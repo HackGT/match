@@ -6,35 +6,6 @@ const UserCard: React.FC<UserCardType> = (props: UserCardType) => {
   const { name, profile } = props;
   const { description, school, year, major, skills, commitmentLevel } = profile;
 
-  // Custom style for the school section if it's "Georgia Institute of Technology"
-  const schoolStyle =
-    school === "Georgia Institute of Technology"
-      ? {
-          color: "gold",
-          fontWeight: "bold",
-        }
-      : {};
-
-  // Custom style for the commitment tag based on the commitment level
-  const commitmentStyle = 
-  commitmentLevel === "low"
-    ? {
-        bg: "red.400",
-        color: "white",
-      }
-    : commitmentLevel === "medium"
-    ? {
-        bg: "yellow.400",
-        color: "black",
-      }
-    : commitmentLevel === "high"
-    ? {
-        bg: "green.400",
-        color: "white",
-      }
-    : {};
-
-
   return (
     <Box
       borderWidth="1px"
@@ -53,19 +24,15 @@ const UserCard: React.FC<UserCardType> = (props: UserCardType) => {
         <Text fontSize="3xl" fontWeight="bold" mb="2">
           {name}
         </Text>
-        <Text fontSize="sm" mb="2" style={schoolStyle}>
+        <Text fontSize="sm" mb="2">
           {school}
         </Text>
         <Text fontSize="sm" mb="2">
           {year}
         </Text>
-        <Text fontSize="sm" mb="2">
-          {major}
-        </Text>
         <Divider borderColor="gray.300" borderWidth="2px" mb="2" />
         <Flex alignItems="center" flexWrap="wrap" mb="2">
           <Tag
-            style={commitmentStyle}
             bg="green.400"
             color="white"
             borderRadius="md"
