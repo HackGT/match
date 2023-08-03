@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Footer, Service, apiUrl } from "@hex-labs/core";
-import axios from "axios";
 
 import Navigation from "./Navigation";
 import Display from "./Display";
-import Card from "../UserCard";
+import { userData } from "../../definitions/DummyUserData";
+import axios from "axios";
 import { UserCardType } from "../../types/UserCard";
 
 const AppOutline: React.FC = () => {
@@ -36,7 +36,7 @@ const AppOutline: React.FC = () => {
   return (
     <>
       <Navigation />
-      <Display users={userData}/>
+      <Display users={userData} />
       <Footer />
     </>
   );
