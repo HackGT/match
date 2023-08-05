@@ -172,13 +172,15 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
         </Flex>
         <br></br>
         <Box paddingLeft={"5%"} paddingRight={"5%"}>
-          <Text fontSize={32}>{title}</Text>
+          <Text fontSize={32} fontWeight="bold">
+            HackGT X Team Formation
+          </Text>
           <br></br>
-          <SimpleGrid columns={4} spacing={"50px"}>
-            {filteredProfiles.map((user: UserCardType) => (
-              <UserCard {...user} />
+          <Flex flexWrap="wrap" justifyContent="space-evenly">
+            {users.map((user: UserCardType) => (
+              <UserCard key={user.name} {...user} />
             ))}
-          </SimpleGrid>
+          </Flex>
         </Box>
       </CardBody>
     </Card>
