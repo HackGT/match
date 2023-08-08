@@ -32,7 +32,7 @@ export default function UserModal(props: any) {
               {profile.skills.map((skill: any) => (
                 <Tag
                   key={skill}
-                  bg="green.400"
+                  bg="blue.400"
                   color="white"
                   borderRadius="md"
                   px="2"
