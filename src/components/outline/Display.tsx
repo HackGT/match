@@ -1,21 +1,36 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Card, Flex, Input, Text, Box, SimpleGrid, CardBody } from "@chakra-ui/react";
+import { Card, Flex, Input, Text, Box, CardBody } from "@chakra-ui/react";
 import { GroupBase, OptionBase, Select } from "chakra-react-select";
 import { createSearchParams, useSearchParams } from "react-router-dom";
-import { UserCardType, UserListType } from "../../types/UserCard";
+import { UserCardType } from "../../types/UserCard";
 import { CommitmentLevels, Schools, Skills } from "../../definitions";
 import UserCard from "../UserCard";
+import { apiUrl, Service, ErrorScreen } from "@hex-labs/core";
+import useAxios from "axios-hooks";
 
-const Display: React.FC<UserListType> = ({ users }: any) => {
+const Display: React.FC = () => {
   const title = process.env.REACT_APP_EVENT_NAME;
   const [searchParams, setSearchParams] = useSearchParams();
+  const [searchText, setSearchText] = useState("");
   const [commitmentSelectValue, setCommitmentSelectValue] = useState<GroupOption[]>([]);
   const [skillSelectValue, setSkillSelectValue] = useState<GroupOption[]>([]);
   const [schoolSelectValue, setSchoolSelectValue] = useState<GroupOption[]>([]);
 
-  const skillOptions = useMemo(() => Skills, []);
-  const commitmentOptions = useMemo(() => CommitmentLevels, []);
-  const schoolOptions = useMemo(() => Schools, []);
+  const [{ data, error }] = useAxios({
+    method: "GET",
+    url: apiUrl(Service.HEXATHONS, `/hexathon-users/${process.env.REACT_APP_HEXATHON_ID}/users`),
+    params: {
+      matched: true,
+      skills: searchParams.get("skill")?.split(","),
+      commitmentLevel: searchParams.get("commitment")?.split(","),
+      school: searchParams.get("school")?.split(","),
+      search: searchText,
+    },
+  });
+
+  const skillOptions = useMemo(() => Skills, [data]);
+  const commitmentOptions = useMemo(() => CommitmentLevels, [data]);
+  const schoolOptions = useMemo(() => Schools, [data]);
 
   useEffect(() => {
     setCommitmentSelectValue(
@@ -31,30 +46,7 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
     );
   }, [searchParams, commitmentOptions, skillOptions, schoolOptions]);
 
-  const filteredProfiles = users.filter((user: UserCardType) => {
-    if (
-      commitmentSelectValue.length > 0 &&
-      !commitmentSelectValue.find(option => option.value === user.profile.commitmentLevel)
-    ) {
-      return false;
-    }
-
-    if (
-      skillSelectValue.length > 0 &&
-      !user.profile.skills.some(skill => skillSelectValue.some(option => option.value === skill))
-    ) {
-      return false;
-    }
-
-    if (
-      schoolSelectValue.length > 0 &&
-      !schoolSelectValue.find(option => option.value === user.profile.school)
-    ) {
-      return false;
-    }
-
-    return true;
-  });
+  if (error) return <ErrorScreen error={error} />;
 
   interface GroupOption extends OptionBase {
     label: string;
@@ -71,13 +63,19 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
     >
       <CardBody>
         <Flex>
-          <Input placeholder="Search" width={"256px"} height={"40px"} />
+          <Input
+            placeholder="Search"
+            onChange={event => setSearchText(event.target.value)}
+            width={"256px"}
+            height={"40px"}
+          />
 
           <Box pl="10px" w="256px">
             <Select<GroupOption, true, GroupBase<GroupOption>>
               isMulti
               options={skillOptions}
               placeholder="Skills"
+              value={skillSelectValue}
               closeMenuOnSelect={false}
               selectedOptionStyle="check"
               hideSelectedOptions={false}
@@ -97,7 +95,6 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
                   skills.length > 0
                     ? newParams.set("skill", skills.map(skill => skill.value).join())
                     : newParams.delete("skill");
-
                   setSearchParams(newParams);
                 }
               }}
@@ -132,7 +129,6 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
                         commitments.map(commitment => commitment.value).join()
                       )
                     : newParams.delete("commitment");
-
                   setSearchParams(newParams);
                 }
               }}
@@ -144,6 +140,7 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
               isMulti
               options={schoolOptions}
               placeholder="Schools"
+              value={schoolSelectValue}
               closeMenuOnSelect={false}
               selectedOptionStyle="check"
               hideSelectedOptions={false}
@@ -172,12 +169,10 @@ const Display: React.FC<UserListType> = ({ users }: any) => {
         </Flex>
         <br></br>
         <Box paddingLeft={"5%"} paddingRight={"5%"}>
-          <Text fontSize={32} fontWeight="bold">
-            HackGT X Team Formation
-          </Text>
+          <Text fontSize={32}>{title}</Text>
           <br></br>
           <Flex flexWrap="wrap" justifyContent="space-evenly">
-            {filteredProfiles.map((user: UserCardType) => (
+            {data?.hexathonUsers.map((user: UserCardType) => (
               <UserCard key={user.name} {...user} />
             ))}
           </Flex>
