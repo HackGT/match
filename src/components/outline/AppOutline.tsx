@@ -13,7 +13,7 @@ const AppOutline: React.FC = () => {
   );
 
   const users = hexData?.hexathonUsers || [];
-  
+  console.log(users)
   // Modify userData to dynamically create an object for each user in the users array
   const userData: UserCardType[] = users.map((
     user: { name: string; 
