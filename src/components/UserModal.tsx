@@ -9,6 +9,12 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 
+const commitmentLevelColors: Record<string, string> = {
+  Low: "red.400",
+  Medium: "yellow.400",
+  High: "green.400",
+};
+
 export default function UserModal(props: any) {
   const { isOpen, onOpen, onClose, name, profile } = props;
   return (
@@ -24,7 +30,7 @@ export default function UserModal(props: any) {
             </Text>
             <Divider borderColor="gray.300" borderWidth="2px" mb="2" />
             <Flex alignItems="center" flexWrap="wrap" mb="2">
-              <Tag bg="green.400" color="white" borderRadius="md" px="2" py="1" mr="2" mb="2">
+              <Tag bg={commitmentLevelColors[profile.commitmentLevel]} color="white" borderRadius="md" px="2" py="1" mr="2" mb="2">
                 <Text fontSize="sm">
                   <strong>Commitment:</strong> {profile.commitmentLevel}
                 </Text>

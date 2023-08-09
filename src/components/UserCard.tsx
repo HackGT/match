@@ -14,6 +14,12 @@ import { UserCardType } from "../types/UserCard";
 import UserModal from "./UserModal";
 import Avatars from "../definitions/Avatars";
 
+const commitmentLevelColors: Record<string, string> = {
+  Low: "red.400",
+  Medium: "yellow.400",
+  High: "green.400",
+};
+
 const UserCard: React.FC<UserCardType> = (props: UserCardType) => {
   const { name, profile } = props;
   const { description, school, year, skills, commitmentLevel } = profile;
@@ -45,7 +51,7 @@ const UserCard: React.FC<UserCardType> = (props: UserCardType) => {
         <Tag width="fit-content">{year}</Tag>
         <Divider borderColor="gray.300" borderWidth="2px" mb="2" />
         <Flex alignItems="center" flexWrap="wrap" mb="2" height="60px">
-          <Tag bg="green.400" color="white" borderRadius="md" px="2" py="1" mr="2" mb="2">
+          <Tag bg={commitmentLevelColors[commitmentLevel]} color="white" borderRadius="md" px="2" py="1" mr="2" mb="2">
             <Text fontSize="sm">
               <strong>Commitment:</strong> {commitmentLevel}
             </Text>
