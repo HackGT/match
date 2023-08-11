@@ -8,12 +8,8 @@ import {
   ModalBody,
   ModalCloseButton,
 } from "@chakra-ui/react";
+import { commitmentLevelColors } from "../definitions/CommitmentLevels";
 
-const commitmentLevelColors: Record<string, string> = {
-  Low: "red.400",
-  Medium: "yellow.400",
-  High: "green.400",
-};
 
 export default function UserModal(props: any) {
   const { isOpen, onOpen, onClose, name, profile } = props;

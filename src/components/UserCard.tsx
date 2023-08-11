@@ -5,7 +5,6 @@ import {
   Text,
   Divider,
   Tag,
-  Button,
   useDisclosure,
   Avatar,
   TagLabel,
@@ -13,12 +12,7 @@ import {
 import { UserCardType } from "../types/UserCard";
 import UserModal from "./UserModal";
 import Avatars from "../definitions/Avatars";
-
-const commitmentLevelColors: Record<string, string> = {
-  Low: "red.400",
-  Medium: "yellow.400",
-  High: "green.400",
-};
+import { commitmentLevelColors } from "../definitions/CommitmentLevels";
 
 const UserCard: React.FC<UserCardType> = (props: UserCardType) => {
   const { name, profile } = props;
