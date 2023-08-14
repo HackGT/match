@@ -1,4 +1,4 @@
-import { Button, Text, Tag, Flex, Divider } from "@chakra-ui/react";
+import { Button, Text, Tag, Flex, Divider, useDisclosure } from "@chakra-ui/react";
 import {
   Modal,
   ModalOverlay,
@@ -9,10 +9,18 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 import { commitmentLevelColors } from "../definitions/CommitmentLevels";
+import Teamup from "./Teamup";
 
 
 export default function UserModal(props: any) {
   const { isOpen, onOpen, onClose, name, profile } = props;
+  const { isOpen: isTeamUpOpen, onOpen: onTeamUpOpen, onClose: onTeamUpClose} = useDisclosure();
+
+  function teamUp(){
+    onTeamUpOpen();
+    onClose();
+  }
+
   return (
     <>
       <Modal size="xl" isOpen={isOpen} onClose={onClose}>
@@ -53,7 +61,22 @@ export default function UserModal(props: any) {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue">Ask to Team Up</Button>
+            <Button colorScheme="blue" onClick={teamUp}>Ask to Team Up</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <Modal size="xl" isOpen={isTeamUpOpen}
+          onClose={onTeamUpClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Team Up?</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            
+          </ModalBody>
+          <ModalFooter>
+            <Button onClick={onTeamUpClose}>Close</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
