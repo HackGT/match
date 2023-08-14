@@ -11,12 +11,11 @@ import {
 import { commitmentLevelColors } from "../definitions/CommitmentLevels";
 import Teamup from "./Teamup";
 
-
 export default function UserModal(props: any) {
   const { isOpen, onOpen, onClose, name, profile } = props;
-  const { isOpen: isTeamUpOpen, onOpen: onTeamUpOpen, onClose: onTeamUpClose} = useDisclosure();
+  const { isOpen: isTeamUpOpen, onOpen: onTeamUpOpen, onClose: onTeamUpClose } = useDisclosure();
 
-  function teamUp(){
+  function teamUp() {
     onTeamUpOpen();
     onClose();
   }
@@ -34,7 +33,15 @@ export default function UserModal(props: any) {
             </Text>
             <Divider borderColor="gray.300" borderWidth="2px" mb="2" />
             <Flex alignItems="center" flexWrap="wrap" mb="2">
-              <Tag bg={commitmentLevelColors[profile.commitmentLevel]} color="white" borderRadius="md" px="2" py="1" mr="2" mb="2">
+              <Tag
+                bg={commitmentLevelColors[profile.commitmentLevel]}
+                color="white"
+                borderRadius="md"
+                px="2"
+                py="1"
+                mr="2"
+                mb="2"
+              >
                 <Text fontSize="sm">
                   <strong>Commitment:</strong> {profile.commitmentLevel}
                 </Text>
@@ -61,25 +68,20 @@ export default function UserModal(props: any) {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" onClick={teamUp}>Ask to Team Up</Button>
+            <Button colorScheme="blue" onClick={teamUp}>
+              Ask to Team Up
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
 
-      <Modal size="xl" isOpen={isTeamUpOpen}
-          onClose={onTeamUpClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Team Up?</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            
-          </ModalBody>
-          <ModalFooter>
-            <Button onClick={onTeamUpClose}>Close</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <Teamup
+        isOpen={isTeamUpOpen}
+        onOpen={onTeamUpOpen}
+        onClose={onTeamUpClose}
+        name={name}
+        profile={profile}
+      ></Teamup>
     </>
   );
 }
