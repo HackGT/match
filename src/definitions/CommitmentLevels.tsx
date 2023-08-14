@@ -6,4 +6,11 @@ const CommitmentLevels : commitmentLevelType[] = [
     { value: "High", label: "High" }
 ];
 
-export default CommitmentLevels;
+const commitmentLevelColors: Record<string, string> = {
+  Low: "red.400",
+  Medium: "yellow.400",
+  High: "green.400",
+};
+
+export { CommitmentLevels, commitmentLevelColors }; 
+export default CommitmentLevels; 
