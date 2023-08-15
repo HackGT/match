@@ -8,6 +8,7 @@ export interface TeamListType {
     hexathon?: string;
     members: string[];
     description: string;
+    public: boolean;
     memberRequests?: {userId: string, message: string}[];
   };
   
