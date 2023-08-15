@@ -12,7 +12,7 @@ import { commitmentLevelColors } from "../definitions/CommitmentLevels";
 import Teamup from "./Teamup";
 
 export default function UserModal(props: any) {
-  const { isOpen, onOpen, onClose, name, profile } = props;
+  const { isOpen, onOpen, onClose, name, profile, email } = props;
   const { isOpen: isTeamUpOpen, onOpen: onTeamUpOpen, onClose: onTeamUpClose } = useDisclosure();
 
   function teamUp() {
@@ -81,6 +81,7 @@ export default function UserModal(props: any) {
         onClose={onTeamUpClose}
         name={name}
         profile={profile}
+        email={email}
       ></Teamup>
     </>
   );

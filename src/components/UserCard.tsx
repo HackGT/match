@@ -15,7 +15,7 @@ import Avatars from "../definitions/Avatars";
 import { commitmentLevelColors } from "../definitions/CommitmentLevels";
 
 const UserCard: React.FC<UserCardType> = (props: UserCardType) => {
-  const { name, profile } = props;
+  const { name, profile, email } = props;
   const { description, school, year, skills, commitmentLevel } = profile;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -75,6 +75,7 @@ const UserCard: React.FC<UserCardType> = (props: UserCardType) => {
           onClose={onClose}
           name={name}
           profile={profile}
+          email={email}
         />
       </Flex>
     </Box>
