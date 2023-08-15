@@ -20,11 +20,36 @@ import {
 } from "@chakra-ui/react";
 import Avatars from "../definitions/Avatars";
 import { commitmentLevelColors } from "../definitions/CommitmentLevels";
-import { Key, ReactElement, JSXElementConstructor, ReactFragment } from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import axios from "axios";
+import { ErrorScreen, LoadingScreen, apiUrl, Service, handleAxiosError } from "@hex-labs/core";
 
 export default function Teamup(props: any) {
   const { isOpen, onOpen, onClose, name, profile } = props;
   const { description, school, year, skills, commitmentLevel } = profile;
+  const [emailText, setEmailText] = useState("");
+
+  const handleUserMessage = (e: { target: { value: React.SetStateAction<string>; }; }) =>{
+    setEmailText(e.target.value);
+  }
+
+  const onSubmit = async (values : any) => {
+    try{
+        await axios.post(
+            apiUrl(Service.NOTIFICATIONS, `/email/send`),
+            {
+                "message": emailText,
+                "emails": ["reese.wang@hexlabs.org"],
+                "subject": "Invite to Team Up",
+                "hexathon": process.env.REACT_APP_HEXATHON_ID
+            }
+        )
+    } catch(e: any){
+        handleAxiosError(e);
+    }
+    onClose();
+  }
+
 
   return (
     <>
@@ -92,11 +117,12 @@ export default function Teamup(props: any) {
                 placeholder="Introduce yourself and explain what you want to accomplish at this event!"
                 size="md"
                 height={300}
+                onChange={handleUserMessage}
               ></Textarea>
             </Grid>
           </ModalBody>
           <ModalFooter justifyContent={"flex-end"}>
-            <Button>Submit Message</Button>
+            <Button onClick={onSubmit}>Submit Message</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
