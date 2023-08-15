@@ -1,7 +1,9 @@
 import { UserCardType } from "../types/UserCard";
+import { TeamCardType } from "../types/TeamCard";
 
 export const userData: UserCardType[] = [
     {
+      userId: "1",
       name: "User 1",
       profile: {
         matched: true,
@@ -15,6 +17,7 @@ export const userData: UserCardType[] = [
       },
     },
     {
+      userId: "2",
       name: "User 2",
       profile: {
         matched: true,
@@ -28,6 +31,7 @@ export const userData: UserCardType[] = [
       },
     },
     {
+      userId: "3",
       name: "User 3",
       profile: {
         matched: true,
@@ -41,6 +45,7 @@ export const userData: UserCardType[] = [
       },
     },
     {
+      userId: "4",
       name: "User 4",
       profile: {
         matched: true,
@@ -54,6 +59,7 @@ export const userData: UserCardType[] = [
       },
     },
     {
+      userId: "5",
       name: "User 5",
       profile: {
         matched: true,
@@ -67,6 +73,7 @@ export const userData: UserCardType[] = [
       },
     },
     {
+      userId: "6",
       name: "User 6",
       profile: {
         matched: true,
@@ -79,4 +86,17 @@ export const userData: UserCardType[] = [
         isJudging: true,
       },
     },
+  ];
+
+  export const teamData: TeamCardType[] = [
+    {
+      name: "Team 1",
+      members: ["1", "3", "5"],
+      description: "We are team 1"
+    },
+    {
+      name: "Team 2",
+      members: ["2", "6"],
+      description: "We are team 2"
+    }
   ];

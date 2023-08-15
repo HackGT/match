@@ -3,11 +3,11 @@ export interface TeamListType {
   }
   
   export type TeamCardType = {
-    id: BigInteger;
+    id?: BigInteger;
     name: string;
-    hexathon: string;
+    hexathon?: string;
     members: string[];
     description: string;
-    memberRequests: {userId: string, message: string}[];
+    memberRequests?: {userId: string, message: string}[];
   };
   
