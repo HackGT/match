@@ -5,11 +5,12 @@ import { createSearchParams, useSearchParams } from "react-router-dom";
 import { UserCardType } from "../../types/UserCard";
 import { CommitmentLevels, Schools, Skills } from "../../definitions";
 import UserCard from "../UserCard";
-import { apiUrl, Service, ErrorScreen } from "@hex-labs/core";
+import { apiUrl, Service, ErrorScreen, useAuth } from "@hex-labs/core";
 import useAxios from "axios-hooks";
 
 const Display: React.FC = () => {
   const title = process.env.REACT_APP_EVENT_NAME;
+  const { user } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchText, setSearchText] = useState("");
   const [commitmentSelectValue, setCommitmentSelectValue] = useState<GroupOption[]>([]);
@@ -172,7 +173,7 @@ const Display: React.FC = () => {
           <Text fontSize={32}>{title}</Text>
           <br></br>
           <Flex flexWrap="wrap" justifyContent="space-evenly">
-            {data?.hexathonUsers.map((user: UserCardType) => (
+            {data?.hexathonUsers.filter((hUser: any) => hUser.userId !== user?.uid).map((user: UserCardType) => (
               <UserCard key={user.name} {...user} />
             ))}
           </Flex>
