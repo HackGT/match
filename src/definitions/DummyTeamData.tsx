@@ -92,11 +92,11 @@ export const userData: UserCardType[] = [
     {
       name: "Team 1",
       members: ["1", "3", "5"],
-      description: "We are team 1"
+      description: "Hey, you! We're assembling a dynamic crew for the hackathon and we've got a mind-blowing project in our sights. If you're all about turning ideas into reality, we want you onboard. Our goal? To craft a slick app that makes life easier for busy students juggling classes, assignments, and social life. If you've got coding chops, design flair, or a knack for user experience, you're the missing piece. Join us for a whirlwind hackathon adventure where we code hard, laugh harder, and emerge with something truly awesome. Slide a message our way and let's conquer this challenge together!"
     },
     {
       name: "Team 2",
       members: ["2", "6"],
-      description: "We are team 2"
+      description: "Team 2 description"
     }
   ];
