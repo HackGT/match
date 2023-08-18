@@ -57,7 +57,7 @@ const Display: React.FC = () => {
   return (
     <Card
       width={"96%"}
-      height={"900px"}
+      height={"auto"}
       top={"50px"}
       left={"2%"}
       boxShadow={"0px 4px 8px 0px rgba(33, 36, 41, 0.1)"}
@@ -173,9 +173,9 @@ const Display: React.FC = () => {
           <Text fontSize={32}>{title}</Text>
           <br></br>
           <Flex flexWrap="wrap" justifyContent="space-evenly">
-            {data?.hexathonUsers.filter((hUser: any) => hUser.userId !== user?.uid).map((user: UserCardType) => (
-              <UserCard key={user.name} {...user} />
-            ))}
+            {data?.hexathonUsers
+              .filter((hUser: any) => hUser.userId !== user?.uid)
+              .map((user: UserCardType) => <UserCard key={user.name} {...user} />)}
           </Flex>
         </Box>
       </CardBody>
