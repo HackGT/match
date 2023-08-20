@@ -88,7 +88,7 @@ export const userData: UserCardType[] = [
     },
   ];
 
-  export const teamData: TeamCardType[] = [
+  const teamData: TeamCardType[] = [
     {
       name: "Team 1",
       members: ["1", "3", "5"],
@@ -102,3 +102,5 @@ export const userData: UserCardType[] = [
       public: true
     }
   ];
+
+  export default teamData;
