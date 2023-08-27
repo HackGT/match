@@ -109,7 +109,6 @@ const Display: React.FC = () => {
     if (!data || data.offset === undefined || data.total === undefined || !data) {
       return false;
     }
-    console.log(data.total > data.offset + data.hexathonUsers.length);
     return data.total > data.offset + data.hexathonUsers.length;
   }, [data]);
 
