@@ -13,13 +13,11 @@ import {
 } from "@chakra-ui/react";
 import { GroupBase, OptionBase, Select } from "chakra-react-select";
 import { createSearchParams, useSearchParams } from "react-router-dom";
-import { UserCardType } from "../../types/UserCard";
 import { CommitmentLevels, Schools, Skills } from "../../definitions";
-import UserCard from "../UserCard";
-import { apiUrl, Service, ErrorScreen, useAuth } from "@hex-labs/core";
+import { apiUrl, Service, ErrorScreen } from "@hex-labs/core";
 import useAxios from "axios-hooks";
-import UserDisplay from "./UserDisplay";
-import TeamsDisplay from "./TeamsDisplay";
+import UserDisplay from "../users/UserDisplay";
+import TeamsDisplay from "../teams/TeamsDisplay";
 
 const limit = 50;
 
@@ -106,6 +104,7 @@ const Display: React.FC = () => {
     }
     return data.offset && data.offset > 0;
   }, [data]);
+
   const hasNext = useMemo(() => {
     if (!data || data.offset === undefined || data.total === undefined || !data) {
       return false;
@@ -276,8 +275,7 @@ const Display: React.FC = () => {
             Teams
           </Button>
         </Box>
-        {displayMode == "allUsers" && <UserDisplay data={data} />}
-        {displayMode == "allTeams" && <TeamsDisplay />}
+        {displayMode === "allUsers" ? <UserDisplay data={data} /> : <TeamsDisplay />}
       </CardBody>
       <Box px={{ base: "4", md: "6" }} pb="5">
         <HStack spacing="3" justify="space-between">
