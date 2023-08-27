@@ -178,19 +178,19 @@ const Display: React.FC = () => {
           </Box>
         </Flex>
         <br></br>
-        <Box display="flex" justifyContent="space-between" alignItems="center" borderWidth="1px" borderRadius="lg" borderColor="purple" width="200px" marginLeft={"auto"} marginRight={"auto"}>
-            <Button colorScheme='purple' variant={displayMode=="allUsers" ? "solid": "ghost"} width="100px" onClick={displayUsers}>
+        <Box display="flex" justifyContent="space-between" alignItems="center" borderRadius="12px" borderColor="#7B69EC" width="192px" height="42px" marginLeft={"auto"} marginRight={"auto"} backgroundColor={"#E6E6E6B2"}>
+        <Button color={displayMode=="allUsers" ? "#ffffff" : "#7B69EC"} backgroundColor={displayMode=="allUsers" ? "#7B69EC": "#E6E6E6B2"} width="94px" height="36px" onClick={displayUsers} borderRadius={"12px"}>
                 Individuals
             </Button>
-            <Button colorScheme='purple' variant={displayMode=="allTeams" ? "solid": "ghost"} width="100px" onClick={displayTeams}>
+            <Button color={displayMode=="allTeams" ? "#ffffff" : "#7B69EC"} backgroundColor={displayMode=="allTeams" ? "#7B69EC": "#E6E6E6B2"} width="94px" height="36px" onClick={displayTeams} borderRadius={"12px"}>
                 Teams
             </Button>
         </Box>
         {displayMode=="allUsers" && (
-          <UserDisplay data={data}></UserDisplay>
+          <UserDisplay data={data}/>
         )}
         {displayMode=="allTeams" && (
-          <TeamsDisplay></TeamsDisplay>
+          <TeamsDisplay/>
         )}
       </CardBody>
     </Card>
