@@ -1,5 +1,16 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Card, Flex, Input, Text, Box, CardBody } from "@chakra-ui/react";
+import {
+  Card,
+  Flex,
+  Input,
+  Text,
+  Box,
+  CardBody,
+  Button,
+  ButtonGroup,
+  HStack,
+  useBreakpointValue,
+} from "@chakra-ui/react";
 import { GroupBase, OptionBase, Select } from "chakra-react-select";
 import { createSearchParams, useSearchParams } from "react-router-dom";
 import { UserCardType } from "../../types/UserCard";
@@ -8,16 +19,21 @@ import UserCard from "../UserCard";
 import { apiUrl, Service, ErrorScreen, useAuth } from "@hex-labs/core";
 import useAxios from "axios-hooks";
 
+const limit = 50;
+
 const Display: React.FC = () => {
   const title = process.env.REACT_APP_EVENT_NAME;
   const { user } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchText, setSearchText] = useState("");
+  const [offset, setOffset] = useState(0);
   const [commitmentSelectValue, setCommitmentSelectValue] = useState<GroupOption[]>([]);
   const [skillSelectValue, setSkillSelectValue] = useState<GroupOption[]>([]);
   const [schoolSelectValue, setSchoolSelectValue] = useState<GroupOption[]>([]);
 
-  const [{ data, error }] = useAxios({
+  const isMobile = useBreakpointValue({ base: true, md: false });
+
+  const [{ data, loading, error }] = useAxios({
     method: "GET",
     url: apiUrl(Service.HEXATHONS, `/hexathon-users/${process.env.REACT_APP_HEXATHON_ID}/users`),
     params: {
@@ -26,6 +42,7 @@ const Display: React.FC = () => {
       commitmentLevel: searchParams.get("commitment")?.split(","),
       school: searchParams.get("school")?.split(","),
       search: searchText,
+      offset,
     },
   });
 
@@ -47,7 +64,54 @@ const Display: React.FC = () => {
     );
   }, [searchParams, commitmentOptions, skillOptions, schoolOptions]);
 
+  useEffect(() => {
+    if (!data) {
+      setResultsText("Showing 0 results");
+    } else if (
+      data.offset === undefined ||
+      data.total === undefined ||
+      data.hexathonUsers.length === 0
+    ) {
+      setResultsText(`Showing ${data.hexathonUsers.length} results`);
+    } else {
+      setResultsText(
+        `Showing ${data.offset + 1} to ${data.offset + data.hexathonUsers.length} of ${
+          data.total
+        } results`
+      );
+    }
+  }, [data]);
+
+  const onPreviousClicked = () => {
+    setOffset(offset - limit);
+  };
+
+  const onNextClicked = () => {
+    setOffset(offset + limit);
+  };
+
+  const onSearchTextChange = (event: any) => {
+    setSearchText(event.target.value);
+    setOffset(0);
+  };
+
+  const [resultsText, setResultsText] = useState("Loading...");
+
   if (error) return <ErrorScreen error={error} />;
+
+  const hasPrevious = useMemo(() => {
+    if (!data || data.offset === undefined) {
+      return false;
+    }
+    return data.offset && data.offset > 0;
+  }, [data]);
+  const hasNext = useMemo(() => {
+    if (!data || data.offset === undefined || data.total === undefined || !data) {
+      return false;
+    }
+    console.log(data.total > data.offset + data.hexathonUsers.length);
+    return data.total > data.offset + data.hexathonUsers.length;
+  }, [data]);
 
   interface GroupOption extends OptionBase {
     label: string;
@@ -66,7 +130,7 @@ const Display: React.FC = () => {
         <Flex>
           <Input
             placeholder="Search"
-            onChange={event => setSearchText(event.target.value)}
+            onChange={onSearchTextChange}
             width={"256px"}
             height={"40px"}
           />
@@ -179,6 +243,28 @@ const Display: React.FC = () => {
           </Flex>
         </Box>
       </CardBody>
+      <Box px={{ base: "4", md: "6" }} pb="5">
+        <HStack spacing="3" justify="space-between">
+          {!isMobile && (
+            <Text color="muted" fontSize="sm">
+              {resultsText}
+            </Text>
+          )}
+          <ButtonGroup
+            spacing="3"
+            justifyContent="space-between"
+            width={{ base: "full", md: "auto" }}
+            variant="secondary"
+          >
+            <Button isDisabled={!hasPrevious} onClick={onPreviousClicked} variant="outline">
+              Previous
+            </Button>
+            <Button isDisabled={!hasNext} onClick={onNextClicked} variant="outline">
+              Next
+            </Button>
+          </ButtonGroup>
+        </HStack>
+      </Box>
     </Card>
   );
 };
