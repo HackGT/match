@@ -56,11 +56,11 @@ const Display: React.FC = () => {
   }
 
   function displayUsers() {
-    setDisplayMode("allUsers")
+    setDisplayMode("allUsers");
   }
 
-  function displayTeams(){
-    setDisplayMode("allTeams")
+  function displayTeams() {
+    setDisplayMode("allTeams");
   }
 
   return (
@@ -178,20 +178,43 @@ const Display: React.FC = () => {
           </Box>
         </Flex>
         <br></br>
-        <Box display="flex" justifyContent="space-between" alignItems="center" borderRadius="12px" borderColor="#7B69EC" width="192px" height="42px" marginLeft={"auto"} marginRight={"auto"} backgroundColor={"#E6E6E6B2"}>
-        <Button color={displayMode=="allUsers" ? "#ffffff" : "#7B69EC"} backgroundColor={displayMode=="allUsers" ? "#7B69EC": "#E6E6E6B2"} width="94px" height="36px" onClick={displayUsers} borderRadius={"12px"}>
-                Individuals
-            </Button>
-          <Button color={displayMode == "allTeams" ? "#ffffff" : "#7B69EC"} backgroundColor={displayMode == "allTeams" ? "#7B69EC" : "#E6E6E6B2"} width="94px" height="36px" onClick={displayTeams} borderRadius={"12px"}>
-                Teams
-            </Button>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          borderRadius="12px"
+          borderColor="#7B69EC"
+          width="192px"
+          height="42px"
+          marginLeft={"auto"}
+          marginRight={"auto"}
+          backgroundColor={"#E6E6E6B2"}
+        >
+          <Button
+            color={displayMode == "allUsers" ? "#ffffff" : "#7B69EC"}
+            backgroundColor={displayMode == "allUsers" ? "#7B69EC" : "#E6E6E6B2"}
+            width="124px"
+            height="36px"
+            onClick={displayUsers}
+            borderRadius={"12px"}
+            _hover={{ backgroundColor: displayMode == "allUsers" ? "#8b7ee0" : "#dddcde" }}
+          >
+            Individuals
+          </Button>
+          <Button
+            color={displayMode == "allTeams" ? "#ffffff" : "#7B69EC"}
+            backgroundColor={displayMode == "allTeams" ? "#7B69EC" : "#E6E6E6B2"}
+            width="94px"
+            height="36px"
+            onClick={displayTeams}
+            borderRadius={"12px"}
+            _hover={{ backgroundColor: displayMode == "allTeams" ? "#8b7ee0" : "#dddcde" }}
+          >
+            Teams
+          </Button>
         </Box>
-        {displayMode=="allUsers" && (
-          <UserDisplay data={data}/>
-        )}
-        {displayMode=="allTeams" && (
-          <TeamsDisplay/>
-        )}
+        {displayMode == "allUsers" && <UserDisplay data={data} />}
+        {displayMode == "allTeams" && <TeamsDisplay />}
       </CardBody>
     </Card>
   );
