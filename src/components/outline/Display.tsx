@@ -8,11 +8,8 @@ import UserCard from "../UserCard";
 import { apiUrl, Service, ErrorScreen, useAuth } from "@hex-labs/core";
 import useAxios from "axios-hooks";
 import UserDisplay from "./UserDisplay";
-import ToggleButton from "../ToggleButton";
 
 const Display: React.FC = () => {
-  const title = process.env.REACT_APP_EVENT_NAME;
-  const { user } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchText, setSearchText] = useState("");
   const [commitmentSelectValue, setCommitmentSelectValue] = useState<GroupOption[]>([]);
