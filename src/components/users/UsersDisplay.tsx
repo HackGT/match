@@ -7,11 +7,11 @@ import useAxios from "axios-hooks";
 import { limit } from "../outline/Display";
 
 interface Props {
-  skills: any;
-  commitmentLevel: any;
-  school: any;
-  search: any;
-  usersOffset: any;
+  skills: string[];
+  commitmentLevel: string[];
+  school: string[];
+  search: string;
+  usersOffset: number;
   setUsersOffset: any;
 }
 

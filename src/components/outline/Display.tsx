@@ -206,10 +206,10 @@ const Display: React.FC = () => {
         </Box>
         {displayMode === "allUsers" ? (
           <UsersDisplay
-            skills={searchParams.get("skill")?.split(",")}
-            commitmentLevel={searchParams.get("commitment")?.split(",")}
-            school={searchParams.get("school")?.split(",")}
-            search={searchText}
+            skills={searchParams.get("skill")?.split(",") as string[]}
+            commitmentLevel={searchParams.get("commitment")?.split(",") as string[]}
+            school={searchParams.get("school")?.split(",") as string[]}
+            search={searchText as string}
             usersOffset={usersOffset}
             setUsersOffset={setUsersOffset}
           />
