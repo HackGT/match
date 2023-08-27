@@ -186,7 +186,7 @@ const Display: React.FC = () => {
             </Button>
         </Box>
         {displayMode=="allUsers" && (
-          <UserDisplay></UserDisplay>
+          <UserDisplay data={data}></UserDisplay>
         )}
       </CardBody>
     </Card>

@@ -8,51 +8,13 @@ import UserCard from "../UserCard";
 import { apiUrl, Service, ErrorScreen, useAuth } from "@hex-labs/core";
 import useAxios from "axios-hooks";
 
-const UserDisplay: React.FC = () => {
+interface Props {
+    data: any;
+}
+
+const UserDisplay: React.FC<Props> = ({data}) => {
     const title = process.env.REACT_APP_EVENT_NAME;
     const { user } = useAuth();
-    const [searchParams, setSearchParams] = useSearchParams();
-    const [searchText, setSearchText] = useState("");
-    const [commitmentSelectValue, setCommitmentSelectValue] = useState<GroupOption[]>([]);
-    const [skillSelectValue, setSkillSelectValue] = useState<GroupOption[]>([]);
-    const [schoolSelectValue, setSchoolSelectValue] = useState<GroupOption[]>([]);
-  
-    const [{ data, error }] = useAxios({
-      method: "GET",
-      url: apiUrl(Service.HEXATHONS, `/hexathon-users/${process.env.REACT_APP_HEXATHON_ID}/users`),
-      params: {
-        matched: true,
-        skills: searchParams.get("skill")?.split(","),
-        commitmentLevel: searchParams.get("commitment")?.split(","),
-        school: searchParams.get("school")?.split(","),
-        search: searchText,
-      },
-    });
-  
-    const skillOptions = useMemo(() => Skills, [data]);
-    const commitmentOptions = useMemo(() => CommitmentLevels, [data]);
-    const schoolOptions = useMemo(() => Schools, [data]);
-  
-    useEffect(() => {
-      setCommitmentSelectValue(
-        commitmentOptions.filter(
-          commitment => searchParams.get("commitment")?.includes(commitment.value)
-        )
-      );
-      setSkillSelectValue(
-        skillOptions.filter(skill => searchParams.get("skill")?.includes(skill.value))
-      );
-      setSchoolSelectValue(
-        schoolOptions.filter(school => searchParams.get("school")?.includes(school.value))
-      );
-    }, [searchParams, commitmentOptions, skillOptions, schoolOptions]);
-  
-    if (error) return <ErrorScreen error={error} />;
-  
-    interface GroupOption extends OptionBase {
-      label: string;
-      value: string;
-    }
   
     return (
       <div>
