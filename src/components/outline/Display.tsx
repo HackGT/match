@@ -182,7 +182,7 @@ const Display: React.FC = () => {
         <Button color={displayMode=="allUsers" ? "#ffffff" : "#7B69EC"} backgroundColor={displayMode=="allUsers" ? "#7B69EC": "#E6E6E6B2"} width="94px" height="36px" onClick={displayUsers} borderRadius={"12px"}>
                 Individuals
             </Button>
-            <Button color={displayMode=="allTeams" ? "#ffffff" : "#7B69EC"} backgroundColor={displayMode=="allTeams" ? "#7B69EC": "#E6E6E6B2"} width="94px" height="36px" onClick={displayTeams} borderRadius={"12px"}>
+          <Button color={displayMode == "allTeams" ? "#ffffff" : "#7B69EC"} backgroundColor={displayMode == "allTeams" ? "#7B69EC" : "#E6E6E6B2"} width="94px" height="36px" onClick={displayTeams} borderRadius={"12px"}>
                 Teams
             </Button>
         </Box>
