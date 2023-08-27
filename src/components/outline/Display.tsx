@@ -8,6 +8,7 @@ import UserCard from "../UserCard";
 import { apiUrl, Service, ErrorScreen, useAuth } from "@hex-labs/core";
 import useAxios from "axios-hooks";
 import UserDisplay from "./UserDisplay";
+import TeamsDisplay from "./TeamsDisplay";
 
 const Display: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -54,11 +55,11 @@ const Display: React.FC = () => {
     value: string;
   }
 
-  const displayUsers = async() =>{
+  function displayUsers() {
     setDisplayMode("allUsers")
   }
 
-  const displayTeams = async() =>{
+  function displayTeams(){
     setDisplayMode("allTeams")
   }
 
@@ -179,14 +180,17 @@ const Display: React.FC = () => {
         <br></br>
         <Box display="flex" justifyContent="space-between" alignItems="center" borderWidth="1px" borderRadius="lg" borderColor="purple" width="200px" marginLeft={"auto"} marginRight={"auto"}>
             <Button colorScheme='purple' variant={displayMode=="allUsers" ? "solid": "ghost"} width="100px" onClick={displayUsers}>
-                User Display
+                Individuals
             </Button>
             <Button colorScheme='purple' variant={displayMode=="allTeams" ? "solid": "ghost"} width="100px" onClick={displayTeams}>
-                Team Display
+                Teams
             </Button>
         </Box>
         {displayMode=="allUsers" && (
           <UserDisplay data={data}></UserDisplay>
+        )}
+        {displayMode=="allTeams" && (
+          <TeamsDisplay></TeamsDisplay>
         )}
       </CardBody>
     </Card>
