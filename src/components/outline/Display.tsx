@@ -1,53 +1,26 @@
 import React, { useState, useEffect, useMemo } from "react";
-import {
-  Card,
-  Flex,
-  Input,
-  Text,
-  Box,
-  CardBody,
-  Button,
-  ButtonGroup,
-  HStack,
-  useBreakpointValue,
-} from "@chakra-ui/react";
+import { Card, Flex, Input, Box, CardBody, Button } from "@chakra-ui/react";
 import { GroupBase, OptionBase, Select } from "chakra-react-select";
 import { createSearchParams, useSearchParams } from "react-router-dom";
 import { CommitmentLevels, Schools, Skills } from "../../definitions";
-import { apiUrl, Service, ErrorScreen } from "@hex-labs/core";
-import useAxios from "axios-hooks";
-import UserDisplay from "../users/UserDisplay";
+import UsersDisplay from "../users/UsersDisplay";
 import TeamsDisplay from "../teams/TeamsDisplay";
 
-const limit = 50;
+export const limit = 50;
 
 const Display: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchText, setSearchText] = useState("");
-  const [offset, setOffset] = useState(0);
+  const [usersOffset, setUsersOffset] = useState(0);
+  const [teamsOffset, setTeamsOffset] = useState(0);
   const [commitmentSelectValue, setCommitmentSelectValue] = useState<GroupOption[]>([]);
   const [skillSelectValue, setSkillSelectValue] = useState<GroupOption[]>([]);
   const [schoolSelectValue, setSchoolSelectValue] = useState<GroupOption[]>([]);
   const [displayMode, setDisplayMode] = useState("allUsers");
 
-  const isMobile = useBreakpointValue({ base: true, md: false });
-
-  const [{ data, error }] = useAxios({
-    method: "GET",
-    url: apiUrl(Service.HEXATHONS, `/hexathon-users/${process.env.REACT_APP_HEXATHON_ID}/users`),
-    params: {
-      matched: true,
-      skills: searchParams.get("skill")?.split(","),
-      commitmentLevel: searchParams.get("commitment")?.split(","),
-      school: searchParams.get("school")?.split(","),
-      search: searchText,
-      offset,
-    },
-  });
-
-  const skillOptions = useMemo(() => Skills, [data]);
-  const commitmentOptions = useMemo(() => CommitmentLevels, [data]);
-  const schoolOptions = useMemo(() => Schools, [data]);
+  const skillOptions = useMemo(() => Skills, []);
+  const commitmentOptions = useMemo(() => CommitmentLevels, []);
+  const schoolOptions = useMemo(() => Schools, []);
 
   useEffect(() => {
     setCommitmentSelectValue(
@@ -63,54 +36,10 @@ const Display: React.FC = () => {
     );
   }, [searchParams, commitmentOptions, skillOptions, schoolOptions]);
 
-  useEffect(() => {
-    if (!data) {
-      setResultsText("Showing 0 results");
-    } else if (
-      data.offset === undefined ||
-      data.total === undefined ||
-      data.hexathonUsers.length === 0
-    ) {
-      setResultsText(`Showing ${data.hexathonUsers.length} results`);
-    } else {
-      setResultsText(
-        `Showing ${data.offset + 1} to ${data.offset + data.hexathonUsers.length} of ${
-          data.total
-        } results`
-      );
-    }
-  }, [data]);
-
-  const onPreviousClicked = () => {
-    setOffset(offset - limit);
-  };
-
-  const onNextClicked = () => {
-    setOffset(offset + limit);
-  };
-
   const onSearchTextChange = (event: any) => {
     setSearchText(event.target.value);
-    setOffset(0);
+    displayMode === "allUsers" ? setUsersOffset(0) : setTeamsOffset(0);
   };
-
-  const [resultsText, setResultsText] = useState("Loading...");
-
-  if (error) return <ErrorScreen error={error} />;
-
-  const hasPrevious = useMemo(() => {
-    if (!data || data.offset === undefined) {
-      return false;
-    }
-    return data.offset && data.offset > 0;
-  }, [data]);
-
-  const hasNext = useMemo(() => {
-    if (!data || data.offset === undefined || data.total === undefined || !data) {
-      return false;
-    }
-    return data.total > data.offset + data.hexathonUsers.length;
-  }, [data]);
 
   interface GroupOption extends OptionBase {
     label: string;
@@ -275,30 +204,19 @@ const Display: React.FC = () => {
             Teams
           </Button>
         </Box>
-        {displayMode === "allUsers" ? <UserDisplay data={data} /> : <TeamsDisplay />}
+        {displayMode === "allUsers" ? (
+          <UsersDisplay
+            skills={searchParams.get("skill")?.split(",")}
+            commitmentLevel={searchParams.get("commitment")?.split(",")}
+            school={searchParams.get("school")?.split(",")}
+            search={searchText}
+            usersOffset={usersOffset}
+            setUsersOffset={setUsersOffset}
+          />
+        ) : (
+          <TeamsDisplay />
+        )}
       </CardBody>
-      <Box px={{ base: "4", md: "6" }} pb="5">
-        <HStack spacing="3" justify="space-between">
-          {!isMobile && (
-            <Text color="muted" fontSize="sm">
-              {resultsText}
-            </Text>
-          )}
-          <ButtonGroup
-            spacing="3"
-            justifyContent="space-between"
-            width={{ base: "full", md: "auto" }}
-            variant="secondary"
-          >
-            <Button isDisabled={!hasPrevious} onClick={onPreviousClicked} variant="outline">
-              Previous
-            </Button>
-            <Button isDisabled={!hasNext} onClick={onNextClicked} variant="outline">
-              Next
-            </Button>
-          </ButtonGroup>
-        </HStack>
-      </Box>
     </Card>
   );
 };

@@ -23,7 +23,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { apiUrl, Service, handleAxiosError, useAuth } from "@hex-labs/core";
 
-export default function Teamup(props: any) {
+export default function TeamUpModal(props: any) {
   const { isOpen, onOpen, onClose, name, profile, email } = props;
   const { description, school, year, skills, commitmentLevel } = profile;
   const [emailText, setEmailText] = useState("");
