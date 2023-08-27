@@ -18,22 +18,23 @@ import { CommitmentLevels, Schools, Skills } from "../../definitions";
 import UserCard from "../UserCard";
 import { apiUrl, Service, ErrorScreen, useAuth } from "@hex-labs/core";
 import useAxios from "axios-hooks";
+import UserDisplay from "./UserDisplay";
+import TeamsDisplay from "./TeamsDisplay";
 
 const limit = 50;
 
 const Display: React.FC = () => {
-  const title = process.env.REACT_APP_EVENT_NAME;
-  const { user } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchText, setSearchText] = useState("");
   const [offset, setOffset] = useState(0);
   const [commitmentSelectValue, setCommitmentSelectValue] = useState<GroupOption[]>([]);
   const [skillSelectValue, setSkillSelectValue] = useState<GroupOption[]>([]);
   const [schoolSelectValue, setSchoolSelectValue] = useState<GroupOption[]>([]);
+  const [displayMode, setDisplayMode] = useState("allUsers");
 
   const isMobile = useBreakpointValue({ base: true, md: false });
 
-  const [{ data, loading, error }] = useAxios({
+  const [{ data, error }] = useAxios({
     method: "GET",
     url: apiUrl(Service.HEXATHONS, `/hexathon-users/${process.env.REACT_APP_HEXATHON_ID}/users`),
     params: {
@@ -115,6 +116,14 @@ const Display: React.FC = () => {
   interface GroupOption extends OptionBase {
     label: string;
     value: string;
+  }
+
+  function displayUsers() {
+    setDisplayMode("allUsers");
+  }
+
+  function displayTeams() {
+    setDisplayMode("allTeams");
   }
 
   return (
@@ -232,15 +241,43 @@ const Display: React.FC = () => {
           </Box>
         </Flex>
         <br></br>
-        <Box paddingLeft={"5%"} paddingRight={"5%"}>
-          <Text fontSize={32}>{title}</Text>
-          <br></br>
-          <Flex flexWrap="wrap" justifyContent="space-evenly">
-            {data?.hexathonUsers
-              .filter((hUser: any) => hUser.userId !== user?.uid)
-              .map((user: UserCardType) => <UserCard key={user.name} {...user} />)}
-          </Flex>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          borderRadius="12px"
+          borderColor="#7B69EC"
+          width="192px"
+          height="42px"
+          marginLeft={"auto"}
+          marginRight={"auto"}
+          backgroundColor={"#E6E6E6B2"}
+        >
+          <Button
+            color={displayMode == "allUsers" ? "#ffffff" : "#7B69EC"}
+            backgroundColor={displayMode == "allUsers" ? "#7B69EC" : "#E6E6E6B2"}
+            width="124px"
+            height="36px"
+            onClick={displayUsers}
+            borderRadius={"12px"}
+            _hover={{ backgroundColor: displayMode == "allUsers" ? "#8b7ee0" : "#dddcde" }}
+          >
+            Individuals
+          </Button>
+          <Button
+            color={displayMode == "allTeams" ? "#ffffff" : "#7B69EC"}
+            backgroundColor={displayMode == "allTeams" ? "#7B69EC" : "#E6E6E6B2"}
+            width="94px"
+            height="36px"
+            onClick={displayTeams}
+            borderRadius={"12px"}
+            _hover={{ backgroundColor: displayMode == "allTeams" ? "#8b7ee0" : "#dddcde" }}
+          >
+            Teams
+          </Button>
         </Box>
+        {displayMode == "allUsers" && <UserDisplay data={data} />}
+        {displayMode == "allTeams" && <TeamsDisplay />}
       </CardBody>
       <Box px={{ base: "4", md: "6" }} pb="5">
         <HStack spacing="3" justify="space-between">
