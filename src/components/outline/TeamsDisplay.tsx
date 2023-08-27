@@ -1,18 +1,11 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Card, Flex, Input, Text, Box, CardBody } from "@chakra-ui/react";
-import { GroupBase, OptionBase, Select } from "chakra-react-select";
-import { createSearchParams, useSearchParams } from "react-router-dom";
-import { UserCardType } from "../../types/UserCard";
-import { CommitmentLevels, Schools, Skills } from "../../definitions";
-import UserCard from "../UserCard";
 import { apiUrl, Service, ErrorScreen, useAuth } from "@hex-labs/core";
-import useAxios from "axios-hooks";
+import { TeamCardType } from "../../types/TeamCard";
+import { teamData } from "../../definitions/DummyTeamData";
 
-interface Props {
-    data: any;
-}
 
-const TeamsDisplay: React.FC<Props> = ({data}) => {
+const TeamsDisplay: React.FC = () =>{
     const title = process.env.REACT_APP_EVENT_NAME;
     const { user } = useAuth();
   
@@ -20,16 +13,18 @@ const TeamsDisplay: React.FC<Props> = ({data}) => {
       <div>
         <br></br>
           <Box paddingLeft={"5%"} paddingRight={"5%"}>
-            <Text fontSize={32}>{title}</Text>
+            <Text fontSize={32}>{title} Teams</Text>
             <br></br>
             <Flex flexWrap="wrap" justifyContent="space-evenly">
-              {data?.hexathonUsers
-                .filter((hUser: any) => hUser.userId !== user?.uid)
-                .map((user: UserCardType) => <UserCard key={user.name} {...user} />)}
+                {/* temporary team card */}
+                {teamData?.map((team: TeamCardType) => <Box width = "300px">
+                    <Text fontSize={24}>{team.name}</Text>
+                    <Text fontSize={16}>{team.description}</Text>
+                </Box>)}
             </Flex>
           </Box>
       </div>
     );
-  };
-  
-  export default TeamsDisplay;
+};
+
+export default TeamsDisplay;
