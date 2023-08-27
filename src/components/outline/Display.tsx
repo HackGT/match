@@ -187,10 +187,10 @@ const Display: React.FC = () => {
             </Button>
         </Box>
         {displayMode=="allUsers" && (
-          <UserDisplay data={data}></UserDisplay>
+          <UserDisplay data={data} />
         )}
         {displayMode=="allTeams" && (
-          <TeamsDisplay></TeamsDisplay>
+          <TeamsDisplay />
         )}
       </CardBody>
     </Card>
