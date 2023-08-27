@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Card, Flex, Input, Text, Box, CardBody } from "@chakra-ui/react";
+import { Card, Flex, Input, Text, Box, CardBody, Button } from "@chakra-ui/react";
 import { GroupBase, OptionBase, Select } from "chakra-react-select";
 import { createSearchParams, useSearchParams } from "react-router-dom";
 import { UserCardType } from "../../types/UserCard";
@@ -8,6 +8,7 @@ import UserCard from "../UserCard";
 import { apiUrl, Service, ErrorScreen, useAuth } from "@hex-labs/core";
 import useAxios from "axios-hooks";
 import UserDisplay from "./UserDisplay";
+import ToggleButton from "../ToggleButton";
 
 const Display: React.FC = () => {
   const title = process.env.REACT_APP_EVENT_NAME;
@@ -17,6 +18,7 @@ const Display: React.FC = () => {
   const [commitmentSelectValue, setCommitmentSelectValue] = useState<GroupOption[]>([]);
   const [skillSelectValue, setSkillSelectValue] = useState<GroupOption[]>([]);
   const [schoolSelectValue, setSchoolSelectValue] = useState<GroupOption[]>([]);
+  const [displayMode, setDisplayMode] = useState("allUsers");
 
   const [{ data, error }] = useAxios({
     method: "GET",
@@ -53,6 +55,14 @@ const Display: React.FC = () => {
   interface GroupOption extends OptionBase {
     label: string;
     value: string;
+  }
+
+  const displayUsers = async() =>{
+    setDisplayMode("allUsers")
+  }
+
+  const displayTeams = async() =>{
+    setDisplayMode("allTeams")
   }
 
   return (
@@ -169,7 +179,18 @@ const Display: React.FC = () => {
             />
           </Box>
         </Flex>
-        <UserDisplay></UserDisplay>
+        <br></br>
+        <Box display="flex" justifyContent="space-between" alignItems="center" borderWidth="1px" borderRadius="lg" borderColor="purple" width="200px" marginLeft={"auto"} marginRight={"auto"}>
+            <Button colorScheme='purple' variant={displayMode=="allUsers" ? "solid": "ghost"} width="100px" onClick={displayUsers}>
+                User Display
+            </Button>
+            <Button colorScheme='purple' variant={displayMode=="allTeams" ? "solid": "ghost"} width="100px" onClick={displayTeams}>
+                Team Display
+            </Button>
+        </Box>
+        {displayMode=="allUsers" && (
+          <UserDisplay></UserDisplay>
+        )}
       </CardBody>
     </Card>
   );
