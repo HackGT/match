@@ -1,4 +1,3 @@
-import UserModal from "./UserModal";
 import {
   Modal,
   ModalOverlay,
@@ -18,50 +17,56 @@ import {
   Textarea,
   Divider,
 } from "@chakra-ui/react";
-import Avatars from "../definitions/Avatars";
-import { commitmentLevelColors } from "../definitions/CommitmentLevels";
-import React, { useState, useEffect, useMemo } from "react";
+import Avatars from "../../definitions/Avatars";
+import { commitmentLevelColors } from "../../definitions/CommitmentLevels";
+import React, { useState } from "react";
 import axios from "axios";
-import { ErrorScreen, LoadingScreen, apiUrl, Service, handleAxiosError, useAuth } from "@hex-labs/core";
+import { apiUrl, Service, handleAxiosError, useAuth } from "@hex-labs/core";
 
-export default function Teamup(props: any) {
+export default function TeamUpModal(props: any) {
   const { isOpen, onOpen, onClose, name, profile, email } = props;
   const { description, school, year, skills, commitmentLevel } = profile;
   const [emailText, setEmailText] = useState("");
   const { user } = useAuth();
 
-  const handleUserMessage = (e: { target: { value: React.SetStateAction<string>; }; }) =>{
+  const handleUserMessage = (e: { target: { value: React.SetStateAction<string> } }) => {
     setEmailText(e.target.value);
-  }
+  };
 
-  const onSubmit = async (values : any) => {
-    try{
-        const myUserID = user?.uid;
-        const userDetails = await axios.get(apiUrl(Service.USERS, `/users/${myUserID}`))
+  const onSubmit = async (values: any) => {
+    try {
+      const myUserID = user?.uid;
+      const userDetails = await axios.get(apiUrl(Service.USERS, `/users/${myUserID}`));
 
-        await axios.post(
-            apiUrl(Service.NOTIFICATIONS, `/email/send`),
-            {
-                "message": `<html>
+      await axios.post(apiUrl(Service.NOTIFICATIONS, `/email/send`), {
+        message:
+          `<html>
                 <body>
                     <br>
-                    <p>`+ emailText +`</p>
+                    <p>` +
+          emailText +
+          `</p>
                     <br>
                     <p>For more information, visit Hexlabs Match.</p>
                 </body>
                 </html>`,
-                "emails": [email],
-                "subject": userDetails.data.name.first + " " + userDetails.data.name.middle + " "+ userDetails.data.name.last +" invites you to team up for " + process.env.REACT_APP_EVENT_NAME + "!!",
-                "hexathon": process.env.REACT_APP_HEXATHON_ID
-            }
-        )
-        
-    } catch(e: any){
-        handleAxiosError(e);
+        emails: [email],
+        subject:
+          userDetails.data.name.first +
+          " " +
+          userDetails.data.name.middle +
+          " " +
+          userDetails.data.name.last +
+          " invites you to team up for " +
+          process.env.REACT_APP_EVENT_NAME +
+          "!!",
+        hexathon: process.env.REACT_APP_HEXATHON_ID,
+      });
+    } catch (e: any) {
+      handleAxiosError(e);
     }
     onClose();
-  }
-
+  };
 
   return (
     <>

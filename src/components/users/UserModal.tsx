@@ -8,8 +8,8 @@ import {
   ModalBody,
   ModalCloseButton,
 } from "@chakra-ui/react";
-import { commitmentLevelColors } from "../definitions/CommitmentLevels";
-import Teamup from "./Teamup";
+import { commitmentLevelColors } from "../../definitions/CommitmentLevels";
+import TeamUpModal from "../teams/TeamUpModal";
 
 export default function UserModal(props: any) {
   const { isOpen, onOpen, onClose, name, profile, email } = props;
@@ -75,14 +75,14 @@ export default function UserModal(props: any) {
         </ModalContent>
       </Modal>
 
-      <Teamup
+      <TeamUpModal
         isOpen={isTeamUpOpen}
         onOpen={onTeamUpOpen}
         onClose={onTeamUpClose}
         name={name}
         profile={profile}
         email={email}
-      ></Teamup>
+      />
     </>
   );
 }
