@@ -9,7 +9,7 @@ import Display from "./Display";
 const AppOutline: React.FC = () => (
   <>
     <Navigation />
-    <TeamCard name="Test" description="test" members={[]} public={false}/>  
+    <TeamCard name="epic team" description="A team description that would tell individuals what the team is about." members={["skill1", "skill2", "skill3", "skill4"]} public={false}/>  
     <Display />
     <Footer />
   </>

@@ -13,52 +13,67 @@ import { TeamCardType } from "../../types/TeamCard";
 import { UserCardType } from "../../types/UserCard";
 import userData from "../../definitions/DummyTeamData";
 import teamData from "../../definitions/DummyTeamData";
-console.log(userData)
-const TeamCard: React.FC<TeamCardType> = (props: TeamCardType) => {
-    const { name, members, description } = props;
 
-    return (
+const TeamCard: React.FC<TeamCardType> = (props: TeamCardType) => {
+  const { name, members, description } = props;
+
+  return (
+    <Box
+      borderWidth="1px"
+      borderStyle="solid"
+      rounded="lg"
+      boxShadow="lg"
+      height="315px"
+      width="300px"
+      fontWeight="bold"
+      alignItems="center"
+      backgroundColor="white"
+      cursor="pointer"
+      padding="4"
+    >
+      <Flex flexDirection="column">
+        <Text fontSize="3xl" fontWeight="bold" mb="1">
+          {name}
+        </Text>
+        <Divider borderColor="gray.300" borderWidth="2px" mb="2" />
+
+        <Flex alignItems="flex-start" flexWrap="wrap" mb="2">
+          {members.map((member) => (
+            <Tag
+              key={member}
+              bg="blue.400"
+              color="white"
+              borderRadius="md"
+              px="2"
+              py="1"
+              mr="2"
+              mb="2"
+            >
+              <Text fontSize="sm">{member}</Text>
+            </Tag>
+          ))}
+        </Flex>
+
         <Box
-          borderWidth="1px"
-          borderStyle="solid"
-          rounded="lg"
-          boxShadow="lg"
-          height="315px"
-          width="300px"
-          fontWeight="bold"
-          alignItems="center"
-          backgroundColor="white"
-          cursor="pointer"
-          padding="4"
+          fontSize="sm"
+          color="gray.500"
+          mb="2"
+          maxHeight="80px" // Set a maximum height for the description
+          overflowY="auto" // Add vertical scrollbar when content overflows
         >
-            <Flex flexDirection="column">
-                <Text fontSize="3xl" fontWeight="bold" mb="2">
-                    {name}
-                </Text>
-                <Divider borderColor="gray.300" borderWidth="2px" mb="2" />
-                <Text fontSize="sm" color="gray.500" mb="2" height="45px" isTruncated>
-                    {description}
-                </Text>
-                <Divider borderColor="gray.300" borderWidth="2px" />
-                <Flex alignItems="center" flexWrap="wrap" mb="2" height="60px">
-                {members.map(member => (
-                  <Tag
-                    key={member}
-                    bg="blue.400"
-                    color="white"
-                    borderRadius="md"
-                    px="2"
-                    py="1"
-                    mr="2"
-                    mb="2"
-                  >
-                    <Text fontSize="sm">{member}</Text>
-                  </Tag>
-                ))}
-                </Flex>
-            </Flex>
+          {description}
         </Box>
-      );
+
+        <Divider borderColor="gray.300" borderWidth="2px" />
+
+        <Flex justifyContent="flex-start" alignItems="center" mt="2">
+          <Tag bg="purple.400" color="white" borderRadius="md" px="2" py="1">
+            Members: {members.length}
+          </Tag>
+        </Flex>
+      </Flex>
+    </Box>
+  );
 };
 
 export default TeamCard;
