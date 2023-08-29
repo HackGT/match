@@ -39,6 +39,22 @@ const TeamCard: React.FC<TeamCardType> = (props: TeamCardType) => {
                     {description}
                 </Text>
                 <Divider borderColor="gray.300" borderWidth="2px" />
+                <Flex alignItems="center" flexWrap="wrap" mb="2" height="60px">
+                {members.map(member => (
+                  <Tag
+                    key={member}
+                    bg="blue.400"
+                    color="white"
+                    borderRadius="md"
+                    px="2"
+                    py="1"
+                    mr="2"
+                    mb="2"
+                  >
+                    <Text fontSize="sm">{member}</Text>
+                  </Tag>
+                ))}
+        </Flex>
             </Flex>
         </Box>
       );
