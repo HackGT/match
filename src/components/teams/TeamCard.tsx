@@ -9,10 +9,11 @@ import {
   Avatar,
   TagLabel,
 } from "@chakra-ui/react";
-import { TeamCardType } from "../types/TeamCard";
-import userData from "../definitions/DummyTeamData";
-import teamData from "../definitions/DummyTeamData";
-
+import { TeamCardType } from "../../types/TeamCard";
+import { UserCardType } from "../../types/UserCard";
+import userData from "../../definitions/DummyTeamData";
+import teamData from "../../definitions/DummyTeamData";
+console.log(userData)
 const TeamCard: React.FC<TeamCardType> = (props: TeamCardType) => {
     const { name, members, description } = props;
 
@@ -54,7 +55,7 @@ const TeamCard: React.FC<TeamCardType> = (props: TeamCardType) => {
                     <Text fontSize="sm">{member}</Text>
                   </Tag>
                 ))}
-        </Flex>
+                </Flex>
             </Flex>
         </Box>
       );
