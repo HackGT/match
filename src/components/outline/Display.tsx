@@ -214,7 +214,13 @@ const Display: React.FC = () => {
             setUsersOffset={setUsersOffset}
           />
         ) : (
-          <TeamsDisplay teamName={""} description={""} members={[]} search={""}  />
+          <TeamsDisplay 
+          teamName={""} 
+          description={""} 
+          members={[]} 
+          search={""}
+          usersOffset={usersOffset}
+          setUsersOffset={setUsersOffset}  />
         )}
       </CardBody>
     </Card>

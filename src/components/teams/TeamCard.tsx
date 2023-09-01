@@ -16,6 +16,7 @@ import teamData from "../../definitions/DummyTeamData";
 
 const TeamCard: React.FC<TeamCardType> = (props: TeamCardType) => {
   const { name, members, description } = props;
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <Box
@@ -30,6 +31,7 @@ const TeamCard: React.FC<TeamCardType> = (props: TeamCardType) => {
       backgroundColor="white"
       cursor="pointer"
       padding="4"
+      onClick={onOpen} // Open the modal when clicked
     >
       <Flex flexDirection="column">
         <Text fontSize="3xl" fontWeight="bold" mb="1">
