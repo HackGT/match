@@ -28,37 +28,44 @@ const TeamsDisplay: React.FC<Props> = ({
     const title = process.env.REACT_APP_EVENT_NAME;
     const { user } = useAuth();
 
-    const [{ data, error }] = useAxios({
+    const [{ data: tData, error: tError }] = useAxios({
         method: "GET",
         url: apiUrl(Service.HEXATHONS, `/teams`),
         params: {
             matched: true,
             teamName,
             description,
-            members, 
+            members,
             search,
         },
     });
 
+    
+    // tData?.teams.forEach((team: { name: any; description: any; members: any[]; }) => {
+    //     console.log(`Team Name: ${team.name}`);
+    //     console.log(`Description: ${team.description}`);
+    //   });
+    
+
     useEffect(() => {
-        if (!data) {
+        if (!tData) {
           setResultsText("Showing 0 results");
         } else if (
-          data.offset === undefined ||
-          data.total === undefined ||
-          data.teams.length === 0
+            tData.offset === undefined ||
+            tData.total === undefined ||
+            tData.teams.length === 0
         ) {
-          setResultsText(`Showing ${data.teams.length} results`);
+          setResultsText(`Showing ${tData.teams.length} results`);
         } else {
           setResultsText(
-            `Showing ${data.offset + 1} to ${data.offset + data.teams.length} of ${
-              data.total
+            `Showing ${tData.offset + 1} to ${tData.offset + tData.teams.length} of ${
+                tData.total
             } results`
           );
         }
-      }, [data]);
+      }, [tData]);
 
-    if (error) return <ErrorScreen error={error} />;
+    if (tError) return <ErrorScreen error={tError} />;
 
     const onPreviousClicked = () => {
         setUsersOffset(usersOffset - limit);
@@ -69,18 +76,18 @@ const TeamsDisplay: React.FC<Props> = ({
     };
 
     const hasPrevious = useMemo(() => {
-        if (!data || data.offset === undefined) {
+        if (!tData || tData.offset === undefined) {
             return false;
         }
-        return data.offset && data.offset > 0;
-    }, [data]);
+        return tData.offset && tData.offset > 0;
+    }, [tData]);
 
     const hasNext = useMemo(() => {
-        if (!data || data.offset === undefined || data.total === undefined || !data) {
+        if (!tData || tData.offset === undefined || tData.total === undefined || !tData) {
             return false;
         }
-        return data.total > data.offset + data.teams.length;
-    }, [data]);
+        return tData.total > tData.offset + tData.teams.length;
+    }, [tData]);
 
     return (
         <div>
@@ -89,7 +96,8 @@ const TeamsDisplay: React.FC<Props> = ({
                 <Text fontSize={32}>{title}</Text>
                 <br></br>
                 <Flex flexWrap="wrap" justifyContent="space-evenly">
-                    {data?.teams
+                    {tData?.teams
+                        .filter((hUser: any) => hUser.userId !== user?.uid)
                         .map((user: TeamCardType) => <TeamCard key={user.name} {...user} />)}
                 </Flex>
             </Box>

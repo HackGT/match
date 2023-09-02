@@ -11,10 +11,22 @@ import {
 } from "@chakra-ui/react";
 import { TeamCardType } from "../../types/TeamCard";
 import { UserCardType } from "../../types/UserCard";
+import { apiUrl, Service } from "@hex-labs/core";
+import useAxios from "axios-hooks";
 
 const TeamCard: React.FC<TeamCardType> = (props: TeamCardType) => {
   const { name, members, description } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [{ data, error }] = useAxios({
+    method: "GET",
+    url: apiUrl(Service.HEXATHONS, `/hexathon-users/${process.env.REACT_APP_HEXATHON_ID}/users/`),
+    params: {
+        members, 
+    },
+  });
+
+  console.log(data)
 
   return (
     <Box
@@ -38,9 +50,9 @@ const TeamCard: React.FC<TeamCardType> = (props: TeamCardType) => {
         <Divider borderColor="gray.300" borderWidth="2px" mb="2" />
 
         <Flex alignItems="flex-start" flexWrap="wrap" mb="2">
-          {members.map((member) => (
+          {data.map((member: any) => (
             <Tag
-              key={member}
+              key={member?.userId}
               bg="blue.400"
               color="white"
               borderRadius="md"
@@ -49,7 +61,7 @@ const TeamCard: React.FC<TeamCardType> = (props: TeamCardType) => {
               mr="2"
               mb="2"
             >
-              <Text fontSize="sm">{member}</Text>
+              <Text fontSize="sm">{member?.name}</Text>
             </Tag>
           ))}
         </Flex>
