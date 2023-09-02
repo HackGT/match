@@ -28,7 +28,7 @@ const TeamsDisplay: React.FC<Props> = ({
     const title = process.env.REACT_APP_EVENT_NAME;
     const { user } = useAuth();
 
-    const [{ data, loading, error }] = useAxios({
+    const [{ data, error }] = useAxios({
         method: "GET",
         url: apiUrl(Service.HEXATHONS, `/teams`),
         params: {
