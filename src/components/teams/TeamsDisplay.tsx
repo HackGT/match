@@ -25,6 +25,8 @@ const TeamsDisplay: React.FC<Props> = ({
 }) => {
     const isMobile = useBreakpointValue({ base: true, md: false });
     const [resultsText, setResultsText] = useState("Loading...");
+    const title = process.env.REACT_APP_EVENT_NAME;
+    const { user } = useAuth();
 
     const [{ data, loading, error }] = useAxios({
         method: "GET",
@@ -38,17 +40,26 @@ const TeamsDisplay: React.FC<Props> = ({
         },
     });
 
-    console.log(data)
-
     useEffect(() => {
         if (!data) {
-            setResultsText("Loading...");
-        } else if (!Array.isArray(data) || data.length === 0) {
-            setResultsText("No teams found");
+          setResultsText("Showing 0 results");
+        } else if (
+          data.offset === undefined ||
+          data.total === undefined ||
+          data.teams.length === 0
+        ) {
+          setResultsText(`Showing ${data.teams.length} results`);
         } else {
-            setResultsText(`Showing ${data.length} teams`);
+          setResultsText(
+            `Showing ${data.offset + 1} to ${data.offset + data.teams.length} of ${
+              data.total
+            } results`
+          );
         }
-    }, [data]);
+      }, [data]);
+
+    if (error) return <ErrorScreen error={error} />;
+    if (loading) return <LoadingScreen />;
 
     const onPreviousClicked = () => {
         setUsersOffset(usersOffset - limit);
@@ -72,19 +83,15 @@ const TeamsDisplay: React.FC<Props> = ({
         return data.total > data.offset;
     }, [data]);
 
-    if (loading) return <LoadingScreen />;
-    if (error) return <ErrorScreen error={error} />;
-
     return (
         <div>
-            <br />
+            <br></br>
             <Box paddingLeft={"5%"} paddingRight={"5%"}>
-                <Text fontSize={32}>Teams</Text>
-                <br />
+                <Text fontSize={32}>{title}</Text>
+                <br></br>
                 <Flex flexWrap="wrap" justifyContent="space-evenly">
-                    {Array.isArray(data) && data.map((team: TeamCardType) => (
-                        <TeamCard key={team.name} {...team} />
-                    ))}
+                    {data?.teams
+                        .map((user: TeamCardType) => <TeamCard key={user.name} {...user} />)}
                 </Flex>
             </Box>
             <Box px={{ base: "4", md: "6" }} pb="5">

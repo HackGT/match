@@ -11,8 +11,6 @@ import {
 } from "@chakra-ui/react";
 import { TeamCardType } from "../../types/TeamCard";
 import { UserCardType } from "../../types/UserCard";
-import userData from "../../definitions/DummyTeamData";
-import teamData from "../../definitions/DummyTeamData";
 
 const TeamCard: React.FC<TeamCardType> = (props: TeamCardType) => {
   const { name, members, description } = props;
