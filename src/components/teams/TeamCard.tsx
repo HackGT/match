@@ -11,6 +11,9 @@ import {
 } from "@chakra-ui/react";
 import { TeamCardType } from "../../types/TeamCard";
 import { UserCardType } from "../../types/UserCard";
+import userData from "../../definitions/DummyTeamData";
+import teamData from "../../definitions/DummyTeamData";
+
 
 const TeamCard: React.FC<TeamCardType> = (props: TeamCardType) => {
   const { name, members, description } = props;
@@ -58,8 +61,8 @@ const TeamCard: React.FC<TeamCardType> = (props: TeamCardType) => {
           fontSize="sm"
           color="gray.500"
           mb="2"
-          maxHeight="80px" // Set a maximum height for the description
-          overflowY="auto" // Add vertical scrollbar when content overflows
+          maxHeight="80px" 
+          overflowY="auto" 
         >
           {description}
         </Box>

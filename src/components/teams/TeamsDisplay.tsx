@@ -59,7 +59,6 @@ const TeamsDisplay: React.FC<Props> = ({
       }, [data]);
 
     if (error) return <ErrorScreen error={error} />;
-    if (loading) return <LoadingScreen />;
 
     const onPreviousClicked = () => {
         setUsersOffset(usersOffset - limit);
@@ -77,10 +76,10 @@ const TeamsDisplay: React.FC<Props> = ({
     }, [data]);
 
     const hasNext = useMemo(() => {
-        if (!data || data.offset === undefined || data.total === undefined) {
+        if (!data || data.offset === undefined || data.total === undefined || !data) {
             return false;
         }
-        return data.total > data.offset;
+        return data.total > data.offset + data.teams.length;
     }, [data]);
 
     return (
