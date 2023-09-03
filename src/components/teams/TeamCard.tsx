@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Flex,
@@ -9,24 +9,49 @@ import {
   Avatar,
   TagLabel,
 } from "@chakra-ui/react";
+
 import { TeamCardType } from "../../types/TeamCard";
 import { UserCardType } from "../../types/UserCard";
 import { apiUrl, Service } from "@hex-labs/core";
 import useAxios from "axios-hooks";
+import axios from "axios";
 
 const TeamCard: React.FC<TeamCardType> = (props: TeamCardType) => {
   const { name, members, description } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [ memberData, setMemberData ] = useState<any>([]);
 
-  const [{ data, error }] = useAxios({
-    method: "GET",
-    url: apiUrl(Service.HEXATHONS, `/hexathon-users/${process.env.REACT_APP_HEXATHON_ID}/users/`),
-    params: {
-        members, 
-    },
-  });
 
-  console.log(data)
+  async function getUsers() {
+    const promises = members.map(member =>
+      axios.get(apiUrl(Service.HEXATHONS, `/hexathon-users/${process.env.REACT_APP_HEXATHON_ID}/users/${member}`)).catch(() => {}).then(res => {
+        if (res) {
+          return res.data;
+        }
+      })
+    )
+
+    // const responses = await Promise.allSettled(promises);
+    // const [{ data, error }] = 
+    //   // params: {
+    //   //     members, 
+    //   // },
+    // });
+  
+    const responses = await Promise.all(promises);
+
+    // console.log(responses)
+    // console.log(responses)
+    // setMemberData(responses)
+
+    console.log(responses)
+
+    setMemberData(responses);
+  }
+
+  React.useEffect(() => {
+    getUsers();
+  }, []);
 
   return (
     <Box
@@ -50,7 +75,7 @@ const TeamCard: React.FC<TeamCardType> = (props: TeamCardType) => {
         <Divider borderColor="gray.300" borderWidth="2px" mb="2" />
 
         <Flex alignItems="flex-start" flexWrap="wrap" mb="2">
-          {data.map((member: any) => (
+          {members.map((member: any) => (
             <Tag
               key={member?.userId}
               bg="blue.400"
@@ -61,9 +86,13 @@ const TeamCard: React.FC<TeamCardType> = (props: TeamCardType) => {
               mr="2"
               mb="2"
             >
-              <Text fontSize="sm">{member?.name}</Text>
+              <Text fontSize="sm">{member}</Text>
             </Tag>
           ))}
+
+          {memberData.map((member: any) => {
+            <h1>test{member ? member.name : ""}</h1>
+          })}
         </Flex>
 
         <Box

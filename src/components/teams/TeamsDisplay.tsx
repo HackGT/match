@@ -32,11 +32,7 @@ const TeamsDisplay: React.FC<Props> = ({
         method: "GET",
         url: apiUrl(Service.HEXATHONS, `/teams`),
         params: {
-            matched: true,
-            teamName,
-            description,
-            members,
-            search,
+            hexathon: process.env.REACT_APP_HEXATHON_ID,
         },
     });
 
