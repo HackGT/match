@@ -30,22 +30,8 @@ const TeamCard: React.FC<TeamCardType> = (props: TeamCardType) => {
         }
       })
     )
-
-    // const responses = await Promise.allSettled(promises);
-    // const [{ data, error }] = 
-    //   // params: {
-    //   //     members, 
-    //   // },
-    // });
   
     const responses = await Promise.all(promises);
-
-    // console.log(responses)
-    // console.log(responses)
-    // setMemberData(responses)
-
-    console.log(responses)
-
     setMemberData(responses);
   }
 
@@ -75,7 +61,7 @@ const TeamCard: React.FC<TeamCardType> = (props: TeamCardType) => {
         <Divider borderColor="gray.300" borderWidth="2px" mb="2" />
 
         <Flex alignItems="flex-start" flexWrap="wrap" mb="2">
-          {members.map((member: any) => (
+          {memberData.map((member: any) => (
             <Tag
               key={member?.userId}
               bg="blue.400"
@@ -86,7 +72,7 @@ const TeamCard: React.FC<TeamCardType> = (props: TeamCardType) => {
               mr="2"
               mb="2"
             >
-              <Text fontSize="sm">{member}</Text>
+              <Text fontSize="sm">{member?.name}</Text>
             </Tag>
           ))}
 

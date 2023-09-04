@@ -36,13 +36,6 @@ const TeamsDisplay: React.FC<Props> = ({
         },
     });
 
-    
-    // tData?.teams.forEach((team: { name: any; description: any; members: any[]; }) => {
-    //     console.log(`Team Name: ${team.name}`);
-    //     console.log(`Description: ${team.description}`);
-    //   });
-    
-
     useEffect(() => {
         if (!tData) {
           setResultsText("Showing 0 results");
