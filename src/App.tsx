@@ -5,6 +5,7 @@ import { Routes, Route } from "react-router-dom";
 import { initializeApp } from "firebase/app";
 import { setPersistence, getAuth, inMemoryPersistence } from "firebase/auth";
 import AppOutline from "./components/outline/AppOutline";
+import EditProfile from "./components/EditProfile";
 
 export const app = initializeApp({
   apiKey: "AIzaSyCsukUZtMkI5FD_etGfefO4Sr7fHkZM7Rg",
@@ -30,6 +31,7 @@ export const App = () => {
     <AuthProvider app={app}>
       <Routes>
         <Route path="" element={<AppOutline />} />
+        <Route path="/profile" element={<EditProfile />} />
       </Routes>
     </AuthProvider>
   );
