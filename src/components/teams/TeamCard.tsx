@@ -30,6 +30,7 @@ const TeamCard: React.FC<TeamCardType> = (props: TeamCardType) => {
         }
       })
     )
+    
   
     const responses = await Promise.all(promises);
     setMemberData(responses);
