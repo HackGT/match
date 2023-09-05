@@ -11,6 +11,8 @@ import {
   Button,
   Container,
   Checkbox, 
+  Text,
+  Flex,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@hex-labs/core";
@@ -19,6 +21,7 @@ import { CommitmentLevels, Skills } from "../definitions";
 import { skillType } from "../definitions/Skills";
 import { commitmentLevelType } from "../definitions/CommitmentLevels";
 import { GroupBase, Select } from "chakra-react-select";
+import { InfoOutlineIcon } from "@chakra-ui/icons";
 
 type Profile = {
   matched: boolean;
@@ -31,9 +34,10 @@ const EditProfile: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  const title = process.env.REACT_APP_EVENT_NAME;
   const hexathonId = process.env.REACT_APP_HEXATHON_ID;
-  const userId = "atS6IAumjxejVaEJYKrBKHXxVFO2";
-  // const userId = user?.uid;
+  // const userId = "atS6IAumjxejVaEJYKrBKHXxVFO2";
+  const userId = user?.uid;
   const [skills, setSkills ] = useState<string[]>([]);
   const [commitmentLevel, setCommitmentLevel ] = useState<string>("");
   const [ profile, setProfile ] = useState<Profile>();
@@ -80,7 +84,7 @@ const EditProfile: React.FC = () => {
         };
         reset(updatedProfile);
         setSkills(Skills.filter(skill => updatedProfile.skills.includes(skill.value)).map(skill => skill.value) || []);
-        setCommitmentLevel(CommitmentLevels.find(commitmentLevel => updatedProfile.commitmentLevel === commitmentLevel.value)?.value || "")
+        setCommitmentLevel(CommitmentLevels.find(commitmentLevel => updatedProfile.commitmentLevel === commitmentLevel.value)?.value || "");
         return updatedProfile;
       }
     }, [user, profile, reset])
@@ -111,14 +115,16 @@ const EditProfile: React.FC = () => {
     };
 
     const handleChangeSkills = (e: any) => {
-      let newSkills: string[] = [];
-      if (e != null) {
-        e.forEach((val: any) => {
-          newSkills.push(val.value);
-        })
-      };
-      setSkills(newSkills);
-      console.log(skills);
+      if (e.length <= 5) {
+        let newSkills: string[] = [];
+        if (e != null) {
+          e.forEach((val: any) => {
+            newSkills.push(val.value);
+          })
+        };
+        setSkills(newSkills);
+        console.log(skills);
+      }
     };
 
     const handleChangeLevel = (e: any) => {
@@ -135,21 +141,28 @@ const EditProfile: React.FC = () => {
                 <Stack spacing="5">
                   <FormControl>
                     <FormLabel>Skills</FormLabel>
-                      <Select<skillType, true, GroupBase<skillType>>
-                        id="skills"
-                        name="skills"
-                        placeholder="Select your skills"
-                        options={Skills}
-                        onChange={handleChangeSkills}
-                        isMulti
-                        value={Skills.filter(skill => skills.includes(skill.value))}
-                      />
+                    <Select<skillType, true, GroupBase<skillType>>
+                      id="skills"
+                      name="skills"
+                      placeholder="Select your skills"
+                      options={Skills}
+                      onChange={handleChangeSkills}
+                      isMulti
+                      value={Skills.filter(skill => skills.includes(skill.value))}
+                    />
+                    <Flex alignItems="start">
+                      <InfoOutlineIcon m="1" boxSize={3} color="#858585"/>
+                      <Text fontSize="xs" color="#858585">
+                        Choose atmost 5 skills most relevant to what you intend to use during {title}
+                      </Text>
+                    </Flex>
                   </FormControl>
                   <FormControl>
                     <FormLabel>Description</FormLabel> {/* ??? max 200 chars */}
                     <Input
                       id="description"
                       type="text"
+                      maxLength={200}
                       {...register("description")}
                     />
                   </FormControl>

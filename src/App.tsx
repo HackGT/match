@@ -1,11 +1,11 @@
-import React from "react";
-import { LoadingScreen, AuthProvider, useLogin } from "@hex-labs/core";
+import { LoadingScreen, AuthProvider, useLogin, Footer } from "@hex-labs/core";
 import axios from "axios";
 import { Routes, Route } from "react-router-dom";
 import { initializeApp } from "firebase/app";
 import { setPersistence, getAuth, inMemoryPersistence } from "firebase/auth";
-import AppOutline from "./components/outline/AppOutline";
 import EditProfile from "./components/EditProfile";
+import Display from "./components/outline/Display";
+import Navigation from "./components/outline/Navigation";
 
 export const app = initializeApp({
   apiKey: "AIzaSyCsukUZtMkI5FD_etGfefO4Sr7fHkZM7Rg",
@@ -29,10 +29,12 @@ export const App = () => {
 
   return (
     <AuthProvider app={app}>
+      <Navigation />
       <Routes>
-        <Route path="" element={<AppOutline />} />
+        <Route path="" element={<Display />} />
         <Route path="/profile" element={<EditProfile />} />
       </Routes>
+      <Footer />
     </AuthProvider>
   );
 };
