@@ -12,6 +12,9 @@ const Navigation: React.FC = () => {
   return (
     <Header>
       <HeaderItem>
+        <Link to="/">Home</Link>
+      </HeaderItem>
+      <HeaderItem>
         <Link to="/profile">Edit Profile</Link>
       </HeaderItem>
       <HeaderItem>
