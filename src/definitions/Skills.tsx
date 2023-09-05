@@ -1,4 +1,4 @@
-type skillType = { value: string; label: string };
+export type skillType = { value: string; label: string };
 
 const Skills: skillType[] = [
   { value: "Android", label: "Android" },

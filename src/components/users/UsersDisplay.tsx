@@ -29,7 +29,7 @@ const UsersDisplay: React.FC<Props> = ({
   const isMobile = useBreakpointValue({ base: true, md: false });
   const [resultsText, setResultsText] = useState("Loading...");
 
-  const [{ data, error }] = useAxios({
+  const [{ data, error }, refetch] = useAxios({
     method: "GET",
     url: apiUrl(Service.HEXATHONS, `/hexathon-users/${process.env.REACT_APP_HEXATHON_ID}/users`),
     params: {
@@ -41,6 +41,10 @@ const UsersDisplay: React.FC<Props> = ({
       offset: usersOffset,
     },
   });
+
+  useEffect(() => {
+    refetch();
+  }, []);
 
   useEffect(() => {
     if (!data) {

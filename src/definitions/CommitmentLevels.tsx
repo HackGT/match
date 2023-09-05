@@ -1,4 +1,4 @@
-type commitmentLevelType = { value: string; label: string };
+export type commitmentLevelType = { value: string; label: string };
 
 export const CommitmentLevels: commitmentLevelType[] = [
   { value: "Low", label: "Low" },
