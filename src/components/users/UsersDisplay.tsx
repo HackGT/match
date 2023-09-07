@@ -23,7 +23,6 @@ const UsersDisplay: React.FC<Props> = ({
   usersOffset,
   setUsersOffset,
 }) => {
-  const title = process.env.REACT_APP_EVENT_NAME;
   const { user } = useAuth();
 
   const isMobile = useBreakpointValue({ base: true, md: false });
@@ -89,11 +88,8 @@ const UsersDisplay: React.FC<Props> = ({
   }, [data]);
 
   return (
-    <div>
-      <br></br>
-      <Box paddingLeft={"5%"} paddingRight={"5%"}>
-        <Text fontSize={32}>{title}</Text>
-        <br></br>
+    <>
+      <Box paddingTop={"2.5%"} paddingLeft={"5%"} paddingRight={"5%"}>
         <Flex flexWrap="wrap" justifyContent="space-evenly">
           {data?.hexathonUsers
             .filter((hUser: any) => hUser.userId !== user?.uid)
@@ -122,7 +118,7 @@ const UsersDisplay: React.FC<Props> = ({
           </ButtonGroup>
         </HStack>
       </Box>
-    </div>
+    </>
   );
 };
 

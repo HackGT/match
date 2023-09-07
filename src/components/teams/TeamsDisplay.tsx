@@ -16,7 +16,6 @@ interface Props {
 const TeamsDisplay: React.FC<Props> = ({ data, membersData, teamsOffset, setTeamsOffset }) => {
   const isMobile = useBreakpointValue({ base: true, md: false });
   const [resultsText, setResultsText] = useState("Loading...");
-  const title = process.env.REACT_APP_EVENT_NAME;
 
   useEffect(() => {
     if (!data) {
@@ -59,10 +58,8 @@ const TeamsDisplay: React.FC<Props> = ({ data, membersData, teamsOffset, setTeam
   if (!teamsLoaded) return <LoadingScreen />;
 
   return (
-    <div>
-      <br></br>
-      <Box paddingLeft={"5%"} paddingRight={"5%"}>
-        <Text fontSize={32}>{title}</Text>
+    <>
+      <Box paddingTop={"1.5%"} paddingLeft={"5%"} paddingRight={"5%"}>
         <br></br>
         <Flex flexWrap="wrap" justifyContent="space-evenly">
           {teamsLoaded &&
@@ -93,7 +90,7 @@ const TeamsDisplay: React.FC<Props> = ({ data, membersData, teamsOffset, setTeam
           </ButtonGroup>
         </HStack>
       </Box>
-    </div>
+    </>
   );
 };
 
