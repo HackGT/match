@@ -39,8 +39,6 @@ const TeamsDisplay: React.FC<Props> = ({ data, membersData, teamsOffset, setTeam
     },
   });
 
-  console.log("userteamdata: ", userTeamData);
-
   if (error) return <ErrorScreen error={error} />;
 
   useEffect(() => {
