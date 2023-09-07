@@ -18,6 +18,7 @@ export enum DisplayType {
 }
 
 const Display: React.FC = () => {
+  const isMobile = useBreakpointValue({ base: true, md: false });
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchText, setSearchText] = useState("");
   const [usersOffset, setUsersOffset] = useState(0);
@@ -123,17 +124,17 @@ const Display: React.FC = () => {
       boxShadow={"0px 4px 8px 0px rgba(33, 36, 41, 0.1)"}
     >
       <CardBody>
-        <Flex>
+        <Flex direction={isMobile ? "column" : "row"}>
           <Input
             placeholder="Search"
             onChange={onSearchTextChange}
-            width={displayMode === DisplayType.USERS ? "256px": "512px"}
+            width={displayMode === DisplayType.USERS && !isMobile ? "256px" : "330px"}
             height={"40px"}
           />
 
           {displayMode === DisplayType.USERS && (
             <>
-              <Box pl="10px" w="256px">
+              <Box pl="10px" w={isMobile ? "320px" : "256px"}>
                 <Select<GroupOption, true, GroupBase<GroupOption>>
                   isMulti
                   options={skillOptions}
@@ -164,7 +165,7 @@ const Display: React.FC = () => {
                 />
               </Box>
 
-              <Box pl="10px" w="256px">
+              <Box pl="10px" w={isMobile ? "320px" : "256px"}>
                 <Select<GroupOption, true, GroupBase<GroupOption>>
                   isMulti
                   options={commitmentOptions}
@@ -198,7 +199,7 @@ const Display: React.FC = () => {
                 />
               </Box>
 
-              <Box pl="10px" w="256px">
+              <Box pl="10px" w={isMobile ? "320px" : "256px"}>
                 <Select<GroupOption, true, GroupBase<GroupOption>>
                   isMulti
                   options={schoolOptions}

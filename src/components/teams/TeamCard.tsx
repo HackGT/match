@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Box, Flex, Text, Divider, Tag, useDisclosure } from "@chakra-ui/react";
 
 import { TeamCardType } from "../../types/TeamCard";
-import { apiUrl, Service } from "@hex-labs/core";
-import axios from "axios";
 
 type TeamCardProps = TeamCardType & {
   memberData: any;
@@ -12,36 +10,6 @@ type TeamCardProps = TeamCardType & {
 const TeamCard: React.FC<TeamCardProps> = props => {
   const { name, members, description } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
-  // const [memberData, setMemberData] = useState<any>([]);
-  // const [loaded, setLoaded] = useState<boolean>(false);
-
-  // const getUsers = async () => {
-  //   const promises = members.map(member =>
-  //     axios
-  //       .get(
-  //         apiUrl(
-  //           Service.HEXATHONS,
-  //           `/hexathon-users/${process.env.REACT_APP_HEXATHON_ID}/users/${member}`
-  //         )
-  //       )
-  //       .catch(() => {})
-  //       .then(res => {
-  //         if (res) {
-  //           return res.data;
-  //         }
-  //       })
-  //   );
-
-  //   const responses = await Promise.all(promises);
-  //   setMemberData(responses);
-  //   setLoaded(true);
-  // };
-
-  // useEffect(() => {
-  //   getUsers();
-  // }, []);
-
-  console.log("inside team card: ", props);
 
   return (
     <>
