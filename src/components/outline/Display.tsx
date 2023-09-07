@@ -1,12 +1,21 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Card, Flex, Input, Box, CardBody, Button } from "@chakra-ui/react";
+import { Card, Flex, Input, Box, CardBody, Button, useBreakpointValue } from "@chakra-ui/react";
 import { GroupBase, OptionBase, Select } from "chakra-react-select";
 import { createSearchParams, useSearchParams } from "react-router-dom";
 import { CommitmentLevels, Schools, Skills } from "../../definitions";
 import UsersDisplay from "../users/UsersDisplay";
 import TeamsDisplay from "../teams/TeamsDisplay";
+import { getSearchParams } from "../../util/helpers";
+import { apiUrl, ErrorScreen, Service } from "@hex-labs/core";
+import useAxios from "axios-hooks";
+import axios from "axios";
 
 export const limit = 50;
+
+export enum DisplayType {
+  USERS = "Users",
+  TEAMS = "Teams",
+}
 
 const Display: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -16,11 +25,62 @@ const Display: React.FC = () => {
   const [commitmentSelectValue, setCommitmentSelectValue] = useState<GroupOption[]>([]);
   const [skillSelectValue, setSkillSelectValue] = useState<GroupOption[]>([]);
   const [schoolSelectValue, setSchoolSelectValue] = useState<GroupOption[]>([]);
-  const [displayMode, setDisplayMode] = useState("allUsers");
+  const [displayMode, setDisplayMode] = useState(DisplayType.USERS);
+  const [membersData, setMembersData] = useState<Record<string, any>>({});
 
   const skillOptions = useMemo(() => Skills, []);
   const commitmentOptions = useMemo(() => CommitmentLevels, []);
   const schoolOptions = useMemo(() => Schools, []);
+
+  // GET teams data while users data is being loaded to reduce latency on switching to TEAMS display
+  const [{ data: teamsData, error }] = useAxios({
+    method: "GET",
+    url: apiUrl(Service.HEXATHONS, `/teams`),
+    params: {
+      hexathon: process.env.REACT_APP_HEXATHON_ID,
+      offset: teamsOffset,
+    },
+  });
+
+  if (error) return <ErrorScreen error={error} />;
+
+  // Memoize the mapping (team.name -> array of hexathon users) for the team card
+  useMemo(async () => {
+    if (!teamsData) {
+      return {};
+    }
+
+    const getUsers = async () => {
+      const memberDataMap: Record<string, any> = {};
+
+      await Promise.all(
+        teamsData.teams.map(async (team: any) => {
+          const memberPromises = team.members.map(async (member: any) => {
+            try {
+              const res = await axios.get(
+                apiUrl(
+                  Service.HEXATHONS,
+                  `/hexathon-users/${process.env.REACT_APP_HEXATHON_ID}/users/${member}`
+                )
+              );
+              return res.data;
+            } catch (error: any) {
+              console.error(`Error fetching member data for ${member}: ${error.message}`);
+              return null;
+            }
+          });
+          const memberData = await Promise.all(memberPromises);
+
+          memberDataMap[team.name] = memberData;
+        })
+      );
+
+      setMembersData(memberDataMap);
+      return memberDataMap;
+    };
+
+    return await getUsers();
+  }, [teamsData]);
 
   useEffect(() => {
     setCommitmentSelectValue(
@@ -38,7 +98,7 @@ const Display: React.FC = () => {
 
   const onSearchTextChange = (event: any) => {
     setSearchText(event.target.value);
-    displayMode === "allUsers" ? setUsersOffset(0) : setTeamsOffset(0);
+    displayMode === DisplayType.USERS ? setUsersOffset(0) : setTeamsOffset(0);
   };
 
   interface GroupOption extends OptionBase {
@@ -47,11 +107,11 @@ const Display: React.FC = () => {
   }
 
   function displayUsers() {
-    setDisplayMode("allUsers");
+    setDisplayMode(DisplayType.USERS);
   }
 
   function displayTeams() {
-    setDisplayMode("allTeams");
+    setDisplayMode(DisplayType.TEAMS);
   }
 
   return (
@@ -67,106 +127,110 @@ const Display: React.FC = () => {
           <Input
             placeholder="Search"
             onChange={onSearchTextChange}
-            width={"256px"}
+            width={displayMode === DisplayType.USERS ? "256px": "512px"}
             height={"40px"}
           />
 
-          <Box pl="10px" w="256px">
-            <Select<GroupOption, true, GroupBase<GroupOption>>
-              isMulti
-              options={skillOptions}
-              placeholder="Skills"
-              value={skillSelectValue}
-              closeMenuOnSelect={false}
-              selectedOptionStyle="check"
-              hideSelectedOptions={false}
-              useBasicStyles
-              onChange={(e: any) => {
-                const skills: GroupOption[] = [];
-                if (e !== null) {
-                  e.forEach((val: any) => {
-                    skills.push({
-                      label: val.label,
-                      value: val.value,
-                    });
-                  });
+          {displayMode === DisplayType.USERS && (
+            <>
+              <Box pl="10px" w="256px">
+                <Select<GroupOption, true, GroupBase<GroupOption>>
+                  isMulti
+                  options={skillOptions}
+                  placeholder="Skills"
+                  value={skillSelectValue}
+                  closeMenuOnSelect={false}
+                  selectedOptionStyle="check"
+                  hideSelectedOptions={false}
+                  useBasicStyles
+                  onChange={(e: any) => {
+                    const skills: GroupOption[] = [];
+                    if (e !== null) {
+                      e.forEach((val: any) => {
+                        skills.push({
+                          label: val.label,
+                          value: val.value,
+                        });
+                      });
 
-                  const newParams = createSearchParams(searchParams);
+                      const newParams = createSearchParams(searchParams);
 
-                  skills.length > 0
-                    ? newParams.set("skill", skills.map(skill => skill.value).join())
-                    : newParams.delete("skill");
-                  setSearchParams(newParams);
-                }
-              }}
-            />
-          </Box>
+                      skills.length > 0
+                        ? newParams.set("skill", skills.map(skill => skill.value).join())
+                        : newParams.delete("skill");
+                      setSearchParams(newParams);
+                    }
+                  }}
+                />
+              </Box>
 
-          <Box pl="10px" w="256px">
-            <Select<GroupOption, true, GroupBase<GroupOption>>
-              isMulti
-              options={commitmentOptions}
-              placeholder="Commitment Level"
-              value={commitmentSelectValue}
-              closeMenuOnSelect={false}
-              selectedOptionStyle="check"
-              hideSelectedOptions={false}
-              useBasicStyles
-              onChange={(e: any) => {
-                const commitments: GroupOption[] = [];
-                if (e !== null) {
-                  e.forEach((val: any) => {
-                    commitments.push({
-                      label: val.label,
-                      value: val.value,
-                    });
-                  });
+              <Box pl="10px" w="256px">
+                <Select<GroupOption, true, GroupBase<GroupOption>>
+                  isMulti
+                  options={commitmentOptions}
+                  placeholder="Commitment Level"
+                  value={commitmentSelectValue}
+                  closeMenuOnSelect={false}
+                  selectedOptionStyle="check"
+                  hideSelectedOptions={false}
+                  useBasicStyles
+                  onChange={(e: any) => {
+                    const commitments: GroupOption[] = [];
+                    if (e !== null) {
+                      e.forEach((val: any) => {
+                        commitments.push({
+                          label: val.label,
+                          value: val.value,
+                        });
+                      });
 
-                  const newParams = createSearchParams(searchParams);
+                      const newParams = createSearchParams(searchParams);
 
-                  commitments.length > 0
-                    ? newParams.set(
-                        "commitment",
-                        commitments.map(commitment => commitment.value).join()
-                      )
-                    : newParams.delete("commitment");
-                  setSearchParams(newParams);
-                }
-              }}
-            />
-          </Box>
+                      commitments.length > 0
+                        ? newParams.set(
+                            "commitment",
+                            commitments.map(commitment => commitment.value).join()
+                          )
+                        : newParams.delete("commitment");
+                      setSearchParams(newParams);
+                    }
+                  }}
+                />
+              </Box>
 
-          <Box pl="10px" w="256px">
-            <Select<GroupOption, true, GroupBase<GroupOption>>
-              isMulti
-              options={schoolOptions}
-              placeholder="Schools"
-              value={schoolSelectValue}
-              closeMenuOnSelect={false}
-              selectedOptionStyle="check"
-              hideSelectedOptions={false}
-              useBasicStyles
-              onChange={(e: any) => {
-                const schools: GroupOption[] = [];
-                if (e !== null) {
-                  e.forEach((val: any) => {
-                    schools.push({
-                      label: val.label,
-                      value: val.value,
-                    });
-                  });
+              <Box pl="10px" w="256px">
+                <Select<GroupOption, true, GroupBase<GroupOption>>
+                  isMulti
+                  options={schoolOptions}
+                  placeholder="Schools"
+                  value={schoolSelectValue}
+                  closeMenuOnSelect={false}
+                  selectedOptionStyle="check"
+                  hideSelectedOptions={false}
+                  useBasicStyles
+                  onChange={(e: any) => {
+                    const schools: GroupOption[] = [];
+                    if (e !== null) {
+                      e.forEach((val: any) => {
+                        schools.push({
+                          label: val.label,
+                          value: val.value,
+                        });
+                      });
 
-                  const newParams = createSearchParams(searchParams);
+                      const newParams = createSearchParams(searchParams);
 
-                  schools.length > 0
-                    ? newParams.set("school", schools.map(school => school.value).join())
-                    : newParams.delete("school");
+                      schools.length > 0
+                        ? newParams.set("school", schools.map(school => school.value).join())
+                        : newParams.delete("school");
 
-                  setSearchParams(newParams);
-                }
-              }}
-            />
-          </Box>
+                      setSearchParams(newParams);
+                    }
+                  }}
+                />
+              </Box>
+            </>
+          )}
         </Flex>
         <br></br>
         <Box
@@ -182,45 +246,45 @@ const Display: React.FC = () => {
           backgroundColor={"#E6E6E6B2"}
         >
           <Button
-            color={displayMode == "allUsers" ? "#ffffff" : "#7B69EC"}
-            backgroundColor={displayMode == "allUsers" ? "#7B69EC" : "#E6E6E6B2"}
+            color={displayMode == DisplayType.USERS ? "#ffffff" : "#7B69EC"}
+            backgroundColor={displayMode == DisplayType.USERS ? "#7B69EC" : "#E6E6E6B2"}
             width="124px"
             height="36px"
             onClick={displayUsers}
             borderRadius={"12px"}
-            _hover={{ backgroundColor: displayMode == "allUsers" ? "#8b7ee0" : "#dddcde" }}
+            _hover={{ backgroundColor: displayMode == DisplayType.USERS ? "#8b7ee0" : "#dddcde" }}
           >
             Individuals
           </Button>
           <Button
-            color={displayMode == "allTeams" ? "#ffffff" : "#7B69EC"}
-            backgroundColor={displayMode == "allTeams" ? "#7B69EC" : "#E6E6E6B2"}
+            color={displayMode == DisplayType.TEAMS ? "#ffffff" : "#7B69EC"}
+            backgroundColor={displayMode == DisplayType.TEAMS ? "#7B69EC" : "#E6E6E6B2"}
             width="94px"
             height="36px"
             onClick={displayTeams}
             borderRadius={"12px"}
-            _hover={{ backgroundColor: displayMode == "allTeams" ? "#8b7ee0" : "#dddcde" }}
+            _hover={{ backgroundColor: displayMode == DisplayType.TEAMS ? "#8b7ee0" : "#dddcde" }}
           >
             Teams
           </Button>
         </Box>
-        {displayMode === "allUsers" ? (
+        {displayMode === DisplayType.USERS ? (
           <UsersDisplay
-            skills={searchParams.get("skill")?.split(",") as string[]}
-            commitmentLevel={searchParams.get("commitment")?.split(",") as string[]}
-            school={searchParams.get("school")?.split(",") as string[]}
+            skills={getSearchParams(searchParams, "skill")}
+            commitmentLevel={getSearchParams(searchParams, "commitment")}
+            school={getSearchParams(searchParams, "school")}
             search={searchText as string}
             usersOffset={usersOffset}
             setUsersOffset={setUsersOffset}
           />
         ) : (
-          <TeamsDisplay 
-          teamName={""} 
-          description={""} 
-          members={[]} 
-          search={""}
-          usersOffset={usersOffset}
-          setUsersOffset={setUsersOffset}  />
+          <TeamsDisplay
+            data={teamsData}
+            membersData={membersData}
+            search={searchText as string}
+            teamsOffset={teamsOffset}
+            setTeamsOffset={setTeamsOffset}
+          />
         )}
       </CardBody>
     </Card>
