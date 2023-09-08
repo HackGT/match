@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Flex, Text, Divider, Tag, useDisclosure } from "@chakra-ui/react";
 
 import { TeamCardType } from "../../types/TeamCard";
+import TeamModal from "./TeamModal";
 
 type TeamCardProps = TeamCardType & {
   memberData: any;
@@ -66,6 +67,11 @@ const TeamCard: React.FC<TeamCardProps> = props => {
                 Members: {members.length}
               </Tag>
             </Flex>
+            <TeamModal
+            isOpen = {isOpen}
+            onOpen = {onOpen}
+            onClose = {onClose}
+            />
           </Flex>
         </Box>
       )}
