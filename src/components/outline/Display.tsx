@@ -26,7 +26,9 @@ const Display: React.FC = () => {
   const [commitmentSelectValue, setCommitmentSelectValue] = useState<GroupOption[]>([]);
   const [skillSelectValue, setSkillSelectValue] = useState<GroupOption[]>([]);
   const [schoolSelectValue, setSchoolSelectValue] = useState<GroupOption[]>([]);
-  const [displayMode, setDisplayMode] = useState(DisplayType.USERS);
+  const [displayMode, setDisplayMode] = useState(
+    localStorage.getItem("displayMode") || DisplayType.USERS
+  );
   const [membersData, setMembersData] = useState<Record<string, any>>({});
 
   const skillOptions = useMemo(() => Skills, []);
@@ -109,10 +111,12 @@ const Display: React.FC = () => {
 
   function displayUsers() {
     setDisplayMode(DisplayType.USERS);
+    localStorage.setItem("displayMode", DisplayType.USERS);
   }
 
   function displayTeams() {
     setDisplayMode(DisplayType.TEAMS);
+    localStorage.setItem("displayMode", DisplayType.TEAMS);
   }
 
   return (

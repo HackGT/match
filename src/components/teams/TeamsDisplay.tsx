@@ -1,9 +1,21 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Flex, Text, Box, useBreakpointValue, Button, ButtonGroup, HStack } from "@chakra-ui/react";
-import { LoadingScreen } from "@hex-labs/core";
+import {
+  Flex,
+  Text,
+  Box,
+  useBreakpointValue,
+  Button,
+  ButtonGroup,
+  HStack,
+  Center,
+} from "@chakra-ui/react";
+import { ErrorScreen, LoadingScreen, Service, apiUrl, useAuth } from "@hex-labs/core";
 import { TeamCardType } from "../../types/TeamCard";
 import TeamCard from "./TeamCard";
 import { limit } from "../outline/Display";
+import useAxios from "axios-hooks";
+import CreateTeamSection from "./sections/CreateTeamSection";
+import OnTeamSection from "./sections/OnTeamSection";
 
 interface Props {
   data: any;
@@ -14,9 +26,20 @@ interface Props {
 }
 
 const TeamsDisplay: React.FC<Props> = ({ data, membersData, teamsOffset, setTeamsOffset }) => {
+  const { user } = useAuth();
   const isMobile = useBreakpointValue({ base: true, md: false });
   const [resultsText, setResultsText] = useState("Loading...");
-  const title = process.env.REACT_APP_EVENT_NAME;
+
+  const [{ data: userTeamData, error }, refetch] = useAxios({
+    method: "GET",
+    url: apiUrl(Service.HEXATHONS, `/teams`),
+    params: {
+      hexathon: process.env.REACT_APP_HEXATHON_ID,
+      userId: user?.uid,
+    },
+  });
+
+  if (error) return <ErrorScreen error={error} />;
 
   useEffect(() => {
     if (!data) {
@@ -53,16 +76,38 @@ const TeamsDisplay: React.FC<Props> = ({ data, membersData, teamsOffset, setTeam
   }, [data]);
 
   const teamsLoaded = useMemo(() => {
-    return membersData && data && membersData.length === data.length;
+    return membersData && data && data.teams && Object.keys(membersData).length === data.total;
   }, [membersData, data]);
 
   if (!teamsLoaded) return <LoadingScreen />;
 
   return (
-    <div>
-      <br></br>
-      <Box paddingLeft={"5%"} paddingRight={"5%"}>
-        <Text fontSize={32}>{title}</Text>
+    <>
+      <Center>
+        <Box
+          width={{ base: "90vw", md: "70vw" }}
+          marginTop="40px"
+          borderRadius="2px"
+          boxShadow={{
+            base: "rgba(0, 0, 0, 0.15) 0px 0px 6px 1px",
+          }}
+          paddingBottom="30px"
+        >
+          {userTeamData && (
+            <Center flexDir="column">
+              {userTeamData.total > 0 ? (
+                <OnTeamSection
+                  team={userTeamData.teams[0]}
+                  members={membersData[userTeamData.teams[0].name]}
+                />
+              ) : (
+                <CreateTeamSection />
+              )}
+            </Center>
+          )}
+        </Box>
+      </Center>
+      <Box paddingTop={"1.5%"} paddingLeft={"5%"} paddingRight={"5%"}>
         <br></br>
         <Flex flexWrap="wrap" justifyContent="space-evenly">
           {teamsLoaded &&
@@ -93,7 +138,7 @@ const TeamsDisplay: React.FC<Props> = ({ data, membersData, teamsOffset, setTeam
           </ButtonGroup>
         </HStack>
       </Box>
-    </div>
+    </>
   );
 };
 
