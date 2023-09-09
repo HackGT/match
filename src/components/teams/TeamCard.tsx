@@ -27,7 +27,7 @@ const TeamCard: React.FC<TeamCardProps> = props => {
           backgroundColor="white"
           cursor="pointer"
           padding="4"
-          onClick={onOpen} // Open the modal when clicked
+          onClick={onOpen}
         >
           <Flex flexDirection="column">
             <Text fontSize="3xl" fontWeight="bold" mb="1">
@@ -68,12 +68,11 @@ const TeamCard: React.FC<TeamCardProps> = props => {
               </Tag>
             </Flex>
             <TeamModal
-            isOpen = {isOpen}
-            onOpen = {onOpen}
-            onClose = {onClose}
-            name = {name}
-            memberData = {props.memberData}
-            description = {description}
+              isOpen={isOpen}
+              onClose={onClose}
+              name={name}
+              memberData={props.memberData}
+              description={description}
             />
           </Flex>
         </Box>
