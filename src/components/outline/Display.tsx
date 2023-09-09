@@ -119,8 +119,6 @@ const Display: React.FC = () => {
     localStorage.setItem("displayMode", DisplayType.TEAMS);
   }
 
-  console.log("members data: ", membersData);
-
   return (
     <Card
       width={"96%"}
