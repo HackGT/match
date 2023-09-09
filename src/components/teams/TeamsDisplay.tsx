@@ -30,7 +30,7 @@ const TeamsDisplay: React.FC<Props> = ({ data, membersData, teamsOffset, setTeam
   const isMobile = useBreakpointValue({ base: true, md: false });
   const [resultsText, setResultsText] = useState("Loading...");
 
-  const [{ data: userTeamData, error }] = useAxios({
+  const [{ data: userTeamData, error }, refetch] = useAxios({
     method: "GET",
     url: apiUrl(Service.HEXATHONS, `/teams`),
     params: {
@@ -76,7 +76,7 @@ const TeamsDisplay: React.FC<Props> = ({ data, membersData, teamsOffset, setTeam
   }, [data]);
 
   const teamsLoaded = useMemo(() => {
-    return membersData && data && membersData.length === data.length;
+    return membersData && data && data.teams && Object.keys(membersData).length === data.total;
   }, [membersData, data]);
 
   if (!teamsLoaded) return <LoadingScreen />;
@@ -93,16 +93,18 @@ const TeamsDisplay: React.FC<Props> = ({ data, membersData, teamsOffset, setTeam
           }}
           paddingBottom="30px"
         >
-          <Center flexDir="column">
-            {userTeamData && userTeamData.total > 0 ? (
-              <OnTeamSection
-                team={userTeamData.teams[0]}
-                members={membersData[userTeamData.teams[0].name]}
-              />
-            ) : (
-              <CreateTeamSection />
-            )}
-          </Center>
+          {userTeamData && (
+            <Center flexDir="column">
+              {userTeamData.total > 0 ? (
+                <OnTeamSection
+                  team={userTeamData.teams[0]}
+                  members={membersData[userTeamData.teams[0].name]}
+                />
+              ) : (
+                <CreateTeamSection />
+              )}
+            </Center>
+          )}
         </Box>
       </Center>
       <Box paddingTop={"1.5%"} paddingLeft={"5%"} paddingRight={"5%"}>
