@@ -31,6 +31,7 @@ import { commitmentLevelType } from "../definitions/CommitmentLevels";
 import { GroupBase, Select } from "chakra-react-select";
 import useAxios from "axios-hooks";
 import { InfoOutlineIcon } from "@chakra-ui/icons";
+import NotRegisteredErrorScreen from "../screens/NotRegisteredErrorScreen";
 
 const EditProfile: React.FC = () => {
   const { user } = useAuth();
@@ -72,7 +73,10 @@ const EditProfile: React.FC = () => {
   }, [data, reset]);
 
   if (loading) return <LoadingScreen />;
-  if (error) return <ErrorScreen error={error} />;
+  if (error) {
+    if (!data) return <NotRegisteredErrorScreen />;
+    return <ErrorScreen error={error} />;
+  }
 
   const onSubmit = async (values: any) => {
     try {
