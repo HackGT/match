@@ -33,31 +33,29 @@ export default function TeamUpModal(props: any) {
     setEmailText(e.target.value);
   };
 
-  const handleClick = () => {
-    console.log("clicked");
-  }
-
   const onSubmit = async (values: any) => {
     try {
       const myUserID = user?.uid;
       const userDetails = await axios.get(apiUrl(Service.USERS, `/users/${myUserID}`));
 
+      // await axios.post(apiUrl(Service.HEXATHONS, "/teams/join"), {
+      //   name: ,
+      //   hexathon: process.env.REACT_APP_HEXATHON_ID,
+      //   message: emailText,
+      // });
+
+    const emailMessage = `
+    <html>
+      <body>
+        <br>
+        <p>${emailText}</p>
+        <br>
+        <p>For more information, visit Hexlabs Match.</p>
+      </body>
+    </html>`;
+
       await axios.post(apiUrl(Service.NOTIFICATIONS, `/email/send`), {
-        message:
-          `<html>
-                <body>
-                    <br>
-                    <p>` +
-          emailText +
-          `</p>
-          <p>Click the button below to join the team:</p>
-<a href="https://match.hexlabs.org/team-request?name=Name&hexathon=HexathonName" target="_blank">
-  <button>Join Team</button>
-</a> 
-                    <br>
-                    <p>For more information, visit Hexlabs Match.</p>
-                </body>
-                </html>`,
+        message: emailMessage,
         // emails: [email],
         emails: ["amytang325@gmail.com"],
         subject:
