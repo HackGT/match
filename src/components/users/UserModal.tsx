@@ -10,9 +10,10 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { commitmentLevelColors } from "../../definitions/CommitmentLevels";
-import TeamUpModal from "../teams/TeamUpModal";
+import TeamUpModal from "./UserTeamUpModal";
 import { useAuth, apiUrl, Service, LoadingScreen } from "@hex-labs/core";
 import useAxios from "axios-hooks";
+import UserTeamUpModal from "./UserTeamUpModal";
 
 export default function UserModal(props: any) {
   const { user } = useAuth();
@@ -101,7 +102,7 @@ export default function UserModal(props: any) {
         </ModalContent>
       </Modal>
 
-      <TeamUpModal
+      <UserTeamUpModal
         isOpen={isTeamUpOpen}
         onOpen={onTeamUpOpen}
         onClose={onTeamUpClose}
