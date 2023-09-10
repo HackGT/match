@@ -33,6 +33,10 @@ export default function TeamUpModal(props: any) {
     setEmailText(e.target.value);
   };
 
+  const handleClick = () => {
+    console.log("clicked");
+  }
+
   const onSubmit = async (values: any) => {
     try {
       const myUserID = user?.uid;
@@ -46,11 +50,16 @@ export default function TeamUpModal(props: any) {
                     <p>` +
           emailText +
           `</p>
+          <p>Click the button below to join the team:</p>
+<a href="https://match.hexlabs.org/team-request?name=Name&hexathon=HexathonName" target="_blank">
+  <button>Join Team</button>
+</a> 
                     <br>
                     <p>For more information, visit Hexlabs Match.</p>
                 </body>
                 </html>`,
-        emails: [email],
+        // emails: [email],
+        emails: ["amytang325@gmail.com"],
         subject:
           userDetails.data.name.first +
           " " +
