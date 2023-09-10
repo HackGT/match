@@ -10,14 +10,23 @@ import {
   ModalFooter,
   Button,
   Flex,
-  Box
+  Box,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useAuth } from "@hex-labs/core";
 import UserCard from "../users/UserCard";
 import { UserCardType } from "../../types/UserCard";
-export default function TeamModal(props: any) {
-  const { isOpen, onClose, name, memberData, description } = props;
+import TeamUpModal from "./TeamUpModal";
+
+const TeamModal: React.FC<any> = (props: any) => {
+  const { isOpen, onClose, name, members, memberData, description } = props;
+  const { isOpen: isTeamUpOpen, onOpen: onTeamUpOpen, onClose: onTeamUpClose } = useDisclosure();
   const { user } = useAuth();
+
+  const teamUp = () => {
+    onTeamUpOpen();
+    onClose();
+  };
 
   return (
     <>
@@ -31,18 +40,40 @@ export default function TeamModal(props: any) {
             <Text>{description}</Text>
             <Divider borderColor="gray.300" borderWidth="2px" mb="2" />
             <Box>
-                <Flex flexWrap="wrap" justifyContent="space-evenly">
+              <Flex flexWrap="wrap" justifyContent="space-evenly">
                 {memberData
-                    .filter((hUser: any) => hUser.userId !== user?.uid)
-                    .map((user: UserCardType) => <UserCard key={user.name} {...user} />)}
-                </Flex>
+                  .filter((hUser: any) => hUser.userId !== user?.uid)
+                  .map((user: UserCardType) => (
+                    <UserCard key={user.name} {...user} />
+                  ))}
+              </Flex>
             </Box>
           </ModalBody>
           <ModalFooter>
-            <Button backgroundColor="#7B69EC" color="white" width={"100%"}>Ask to Team Up</Button>
+            <Button
+              backgroundColor="#7B69EC"
+              color="white"
+              width={"100%"}
+              onClick={teamUp}
+              isDisabled={members.length === 4}
+            >
+              Ask to Team Up
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
+
+      <TeamUpModal
+        isOpen={isTeamUpOpen}
+        onOpen={onTeamUpOpen}
+        onClose={onTeamUpClose}
+        name={name}
+        members={members}
+        memberData={memberData}
+        description={description}
+      />
     </>
   );
-}
+};
+
+export default TeamModal;

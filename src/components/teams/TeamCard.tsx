@@ -71,6 +71,7 @@ const TeamCard: React.FC<TeamCardProps> = props => {
               isOpen={isOpen}
               onClose={onClose}
               name={name}
+              members={members}
               memberData={props.memberData}
               description={description}
             />
