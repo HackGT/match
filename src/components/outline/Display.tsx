@@ -6,7 +6,7 @@ import { CommitmentLevels, Schools, Skills } from "../../definitions";
 import UsersDisplay from "../users/UsersDisplay";
 import TeamsDisplay from "../teams/TeamsDisplay";
 import { getSearchParams } from "../../util/helpers";
-import { apiUrl, ErrorScreen, Service } from "@hex-labs/core";
+import { apiUrl, ErrorScreen, handleAxiosError, Service } from "@hex-labs/core";
 import useAxios from "axios-hooks";
 import axios from "axios";
 
@@ -67,9 +67,8 @@ const Display: React.FC = () => {
                 )
               );
               return res.data;
-            } catch (error: any) {
-              console.error(`Error fetching member data for ${member}: ${error.message}`);
-              return null;
+            } catch (e: any) {
+              handleAxiosError(e);
             }
           });
           const memberData = await Promise.all(memberPromises);

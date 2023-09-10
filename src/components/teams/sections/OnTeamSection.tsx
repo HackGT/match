@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Box,
   Heading,
@@ -7,7 +7,6 @@ import {
   Button,
   VStack,
   Wrap,
-  HStack,
   Textarea,
   useDisclosure,
   AlertDialog,
@@ -19,10 +18,20 @@ import {
   useBreakpointValue,
   Flex,
   Center,
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
+  HStack,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { apiUrl, handleAxiosError, Service } from "@hex-labs/core";
 import { IoMdExit } from "react-icons/io";
+import { MdOutlineNotificationsActive, MdOutlineNotificationsNone } from "react-icons/md";
+import { AiOutlineMessage } from "react-icons/ai";
+import UserCard from "../../users/UserCard";
 
 interface Props {
   team: any;
@@ -34,10 +43,42 @@ const OnTeamSection: React.FC<Props> = props => {
   const { id, name, description } = props.team;
   const [email, setEmail] = useState("");
   const [teamDescription, setTeamDescription] = useState(description);
+  const [memberRequests, setMemberRequests] = useState<any>([]);
+  const {
+    isOpen: isLeaveAlertOpen,
+    onOpen: onLeaveAlertOpen,
+    onClose: onLeaveAlertClose,
+  } = useDisclosure();
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const cancelRef = React.useRef<HTMLButtonElement>(null);
+  const {
+    isOpen: isNotificationsOpen,
+    onOpen: onNotificationsOpen,
+    onClose: onNotificationsClose,
+  } = useDisclosure();
+
+  const cancelRef = useRef<HTMLButtonElement>(null);
   const isMobile = useBreakpointValue({ base: true, md: false });
+
+  useEffect(() => {
+    const fetchMemberRequests = async () => {
+      const memberRequestsPromises = props.team.memberRequests.map(async (memberRequest: any) => {
+        try {
+          const res = await axios.get(
+            apiUrl(
+              Service.HEXATHONS,
+              `/hexathon-users/${process.env.REACT_APP_HEXATHON_ID}/users/${memberRequest.userId}`
+            )
+          );
+          return { ...res.data, message: memberRequest.message };
+        } catch (e: any) {
+          handleAxiosError(e);
+        }
+      });
+      const resolvedMemberRequests = await Promise.all(memberRequestsPromises);
+      setMemberRequests(resolvedMemberRequests);
+    };
+    if (props.team.memberRequests.length > 0) fetchMemberRequests();
+  }, []);
 
   const changeEmail = (e: any) => {
     setEmail(e.target.value);
@@ -82,8 +123,39 @@ const OnTeamSection: React.FC<Props> = props => {
     }
   };
 
+  const handleAcceptUser = async (userId: string) => {
+    try {
+      await axios.post(apiUrl(Service.HEXATHONS, `/teams/${id}/accept-user`), {
+        userId,
+      });
+      window.location.reload();
+    } catch (err: any) {
+      handleAxiosError(err);
+    }
+  };
+
+  const handleRejectUser = async (userId: string) => {
+    try {
+      await axios.post(apiUrl(Service.HEXATHONS, `/teams/${id}/reject-user`), {
+        userId,
+      });
+      window.location.reload();
+    } catch (err: any) {
+      handleAxiosError(err);
+    }
+  };
+
   return (
-    <div style={{ position: "relative" }}>
+    <Box
+      width={{ base: "80vw", md: "60vw" }}
+      marginTop="40px"
+      borderRadius="2px"
+      boxShadow={{
+        base: "rgba(0, 0, 0, 0.15) 0px 0px 6px 1px",
+      }}
+      paddingBottom="30px"
+      position="relative"
+    >
       <Heading
         textAlign="center"
         paddingTop="20px"
@@ -97,17 +169,21 @@ const OnTeamSection: React.FC<Props> = props => {
       <IoMdExit
         style={{
           position: "absolute",
-          top: 30,
-          right: isMobile ? -3 : -10,
+          top: 10,
+          right: 10,
           backgroundColor: "#db2a3e",
           borderRadius: "20%",
           height: 30,
           width: 30,
           cursor: "pointer",
         }}
-        onClick={onOpen}
+        onClick={onLeaveAlertOpen}
       />
-      <AlertDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={onClose}>
+      <AlertDialog
+        isOpen={isLeaveAlertOpen}
+        leastDestructiveRef={cancelRef}
+        onClose={onLeaveAlertClose}
+      >
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
@@ -117,7 +193,7 @@ const OnTeamSection: React.FC<Props> = props => {
               Are you sure? This action will remove yourself from the team.
             </AlertDialogBody>
             <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={onClose}>
+              <Button ref={cancelRef} onClick={onLeaveAlertClose}>
                 Cancel
               </Button>
               <Button colorScheme="red" onClick={handleRemoveSelf} ml={3}>
@@ -127,7 +203,91 @@ const OnTeamSection: React.FC<Props> = props => {
           </AlertDialogContent>
         </AlertDialogOverlay>
       </AlertDialog>
-      <Flex flexDirection={isMobile ? "column" : "row"} gap={isMobile ? 10 : 20}>
+      {memberRequests.length > 0 ? (
+        <MdOutlineNotificationsActive
+          style={{
+            position: "absolute",
+            top: 50,
+            right: 10,
+            borderColor: "#db2a3e",
+            height: 30,
+            width: 30,
+            cursor: "pointer",
+          }}
+          onClick={onNotificationsOpen}
+        />
+      ) : (
+        <MdOutlineNotificationsNone
+          style={{
+            position: "absolute",
+            top: 50,
+            right: 10,
+            borderColor: "#db2a3e",
+            height: 30,
+            width: 30,
+            cursor: "pointer",
+          }}
+          onClick={onNotificationsOpen}
+        />
+      )}
+      <Drawer
+        isOpen={isNotificationsOpen}
+        placement="right"
+        onClose={onNotificationsClose}
+        finalFocusRef={cancelRef}
+      >
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader>Team Notifications</DrawerHeader>
+          <DrawerBody>
+            {memberRequests.length == 0 ? (
+              <Text>No notifications</Text>
+            ) : (
+              <VStack align="left">
+                <Text as="b" fontSize="18px" fontWeight="bold" color="#7B69EC">
+                  Members Requests
+                </Text>
+                {memberRequests.map(
+                  (member: any) =>
+                    member && (
+                      <VStack mt={2}>
+                        <UserCard {...member} />
+                        <HStack>
+                          <AiOutlineMessage />
+                          <Text fontSize="14px" color="black">
+                            {member.message}
+                          </Text>
+                        </HStack>
+                        <HStack mt={2} justify="space-evenly">
+                          <Button
+                            backgroundColor="#4CAF50"
+                            size="sm"
+                            onClick={() => handleAcceptUser(member.userId)}
+                          >
+                            <Text fontSize="14px" color="black">
+                              Accept
+                            </Text>
+                          </Button>
+                          <Button
+                            backgroundColor="#F44336"
+                            size="sm"
+                            onClick={() => handleRejectUser(member.userId)}
+                          >
+                            <Text fontSize="14px" color="black">
+                              Reject
+                            </Text>
+                          </Button>
+                        </HStack>
+                      </VStack>
+                    )
+                )}
+              </VStack>
+            )}
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
+      <Flex flexDirection={isMobile ? "column" : "row"} justify="space-evenly">
         <VStack>
           <Heading
             textAlign="center"
@@ -139,8 +299,8 @@ const OnTeamSection: React.FC<Props> = props => {
             Current members
           </Heading>
           {props.members.map((member: any) => (
-            <Text textAlign="center">
-              {member.name.first} {member.name.last} - {member.email}
+            <Text textAlign="center" fontSize={15}>
+              {member.name} - {member.email}
             </Text>
           ))}
           <Box paddingBottom="30px">
@@ -184,7 +344,12 @@ const OnTeamSection: React.FC<Props> = props => {
             width={300}
             maxLength={200}
             onChange={handleUpdateDescription}
-          ></Textarea>
+          />
+          <Flex alignItems="start">
+            <Text fontSize="xs" color="#858585">
+              {`(${teamDescription.length}/200) characters`}
+            </Text>
+          </Flex>
         </VStack>
       </Flex>
       <Center>
@@ -192,7 +357,7 @@ const OnTeamSection: React.FC<Props> = props => {
           Update team
         </Button>
       </Center>
-    </div>
+    </Box>
   );
 };
 

@@ -84,28 +84,18 @@ const TeamsDisplay: React.FC<Props> = ({ data, membersData, teamsOffset, setTeam
   return (
     <>
       <Center>
-        <Box
-          width={{ base: "90vw", md: "70vw" }}
-          marginTop="40px"
-          borderRadius="2px"
-          boxShadow={{
-            base: "rgba(0, 0, 0, 0.15) 0px 0px 6px 1px",
-          }}
-          paddingBottom="30px"
-        >
-          {userTeamData && (
-            <Center flexDir="column">
-              {userTeamData.total > 0 ? (
-                <OnTeamSection
-                  team={userTeamData.teams[0]}
-                  members={membersData[userTeamData.teams[0].name]}
-                />
-              ) : (
-                <CreateTeamSection />
-              )}
-            </Center>
-          )}
-        </Box>
+        {userTeamData && (
+          <Center flexDir="column">
+            {userTeamData.total > 0 ? (
+              <OnTeamSection
+                team={userTeamData.teams[0]}
+                members={membersData[userTeamData.teams[0].name]}
+              />
+            ) : (
+              <CreateTeamSection />
+            )}
+          </Center>
+        )}
       </Center>
       <Box paddingTop={"1.5%"} paddingLeft={"5%"} paddingRight={"5%"}>
         <br></br>
