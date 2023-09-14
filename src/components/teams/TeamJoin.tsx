@@ -8,6 +8,23 @@ import TeamsDisplay from "../teams/TeamsDisplay";
 import { getSearchParams } from "../../util/helpers";
 
 const TeamJoin: React.FC = () => {
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const teamName = getSearchParams(searchParams, "team");
+    const hexathon = getSearchParams(searchParams, "hexathon");
+
+    // console.log('search params', searchParams);
+    // console.log('team name', teamName);
+    // console.log('hexathon', hexathon);
+
+    const handleAccept = () => {
+        console.log('accepted');
+    };
+
+    const handleDecline = () => {
+        console.log('declined');
+    };
+
   return (
     <Card
     width={"40%"}
@@ -20,7 +37,7 @@ const TeamJoin: React.FC = () => {
       padding="20px">
         <CardBody>
         <Heading>
-                Join this team?
+                Join {teamName}?
         </Heading>
         <Flex direction="row" align="center" justify="center" padding="20px">
           <Button
@@ -28,7 +45,7 @@ const TeamJoin: React.FC = () => {
             width="124px"
             height="36px"
             padding="20px"
-            // onClick=
+            onClick={handleAccept}
             borderRadius={"12px"}
           >
             Accept
@@ -38,7 +55,7 @@ const TeamJoin: React.FC = () => {
           width="124px"
           height="36px"
           margin="30px"
-          // onClick=
+          onClick={handleDecline}
           borderRadius={"12px"}
         >
           Decline

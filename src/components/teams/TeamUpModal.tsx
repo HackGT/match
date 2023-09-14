@@ -39,21 +39,12 @@ export default function TeamUpModal(props: any) {
     },
   });
 
-  console.log('userTeamData', userTeamData);
-  // console.log('team name', userTeamData?.teams[0].name);
-  // console.log('hexathon', userTeamData?.teams[0].hexathon);
+  const teamName = userTeamData?.teams[0].name;
+  const hexathon = userTeamData?.teams[0].hexathon;
 
   const handleUserMessage = (e: { target: { value: React.SetStateAction<string> } }) => {
     setEmailText(e.target.value);
   };
-
-  const handleButtonClick = async () => {
-    try {
-      console.log("handled!");
-    } catch (err: any) {
-      handleAxiosError(err);
-    }
-  }
 
   const onSubmit = async (values: any) => {
     try {
@@ -65,7 +56,7 @@ export default function TeamUpModal(props: any) {
       <body>
         <br>
         <p>${emailText}</p>
-        <button onClick=${handleButtonClick}>Join Team</button>
+        <button><a href="match.hexlabs.org/jointeam?team=${teamName}&hexathon=${hexathon}">Join Team</a></button>
         <br>
         <p>For more information, visit Hexlabs Match.</p>
       </body>
