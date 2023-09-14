@@ -76,8 +76,7 @@ export default function TeamUpModal(props: any) {
 
       await axios.post(apiUrl(Service.NOTIFICATIONS, `/email/send`), {
         message: emailMessage,
-        // emails: [email],
-        emails: ["amytang325@gmail.com"],
+        emails: [email],
         subject:
           userDetails.data.name.first +
           " " +
