@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { Card, Flex, Heading, Input, Box, CardBody, Button, useBreakpointValue } from "@chakra-ui/react";
-import { GroupBase, OptionBase, Select } from "chakra-react-select";
-import { createSearchParams, useSearchParams } from "react-router-dom";
-import { CommitmentLevels, Schools, Skills } from "../../definitions";
-import UsersDisplay from "../users/UsersDisplay";
-import TeamsDisplay from "../teams/TeamsDisplay";
+import React from "react";
+import { Card, Flex, Heading, Input, Box, CardBody, Button } from "@chakra-ui/react";
+import { createSearchParams, useSearchParams, Link } from "react-router-dom";
 import { getSearchParams } from "../../util/helpers";
+import axios from "axios";
+import { Service, apiUrl, handleAxiosError } from "@hex-labs/core";
+import useAxios from "axios-hooks";
 
 const TeamJoin: React.FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -13,16 +12,16 @@ const TeamJoin: React.FC = () => {
     const teamName = getSearchParams(searchParams, "team");
     const hexathon = getSearchParams(searchParams, "hexathon");
 
-    // console.log('search params', searchParams);
-    // console.log('team name', teamName);
-    // console.log('hexathon', hexathon);
-
-    const handleAccept = () => {
-        console.log('accepted');
-    };
-
-    const handleDecline = () => {
-        console.log('declined');
+    const handleAccept = async () => {
+        try {
+            await axios.post(apiUrl(Service.HEXATHONS, `/teams/join`), {
+                name: teamName,
+                hexathon: hexathon,
+                message: ""
+              });
+            } catch (e: any) {
+              handleAxiosError(e);
+            }
     };
 
   return (
@@ -47,18 +46,19 @@ const TeamJoin: React.FC = () => {
             padding="20px"
             onClick={handleAccept}
             borderRadius={"12px"}
-          >
+          ><Link to="/">
             Accept
+            </Link>
           </Button>
           <Button
           colorScheme="red"
           width="124px"
           height="36px"
           margin="30px"
-          onClick={handleDecline}
           borderRadius={"12px"}
-        >
-          Decline
+        ><Link to="/">
+        Decline
+        </Link>
         </Button>
         </Flex>
         </CardBody>
