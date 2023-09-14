@@ -21,6 +21,7 @@ import Avatars from "../../definitions/Avatars";
 import { commitmentLevelColors } from "../../definitions/CommitmentLevels";
 import React, { useState } from "react";
 import axios from "axios";
+import useAxios from "axios-hooks";
 import { apiUrl, Service, handleAxiosError, useAuth } from "@hex-labs/core";
 
 export default function TeamUpModal(props: any) {
@@ -29,26 +30,42 @@ export default function TeamUpModal(props: any) {
   const [emailText, setEmailText] = useState("");
   const { user } = useAuth();
 
+  const [{ data: userTeamData, error }, refetch] = useAxios({
+    method: "GET",
+    url: apiUrl(Service.HEXATHONS, `/teams`),
+    params: {
+      hexathon: process.env.REACT_APP_HEXATHON_ID,
+      userId: user?.uid,
+    },
+  });
+
+  console.log('userTeamData', userTeamData);
+  // console.log('team name', userTeamData?.teams[0].name);
+  // console.log('hexathon', userTeamData?.teams[0].hexathon);
+
   const handleUserMessage = (e: { target: { value: React.SetStateAction<string> } }) => {
     setEmailText(e.target.value);
   };
+
+  const handleButtonClick = async () => {
+    try {
+      console.log("handled!");
+    } catch (err: any) {
+      handleAxiosError(err);
+    }
+  }
 
   const onSubmit = async (values: any) => {
     try {
       const myUserID = user?.uid;
       const userDetails = await axios.get(apiUrl(Service.USERS, `/users/${myUserID}`));
 
-      // await axios.post(apiUrl(Service.HEXATHONS, "/teams/join"), {
-      //   name: ,
-      //   hexathon: process.env.REACT_APP_HEXATHON_ID,
-      //   message: emailText,
-      // });
-
     const emailMessage = `
     <html>
       <body>
         <br>
         <p>${emailText}</p>
+        <button onClick=${handleButtonClick}>Join Team</button>
         <br>
         <p>For more information, visit Hexlabs Match.</p>
       </body>

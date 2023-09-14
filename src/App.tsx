@@ -7,6 +7,7 @@ import { setPersistence, getAuth, inMemoryPersistence } from "firebase/auth";
 import EditProfile from "./components/EditProfile";
 import Navigation from "./components/outline/Navigation";
 import Display from "./components/outline/Display";
+import TeamJoin from "./components/teams/TeamJoin";
 
 export const app = initializeApp({
   apiKey: "AIzaSyCsukUZtMkI5FD_etGfefO4Sr7fHkZM7Rg",
@@ -34,6 +35,7 @@ export const App = () => {
       <Routes>
         <Route path="" element={<Display />} />
         <Route path="/profile" element={<EditProfile />} />
+        <Route path="/jointeam" element={<TeamJoin />} />
       </Routes>
       <Footer />
     </AuthProvider>
