@@ -56,10 +56,22 @@ export default function TeamUpModal(props: any) {
       <body>
         <br>
         <p>${emailText}</p>
-        <button><a href="match.hexlabs.org/jointeam?team=${teamName}&hexathon=${hexathon}">Join Team</a></button>
+        <button><a href="match.hexlabs.org/jointeam?team=${teamName}&hexathon=${hexathon}" style="text-decoration: none; color: #ffffff">Join Team</a></button>
         <br>
         <p>For more information, visit Hexlabs Match.</p>
       </body>
+      <style>
+      button {
+        display: inline-block;
+        background-color: #4299E1;
+        padding: 12px;
+        width: 110px;
+        color: #ffffff;
+        text-align: center;
+        border: none;
+        border-radius: 5px;
+      }
+    </style>
     </html>`;
 
       await axios.post(apiUrl(Service.NOTIFICATIONS, `/email/send`), {
