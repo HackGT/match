@@ -25,10 +25,12 @@ interface Props {
   setTeamsOffset: any;
 }
 
-const TeamsDisplay: React.FC<Props> = ({ data, membersData, teamsOffset, setTeamsOffset }) => {
+const TeamsDisplay: React.FC<Props> = ({ data, membersData, search, teamsOffset, setTeamsOffset }) => {
   const { user } = useAuth();
   const isMobile = useBreakpointValue({ base: true, md: false });
   const [resultsText, setResultsText] = useState("Loading...");
+
+  const [teamSearchText, setTeamSearchText] = useState("");
 
   const [{ data: userTeamData, error }, refetch] = useAxios({
     method: "GET",
@@ -81,6 +83,10 @@ const TeamsDisplay: React.FC<Props> = ({ data, membersData, teamsOffset, setTeam
 
   if (!teamsLoaded) return <LoadingScreen />;
 
+  const filteredTeams = data?.teams.filter((team: { name: string; }) =>
+    team.name.toLowerCase().includes(search.toLowerCase())
+    );
+
   return (
     <>
       <Center>
@@ -100,10 +106,10 @@ const TeamsDisplay: React.FC<Props> = ({ data, membersData, teamsOffset, setTeam
       <Box paddingTop={"1.5%"} paddingLeft={"5%"} paddingRight={"5%"}>
         <br></br>
         <Flex flexWrap="wrap" justifyContent="space-evenly">
-          {teamsLoaded &&
-            data?.teams.map((team: TeamCardType) => (
-              <TeamCard key={team.name} {...team} memberData={membersData[team.name]} />
-            ))}
+        {teamsLoaded &&
+            filteredTeams?.map((team: TeamCardType) => (
+                <TeamCard key={team.name} {...team} memberData={membersData[team.name]} />
+        ))}
         </Flex>
       </Box>
       <Box px={{ base: "4", md: "6" }} pb="5">

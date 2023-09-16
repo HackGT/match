@@ -10,6 +10,7 @@ import { apiUrl, ErrorScreen, handleAxiosError, Service } from "@hex-labs/core";
 import useAxios from "axios-hooks";
 import axios from "axios";
 
+
 export const limit = 50;
 
 export enum DisplayType {
@@ -30,6 +31,8 @@ const Display: React.FC = () => {
     localStorage.getItem("displayMode") || DisplayType.USERS
   );
   const [membersData, setMembersData] = useState<Record<string, any>>({});
+
+  const [teamSearchText, setTeamSearchText] = useState("");
 
   const skillOptions = useMemo(() => Skills, []);
   const commitmentOptions = useMemo(() => CommitmentLevels, []);
@@ -130,7 +133,15 @@ const Display: React.FC = () => {
         <Flex direction={isMobile ? "column" : "row"}>
           <Input
             placeholder="Search"
-            onChange={onSearchTextChange}
+            onChange={(event) => {
+              if (displayMode === DisplayType.USERS) {
+                setSearchText(event.target.value);
+                setUsersOffset(0);
+              } else {
+                setTeamSearchText(event.target.value); // Use teamSearchText for teams
+                setTeamsOffset(0); // Reset teams offset
+              }
+            }}
             width={displayMode === DisplayType.USERS && !isMobile ? "256px" : "330px"}
             height={"40px"}
           />
@@ -285,7 +296,7 @@ const Display: React.FC = () => {
           <TeamsDisplay
             data={teamsData}
             membersData={membersData}
-            search={searchText as string}
+            search={teamSearchText} // Pass teamSearchText as the search prop
             teamsOffset={teamsOffset}
             setTeamsOffset={setTeamsOffset}
           />
