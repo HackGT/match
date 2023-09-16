@@ -7,18 +7,45 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
+  useToast,
 } from "@chakra-ui/react";
 import { commitmentLevelColors } from "../../definitions/CommitmentLevels";
-import TeamUpModal from "../teams/TeamUpModal";
+import TeamUpModal from "./UserTeamUpModal";
+import { useAuth, apiUrl, Service, LoadingScreen } from "@hex-labs/core";
+import useAxios from "axios-hooks";
+import UserTeamUpModal from "./UserTeamUpModal";
 
 export default function UserModal(props: any) {
+  const { user } = useAuth();
   const { isOpen, onOpen, onClose, name, profile, email } = props;
   const { isOpen: isTeamUpOpen, onOpen: onTeamUpOpen, onClose: onTeamUpClose } = useDisclosure();
+  const toast = useToast();
 
-  function teamUp() {
+  const [{ data, loading }] = useAxios({
+    url: apiUrl(Service.HEXATHONS, `/teams/user/${user?.uid}`),
+    method: "GET",
+    params: {
+      hexathon: process.env.REACT_APP_HEXATHON_ID,
+    },
+  });
+
+  if (loading) return <LoadingScreen />;
+
+  const teamUp = () => {
+    // first check if user is part of a team before making a request to team up
+    if (Object.keys(data).length === 0) {
+      toast({
+        title: "Error",
+        description: "You must be part of a team to team up with another user.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
     onTeamUpOpen();
     onClose();
-  }
+  };
 
   return (
     <>
@@ -75,7 +102,7 @@ export default function UserModal(props: any) {
         </ModalContent>
       </Modal>
 
-      <TeamUpModal
+      <UserTeamUpModal
         isOpen={isTeamUpOpen}
         onOpen={onTeamUpOpen}
         onClose={onTeamUpClose}

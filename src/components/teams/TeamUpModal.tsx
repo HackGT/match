@@ -16,34 +16,29 @@ import {
   Grid,
   Textarea,
   Divider,
+  useToast,
 } from "@chakra-ui/react";
 import Avatars from "../../definitions/Avatars";
 import { commitmentLevelColors } from "../../definitions/CommitmentLevels";
 import React, { useState } from "react";
 import axios from "axios";
-import useAxios from "axios-hooks";
 import { apiUrl, Service, handleAxiosError, useAuth } from "@hex-labs/core";
+import TeamCard from "./TeamCard";
 
-export default function TeamUpModal(props: any) {
-  const { isOpen, onOpen, onClose, name, profile, email } = props;
-  const { description, school, year, skills, commitmentLevel } = profile;
-  const [emailText, setEmailText] = useState("");
+const TeamUpModal: React.FC<any> = (props: any) => {
+  const { isOpen, onClose, name, memberData } = props;
+  const [message, setMessage] = useState("");
   const { user } = useAuth();
-
-  const [{ data: userTeamData, error }, refetch] = useAxios({
-    method: "GET",
-    url: apiUrl(Service.HEXATHONS, `/teams`),
-    params: {
-      hexathon: process.env.REACT_APP_HEXATHON_ID,
-      userId: user?.uid,
-    },
-  });
-
-  const teamName = userTeamData?.teams[0].name;
-  const hexathon = userTeamData?.teams[0].hexathon;
+  const toast = useToast();
 
   const handleUserMessage = (e: { target: { value: React.SetStateAction<string> } }) => {
-    setEmailText(e.target.value);
+    setMessage(e.target.value);
+  };
+
+  const getMemberEmails = () => {
+    const emails: string[] = [];
+    memberData.forEach((member: any) => emails.push(member.email));
+    return emails;
   };
 
   const onSubmit = async (values: any) => {
@@ -51,42 +46,42 @@ export default function TeamUpModal(props: any) {
       const myUserID = user?.uid;
       const userDetails = await axios.get(apiUrl(Service.USERS, `/users/${myUserID}`));
 
-    const emailMessage = `
-    <html>
-      <body>
-        <br>
-        <p>${emailText}</p>
-        <button><a href="match.hexlabs.org/jointeam?team=${teamName}&hexathon=${hexathon}" style="text-decoration: none; color: #ffffff">Join Team</a></button>
-        <br>
-        <p>For more information, visit Hexlabs Match.</p>
-      </body>
-      <style>
-      button {
-        display: inline-block;
-        background-color: #4299E1;
-        padding: 12px;
-        width: 110px;
-        color: #ffffff;
-        text-align: center;
-        border: none;
-        border-radius: 5px;
-      }
-    </style>
-    </html>`;
+      await axios.post(apiUrl(Service.HEXATHONS, `/teams/join`), {
+        name,
+        hexathon: process.env.REACT_APP_HEXATHON_ID,
+        message,
+      });
 
       await axios.post(apiUrl(Service.NOTIFICATIONS, `/email/send`), {
-        message: emailMessage,
-        emails: [email],
+        message:
+          `<html>
+                  <body>
+                      <br>
+                      <p>` +
+          message +
+          `</p>
+                      <br>
+                      <p>To manage this request, visit Hexlabs Match and view your team notifications.</p>
+                  </body>
+                  </html>`,
+        emails: getMemberEmails(),
         subject:
           userDetails.data.name.first +
           " " +
           userDetails.data.name.middle +
           " " +
           userDetails.data.name.last +
-          " invites you to team up for " +
+          " has requested to join your team for " +
           process.env.REACT_APP_EVENT_NAME +
           "!!",
         hexathon: process.env.REACT_APP_HEXATHON_ID,
+      });
+      toast({
+        title: "Success",
+        description: "Your invite has been sent.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
       });
     } catch (e: any) {
       handleAxiosError(e);
@@ -110,52 +105,7 @@ export default function TeamUpModal(props: any) {
               alignContent="flex-start"
               alignItems={"flex-start"}
             >
-              <Card p="4" height={300} boxShadow="md">
-                <Text fontSize="2xl" fontWeight="bold" mb="2">
-                  {name}
-                </Text>
-                <Tag width="fit-content" alignSelf="right">
-                  {Avatars[school] && <Avatar src={Avatars[school]} size="xs" />}
-                  <TagLabel>{school}</TagLabel>
-                </Tag>
-                <Flex flexDirection="column">
-                  <Tag width="fit-content">{year}</Tag>
-                  <Divider borderColor="gray.300" borderWidth="2px" mb="2" />
-                  <Flex alignItems="center" flexWrap="wrap" mb="2" height="60px">
-                    <Tag
-                      bg={commitmentLevelColors[commitmentLevel]}
-                      color="white"
-                      borderRadius="md"
-                      px="2"
-                      py="1"
-                      mr="2"
-                      mb="2"
-                    >
-                      <Text fontSize="sm">
-                        <strong>Commitment:</strong> {commitmentLevel}
-                      </Text>
-                    </Tag>
-                    {skills.map((skill: string) => (
-                      <Tag
-                        key={skill}
-                        bg="blue.400"
-                        color="white"
-                        borderRadius="md"
-                        px="2"
-                        py="1"
-                        mr="2"
-                        mb="2"
-                      >
-                        <Text fontSize="sm">{skill}</Text>
-                      </Tag>
-                    ))}
-                  </Flex>
-                  <Text fontSize="sm" color="gray.500" mb="2" height="45px" isTruncated>
-                    {description}
-                  </Text>
-                  <Divider borderColor="gray.300" borderWidth="2px" />
-                </Flex>
-              </Card>
+              <TeamCard {...props} />
               <Textarea
                 placeholder="Introduce yourself and explain what you want to accomplish at this event!"
                 size="md"
@@ -171,4 +121,6 @@ export default function TeamUpModal(props: any) {
       </Modal>
     </>
   );
-}
+};
+
+export default TeamUpModal;
