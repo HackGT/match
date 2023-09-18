@@ -25,7 +25,7 @@ interface Props {
   setTeamsOffset: any;
 }
 
-const TeamsDisplay: React.FC<Props> = ({ data, membersData, teamsOffset, setTeamsOffset }) => {
+const TeamsDisplay: React.FC<Props> = ({ data, membersData, search, teamsOffset, setTeamsOffset }) => {
   const { user } = useAuth();
   const isMobile = useBreakpointValue({ base: true, md: false });
   const [resultsText, setResultsText] = useState("Loading...");
@@ -35,6 +35,7 @@ const TeamsDisplay: React.FC<Props> = ({ data, membersData, teamsOffset, setTeam
     url: apiUrl(Service.HEXATHONS, `/teams`),
     params: {
       hexathon: process.env.REACT_APP_HEXATHON_ID,
+      search,
       userId: user?.uid,
     },
   });
