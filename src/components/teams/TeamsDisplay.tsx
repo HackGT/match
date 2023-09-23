@@ -25,17 +25,22 @@ interface Props {
   setTeamsOffset: any;
 }
 
-const TeamsDisplay: React.FC<Props> = ({ data, membersData, search, teamsOffset, setTeamsOffset }) => {
+const TeamsDisplay: React.FC<Props> = ({
+  data,
+  membersData,
+  search,
+  teamsOffset,
+  setTeamsOffset,
+}) => {
   const { user } = useAuth();
   const isMobile = useBreakpointValue({ base: true, md: false });
   const [resultsText, setResultsText] = useState("Loading...");
 
-  const [{ data: userTeamData, error }, refetch] = useAxios({
+  const [{ data: userTeamData, error }] = useAxios({
     method: "GET",
     url: apiUrl(Service.HEXATHONS, `/teams`),
     params: {
       hexathon: process.env.REACT_APP_HEXATHON_ID,
-      search,
       userId: user?.uid,
     },
   });
@@ -77,7 +82,7 @@ const TeamsDisplay: React.FC<Props> = ({ data, membersData, search, teamsOffset,
   }, [data]);
 
   const teamsLoaded = useMemo(() => {
-    return membersData && data && data.teams && Object.keys(membersData).length === data.total;
+    return membersData && data && data.teams && Object.keys(membersData).length === data.count;
   }, [membersData, data]);
 
   if (!teamsLoaded) return <LoadingScreen />;
@@ -85,7 +90,7 @@ const TeamsDisplay: React.FC<Props> = ({ data, membersData, search, teamsOffset,
   return (
     <>
       <Center>
-        {userTeamData && (
+        {teamsLoaded && userTeamData && (
           <Center flexDir="column">
             {userTeamData.total > 0 ? (
               <OnTeamSection
@@ -102,9 +107,11 @@ const TeamsDisplay: React.FC<Props> = ({ data, membersData, search, teamsOffset,
         <br></br>
         <Flex flexWrap="wrap" justifyContent="space-evenly">
           {teamsLoaded &&
-            data?.teams.map((team: TeamCardType) => (
-              <TeamCard key={team.name} {...team} memberData={membersData[team.name]} />
-            ))}
+            data?.teams
+              .filter((team: any) => userTeamData.count > 0 && userTeamData.teams[0].id !== team.id)
+              .map((team: TeamCardType) => (
+                <TeamCard key={team.name} {...team} memberData={membersData[team.name]} />
+              ))}
         </Flex>
       </Box>
       <Box px={{ base: "4", md: "6" }} pb="5">

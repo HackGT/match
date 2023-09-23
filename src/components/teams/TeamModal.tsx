@@ -41,11 +41,9 @@ const TeamModal: React.FC<any> = (props: any) => {
             <Divider borderColor="gray.300" borderWidth="2px" mb="2" />
             <Box>
               <Flex flexWrap="wrap" justifyContent="space-evenly">
-                {memberData
-                  .filter((hUser: any) => hUser.userId !== user?.uid)
-                  .map((user: UserCardType) => (
-                    <UserCard key={user.name} {...user} />
-                  ))}
+                {memberData.map(
+                  (user: UserCardType) => user && <UserCard key={user.name} {...user} />
+                )}
               </Flex>
             </Box>
           </ModalBody>

@@ -298,11 +298,14 @@ const OnTeamSection: React.FC<Props> = props => {
           >
             Current members
           </Heading>
-          {props.members.map((member: any) => (
-            <Text textAlign="center" fontSize={15}>
-              {member.name} - {member.email}
-            </Text>
-          ))}
+          {props.members.map(
+            (member: any) =>
+              member && (
+                <Text textAlign="center" fontSize={15}>
+                  {member.name} - {member.email}
+                </Text>
+              )
+          )}
           <Box paddingBottom="30px">
             {props.members.length >= 4 && (
               <Heading paddingY="10px" size="sm" lineHeight="inherit">

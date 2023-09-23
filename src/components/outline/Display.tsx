@@ -6,7 +6,7 @@ import { CommitmentLevels, Schools, Skills } from "../../definitions";
 import UsersDisplay from "../users/UsersDisplay";
 import TeamsDisplay from "../teams/TeamsDisplay";
 import { getSearchParams } from "../../util/helpers";
-import { apiUrl, ErrorScreen, handleAxiosError, Service } from "@hex-labs/core";
+import { apiUrl, ErrorScreen, handleAxiosError, LoadingScreen, Service } from "@hex-labs/core";
 import useAxios from "axios-hooks";
 import axios from "axios";
 
@@ -41,6 +41,7 @@ const Display: React.FC = () => {
     url: apiUrl(Service.HEXATHONS, `/teams`),
     params: {
       hexathon: process.env.REACT_APP_HEXATHON_ID,
+      search: searchText as string,
       offset: teamsOffset,
     },
   });
@@ -110,11 +111,13 @@ const Display: React.FC = () => {
 
   function displayUsers() {
     setDisplayMode(DisplayType.USERS);
+    setSearchText("");
     localStorage.setItem("displayMode", DisplayType.USERS);
   }
 
   function displayTeams() {
     setDisplayMode(DisplayType.TEAMS);
+    setSearchText("");
     localStorage.setItem("displayMode", DisplayType.TEAMS);
   }
 
