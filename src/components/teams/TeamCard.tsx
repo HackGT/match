@@ -43,7 +43,7 @@ const TeamCard: React.FC<TeamCardType> = props => {
                   mr="2"
                   mb="2"
                 >
-                  <Text fontSize="sm">{member?.name}</Text>
+                  <Text fontSize="sm">{member ? member.name : ""}</Text>
                 </Tag>
               ))}
             </Flex>

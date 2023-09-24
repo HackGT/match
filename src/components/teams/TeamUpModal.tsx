@@ -9,6 +9,7 @@ import {
   Button,
   Grid,
   Textarea,
+  useToast,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import axios from "axios";
@@ -19,6 +20,7 @@ const TeamUpModal: React.FC<any> = (props: any) => {
   const { isOpen, onClose, name, members } = props;
   const [message, setMessage] = useState("");
   const { user } = useAuth();
+  const toast = useToast();
 
   const handleUserMessage = (e: { target: { value: React.SetStateAction<string> } }) => {
     setMessage(e.target.value);
@@ -65,6 +67,13 @@ const TeamUpModal: React.FC<any> = (props: any) => {
           process.env.REACT_APP_EVENT_NAME +
           "!!",
         hexathon: process.env.REACT_APP_HEXATHON_ID,
+      });
+      toast({
+        title: "Success",
+        description: "Your invite has been sent.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
       });
     } catch (e: any) {
       handleAxiosError(e);
