@@ -22,10 +22,11 @@ export default function UserModal(props: any) {
   const toast = useToast();
 
   const [{ data, loading }] = useAxios({
-    url: apiUrl(Service.HEXATHONS, `/teams/user/${user?.uid}`),
+    url: apiUrl(Service.HEXATHONS, `/teams`),
     method: "GET",
     params: {
       hexathon: process.env.REACT_APP_HEXATHON_ID,
+      userId: user?.uid,
     },
   });
 

@@ -4,17 +4,13 @@ import { Box, Flex, Text, Divider, Tag, useDisclosure } from "@chakra-ui/react";
 import { TeamCardType } from "../../types/TeamCard";
 import TeamModal from "./TeamModal";
 
-type TeamCardProps = TeamCardType & {
-  memberData: any;
-};
-
-const TeamCard: React.FC<TeamCardProps> = props => {
+const TeamCard: React.FC<TeamCardType> = props => {
   const { name, members, description } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <>
-      {props.memberData && (
+      {
         <Box
           borderWidth="1px"
           borderStyle="solid"
@@ -36,7 +32,7 @@ const TeamCard: React.FC<TeamCardProps> = props => {
             <Divider borderColor="gray.300" borderWidth="2px" mb="2" />
 
             <Flex alignItems="flex-start" flexWrap="wrap" mb="2">
-              {props.memberData.map((member: any) => (
+              {members.map((member: any) => (
                 <Tag
                   key={member?.userId}
                   bg="blue.400"
@@ -50,10 +46,6 @@ const TeamCard: React.FC<TeamCardProps> = props => {
                   <Text fontSize="sm">{member ? member.name : ""}</Text>
                 </Tag>
               ))}
-
-              {props.memberData.map((member: any) => {
-                <h1>test{member ? member.name : ""}</h1>;
-              })}
             </Flex>
 
             <Box fontSize="sm" color="gray.500" mb="2" maxHeight="80px" overflowY="auto">
@@ -72,12 +64,11 @@ const TeamCard: React.FC<TeamCardProps> = props => {
               onClose={onClose}
               name={name}
               members={members}
-              memberData={props.memberData}
               description={description}
             />
           </Flex>
         </Box>
-      )}
+      }
     </>
   );
 };

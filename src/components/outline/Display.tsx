@@ -6,9 +6,6 @@ import { CommitmentLevels, Schools, Skills } from "../../definitions";
 import UsersDisplay from "../users/UsersDisplay";
 import TeamsDisplay from "../teams/TeamsDisplay";
 import { getSearchParams } from "../../util/helpers";
-import { apiUrl, ErrorScreen, handleAxiosError, Service } from "@hex-labs/core";
-import useAxios from "axios-hooks";
-import axios from "axios";
 
 export const limit = 50;
 
@@ -29,60 +26,10 @@ const Display: React.FC = () => {
   const [displayMode, setDisplayMode] = useState(
     localStorage.getItem("displayMode") || DisplayType.USERS
   );
-  const [membersData, setMembersData] = useState<Record<string, any>>({});
 
   const skillOptions = useMemo(() => Skills, []);
   const commitmentOptions = useMemo(() => CommitmentLevels, []);
   const schoolOptions = useMemo(() => Schools, []);
-
-  // GET teams data while users data is being loaded to reduce latency on switching to TEAMS display
-  const [{ data: teamsData, error }] = useAxios({
-    method: "GET",
-    url: apiUrl(Service.HEXATHONS, `/teams`),
-    params: {
-      hexathon: process.env.REACT_APP_HEXATHON_ID,
-      offset: teamsOffset,
-    },
-  });
-
-  if (error) return <ErrorScreen error={error} />;
-
-  // Memoize the mapping (team.name -> array of hexathon users) for the team card
-  useMemo(async () => {
-    if (!teamsData) {
-      return {};
-    }
-
-    const getUsers = async () => {
-      const memberDataMap: Record<string, any> = {};
-
-      await Promise.all(
-        teamsData.teams.map(async (team: any) => {
-          const memberPromises = team.members.map(async (member: any) => {
-            try {
-              const res = await axios.get(
-                apiUrl(
-                  Service.HEXATHONS,
-                  `/hexathon-users/${process.env.REACT_APP_HEXATHON_ID}/users/${member}`
-                )
-              );
-              return res.data;
-            } catch (e: any) {
-              handleAxiosError(e);
-            }
-          });
-          const memberData = await Promise.all(memberPromises);
-
-          memberDataMap[team.name] = memberData;
-        })
-      );
-
-      setMembersData(memberDataMap);
-      return memberDataMap;
-    };
-
-    return await getUsers();
-  }, [teamsData]);
 
   useEffect(() => {
     setCommitmentSelectValue(
@@ -110,11 +57,13 @@ const Display: React.FC = () => {
 
   function displayUsers() {
     setDisplayMode(DisplayType.USERS);
+    setSearchText("");
     localStorage.setItem("displayMode", DisplayType.USERS);
   }
 
   function displayTeams() {
     setDisplayMode(DisplayType.TEAMS);
+    setSearchText("");
     localStorage.setItem("displayMode", DisplayType.TEAMS);
   }
 
@@ -283,8 +232,6 @@ const Display: React.FC = () => {
           />
         ) : (
           <TeamsDisplay
-            data={teamsData}
-            membersData={membersData}
             search={searchText as string}
             teamsOffset={teamsOffset}
             setTeamsOffset={setTeamsOffset}
