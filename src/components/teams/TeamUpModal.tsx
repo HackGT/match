@@ -7,25 +7,16 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-  Card,
-  Flex,
-  Text,
-  Tag,
-  Avatar,
-  TagLabel,
   Grid,
   Textarea,
-  Divider,
 } from "@chakra-ui/react";
-import Avatars from "../../definitions/Avatars";
-import { commitmentLevelColors } from "../../definitions/CommitmentLevels";
 import React, { useState } from "react";
 import axios from "axios";
 import { apiUrl, Service, handleAxiosError, useAuth } from "@hex-labs/core";
 import TeamCard from "./TeamCard";
 
 const TeamUpModal: React.FC<any> = (props: any) => {
-  const { isOpen, onClose, name, memberData } = props;
+  const { isOpen, onClose, name, members } = props;
   const [message, setMessage] = useState("");
   const { user } = useAuth();
 
@@ -35,7 +26,7 @@ const TeamUpModal: React.FC<any> = (props: any) => {
 
   const getMemberEmails = () => {
     const emails: string[] = [];
-    memberData.forEach((member: any) => emails.push(member.email));
+    members.forEach((member: any) => emails.push(member.email));
     return emails;
   };
 
@@ -47,6 +38,7 @@ const TeamUpModal: React.FC<any> = (props: any) => {
       await axios.post(apiUrl(Service.HEXATHONS, `/teams/join`), {
         name,
         hexathon: process.env.REACT_APP_HEXATHON_ID,
+        email: user?.email,
         message,
       });
 

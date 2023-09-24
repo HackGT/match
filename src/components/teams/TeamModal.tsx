@@ -13,15 +13,13 @@ import {
   Box,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useAuth } from "@hex-labs/core";
 import UserCard from "../users/UserCard";
 import { UserCardType } from "../../types/UserCard";
 import TeamUpModal from "./TeamUpModal";
 
 const TeamModal: React.FC<any> = (props: any) => {
-  const { isOpen, onClose, name, members, memberData, description } = props;
+  const { isOpen, onClose, name, members, description } = props;
   const { isOpen: isTeamUpOpen, onOpen: onTeamUpOpen, onClose: onTeamUpClose } = useDisclosure();
-  const { user } = useAuth();
 
   const teamUp = () => {
     onTeamUpOpen();
@@ -41,9 +39,9 @@ const TeamModal: React.FC<any> = (props: any) => {
             <Divider borderColor="gray.300" borderWidth="2px" mb="2" />
             <Box>
               <Flex flexWrap="wrap" justifyContent="space-evenly">
-                {memberData.map(
-                  (user: UserCardType) => user && <UserCard key={user.name} {...user} />
-                )}
+                {members.map((member: UserCardType) => (
+                  <UserCard key={member.name} {...member} />
+                ))}
               </Flex>
             </Box>
           </ModalBody>
@@ -67,7 +65,6 @@ const TeamModal: React.FC<any> = (props: any) => {
         onClose={onTeamUpClose}
         name={name}
         members={members}
-        memberData={memberData}
         description={description}
       />
     </>

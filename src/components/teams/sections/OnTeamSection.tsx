@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   Box,
   Heading,
@@ -27,7 +27,7 @@ import {
   HStack,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { apiUrl, handleAxiosError, Service } from "@hex-labs/core";
+import { apiUrl, handleAxiosError, Service, useAuth } from "@hex-labs/core";
 import { IoMdExit } from "react-icons/io";
 import { MdOutlineNotificationsActive, MdOutlineNotificationsNone } from "react-icons/md";
 import { AiOutlineMessage } from "react-icons/ai";
@@ -40,10 +40,9 @@ interface Props {
 
 const OnTeamSection: React.FC<Props> = props => {
   const hexathon = process.env.REACT_APP_HEXATHON_ID;
-  const { id, name, description } = props.team;
+  const { id, name, description, memberRequests } = props.team;
   const [email, setEmail] = useState("");
   const [teamDescription, setTeamDescription] = useState(description);
-  const [memberRequests, setMemberRequests] = useState<any>([]);
   const {
     isOpen: isLeaveAlertOpen,
     onOpen: onLeaveAlertOpen,
@@ -58,27 +57,8 @@ const OnTeamSection: React.FC<Props> = props => {
 
   const cancelRef = useRef<HTMLButtonElement>(null);
   const isMobile = useBreakpointValue({ base: true, md: false });
-
-  useEffect(() => {
-    const fetchMemberRequests = async () => {
-      const memberRequestsPromises = props.team.memberRequests.map(async (memberRequest: any) => {
-        try {
-          const res = await axios.get(
-            apiUrl(
-              Service.HEXATHONS,
-              `/hexathon-users/${process.env.REACT_APP_HEXATHON_ID}/users/${memberRequest.userId}`
-            )
-          );
-          return { ...res.data, message: memberRequest.message };
-        } catch (e: any) {
-          handleAxiosError(e);
-        }
-      });
-      const resolvedMemberRequests = await Promise.all(memberRequestsPromises);
-      setMemberRequests(resolvedMemberRequests);
-    };
-    if (props.team.memberRequests.length > 0) fetchMemberRequests();
-  }, []);
+  const { user } = useAuth();
+  const userEmail = user?.email;
 
   const changeEmail = (e: any) => {
     setEmail(e.target.value);
@@ -88,7 +68,7 @@ const OnTeamSection: React.FC<Props> = props => {
     try {
       await axios.post(apiUrl(Service.HEXATHONS, "/teams/add"), {
         hexathon,
-        email,
+        email: userEmail,
       });
       window.location.reload();
     } catch (err: any) {
@@ -115,6 +95,7 @@ const OnTeamSection: React.FC<Props> = props => {
   const handleUpdateTeam = async () => {
     try {
       await axios.put(apiUrl(Service.HEXATHONS, `/teams/${id}`), {
+        hexathon,
         description: teamDescription,
       });
       window.location.reload();
@@ -126,7 +107,8 @@ const OnTeamSection: React.FC<Props> = props => {
   const handleAcceptUser = async (userId: string) => {
     try {
       await axios.post(apiUrl(Service.HEXATHONS, `/teams/${id}/accept-user`), {
-        userId,
+        hexathon,
+        email: userEmail,
       });
       window.location.reload();
     } catch (err: any) {
@@ -137,7 +119,8 @@ const OnTeamSection: React.FC<Props> = props => {
   const handleRejectUser = async (userId: string) => {
     try {
       await axios.post(apiUrl(Service.HEXATHONS, `/teams/${id}/reject-user`), {
-        userId,
+        hexathon,
+        email: userEmail,
       });
       window.location.reload();
     } catch (err: any) {
@@ -298,14 +281,11 @@ const OnTeamSection: React.FC<Props> = props => {
           >
             Current members
           </Heading>
-          {props.members.map(
-            (member: any) =>
-              member && (
-                <Text textAlign="center" fontSize={15}>
-                  {member.name} - {member.email}
-                </Text>
-              )
-          )}
+          {props.members.map((member: any) => (
+            <Text textAlign="center" fontSize={15}>
+              {member.name} - {member.email}
+            </Text>
+          ))}
           <Box paddingBottom="30px">
             {props.members.length >= 4 && (
               <Heading paddingY="10px" size="sm" lineHeight="inherit">
