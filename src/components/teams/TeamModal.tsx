@@ -39,7 +39,7 @@ const TeamModal: React.FC<any> = (props: any) => {
             <Divider borderColor="gray.300" borderWidth="2px" mb="2" />
             <Box>
               <Flex flexWrap="wrap" justifyContent="space-evenly">
-                {members.map((member: UserCardType) => (
+                {members.map((member: any) => (
                   <UserCard key={member.name} {...member} />
                 ))}
               </Flex>

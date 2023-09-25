@@ -42,7 +42,7 @@ const UserTeamUpModal: React.FC<any> = (props: any) => {
 
       const userTeam = await axios.get(apiUrl(Service.HEXATHONS, `/teams`), {
         params: {
-          hexathon: process.env.REACT_APP_HEXATHON_ID,
+          hexathon,
           userId: user?.uid,
         },
       });
@@ -106,7 +106,7 @@ const UserTeamUpModal: React.FC<any> = (props: any) => {
 
       toast({
         title: "Success",
-        description: "Your invite has been sent.",
+        description: "Your request has been sent.",
         status: "success",
         duration: 3000,
         isClosable: true,

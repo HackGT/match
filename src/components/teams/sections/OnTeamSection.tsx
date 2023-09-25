@@ -57,8 +57,6 @@ const OnTeamSection: React.FC<Props> = props => {
 
   const cancelRef = useRef<HTMLButtonElement>(null);
   const isMobile = useBreakpointValue({ base: true, md: false });
-  const { user } = useAuth();
-  const userEmail = user?.email;
 
   const changeEmail = (e: any) => {
     setEmail(e.target.value);
@@ -68,7 +66,7 @@ const OnTeamSection: React.FC<Props> = props => {
     try {
       await axios.post(apiUrl(Service.HEXATHONS, "/teams/add"), {
         hexathon,
-        email: userEmail,
+        email,
       });
       window.location.reload();
     } catch (err: any) {
@@ -104,11 +102,11 @@ const OnTeamSection: React.FC<Props> = props => {
     }
   };
 
-  const handleAcceptUser = async (userId: string) => {
+  const handleAcceptUser = async (email: string) => {
     try {
       await axios.post(apiUrl(Service.HEXATHONS, `/teams/${id}/accept-user`), {
         hexathon,
-        email: userEmail,
+        email,
       });
       window.location.reload();
     } catch (err: any) {
@@ -116,11 +114,11 @@ const OnTeamSection: React.FC<Props> = props => {
     }
   };
 
-  const handleRejectUser = async (userId: string) => {
+  const handleRejectUser = async (email: string) => {
     try {
       await axios.post(apiUrl(Service.HEXATHONS, `/teams/${id}/reject-user`), {
         hexathon,
-        email: userEmail,
+        email,
       });
       window.location.reload();
     } catch (err: any) {
@@ -231,40 +229,37 @@ const OnTeamSection: React.FC<Props> = props => {
                 <Text as="b" fontSize="18px" fontWeight="bold" color="#7B69EC">
                   Members Requests
                 </Text>
-                {memberRequests.map(
-                  (member: any) =>
-                    member && (
-                      <VStack mt={2}>
-                        <UserCard {...member} />
-                        <HStack>
-                          <AiOutlineMessage />
-                          <Text fontSize="14px" color="black">
-                            {member.message}
-                          </Text>
-                        </HStack>
-                        <HStack mt={2} justify="space-evenly">
-                          <Button
-                            backgroundColor="#4CAF50"
-                            size="sm"
-                            onClick={() => handleAcceptUser(member.userId)}
-                          >
-                            <Text fontSize="14px" color="black">
-                              Accept
-                            </Text>
-                          </Button>
-                          <Button
-                            backgroundColor="#F44336"
-                            size="sm"
-                            onClick={() => handleRejectUser(member.userId)}
-                          >
-                            <Text fontSize="14px" color="black">
-                              Reject
-                            </Text>
-                          </Button>
-                        </HStack>
-                      </VStack>
-                    )
-                )}
+                {memberRequests.map((memberRequest: any) => (
+                  <VStack mt={2}>
+                    <UserCard {...memberRequest.member} />
+                    <HStack>
+                      <AiOutlineMessage />
+                      <Text fontSize="14px" color="black">
+                        {memberRequest.message}
+                      </Text>
+                    </HStack>
+                    <HStack mt={2} justify="space-evenly">
+                      <Button
+                        backgroundColor="#4CAF50"
+                        size="sm"
+                        onClick={() => handleAcceptUser(memberRequest.member.email)}
+                      >
+                        <Text fontSize="14px" color="black">
+                          Accept
+                        </Text>
+                      </Button>
+                      <Button
+                        backgroundColor="#F44336"
+                        size="sm"
+                        onClick={() => handleRejectUser(memberRequest.member.email)}
+                      >
+                        <Text fontSize="14px" color="black">
+                          Reject
+                        </Text>
+                      </Button>
+                    </HStack>
+                  </VStack>
+                ))}
               </VStack>
             )}
           </DrawerBody>

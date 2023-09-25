@@ -26,6 +26,7 @@ const TeamJoin: React.FC = () => {
         duration: 3000,
         isClosable: true,
       });
+      window.location.reload();
     } catch (e: any) {
       handleAxiosError(e);
     }

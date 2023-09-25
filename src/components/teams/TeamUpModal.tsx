@@ -70,7 +70,7 @@ const TeamUpModal: React.FC<any> = (props: any) => {
       });
       toast({
         title: "Success",
-        description: "Your invite has been sent.",
+        description: "Your request has been sent.",
         status: "success",
         duration: 3000,
         isClosable: true,

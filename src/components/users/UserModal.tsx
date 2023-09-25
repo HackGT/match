@@ -10,7 +10,6 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { commitmentLevelColors } from "../../definitions/CommitmentLevels";
-import TeamUpModal from "./UserTeamUpModal";
 import { useAuth, apiUrl, Service, LoadingScreen } from "@hex-labs/core";
 import useAxios from "axios-hooks";
 import UserTeamUpModal from "./UserTeamUpModal";
