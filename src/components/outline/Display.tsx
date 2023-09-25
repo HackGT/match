@@ -43,6 +43,11 @@ const Display: React.FC = () => {
     method: "GET",
   });
 
+  const [{ data: userData, loading: userLoading }] = useAxios({
+    url: apiUrl(Service.AUTH, `/permissions/${user?.uid}`),
+    method: "GET",
+  });
+
   useEffect(() => {
     setCommitmentSelectValue(
       commitmentOptions.filter(
@@ -58,7 +63,8 @@ const Display: React.FC = () => {
   }, [searchParams, commitmentOptions, skillOptions, schoolOptions]);
 
   if (loading) return <LoadingScreen />;
-  if (!data) return <NotRegisteredErrorScreen />;
+  // Display not registered screen if an unregistered non-member tries to access the portal
+  if (!data && !userData.roles.member) return <NotRegisteredErrorScreen />;
 
   const onSearchTextChange = (event: any) => {
     setSearchText(event.target.value);
