@@ -6,6 +6,9 @@ import { CommitmentLevels, Schools, Skills } from "../../definitions";
 import UsersDisplay from "../users/UsersDisplay";
 import TeamsDisplay from "../teams/TeamsDisplay";
 import { getSearchParams } from "../../util/helpers";
+import { apiUrl, LoadingScreen, Service, useAuth } from "@hex-labs/core";
+import useAxios from "axios-hooks";
+import NotRegisteredErrorScreen from "../../screens/NotRegisteredErrorScreen";
 
 export const limit = 50;
 
@@ -26,10 +29,19 @@ const Display: React.FC = () => {
   const [displayMode, setDisplayMode] = useState(
     localStorage.getItem("displayMode") || DisplayType.USERS
   );
+  const { user } = useAuth();
 
   const skillOptions = useMemo(() => Skills, []);
   const commitmentOptions = useMemo(() => CommitmentLevels, []);
   const schoolOptions = useMemo(() => Schools, []);
+
+  const [{ data, loading }] = useAxios({
+    url: apiUrl(
+      Service.HEXATHONS,
+      `/hexathon-users/${process.env.REACT_APP_HEXATHON_ID}/users/${user?.uid}`
+    ),
+    method: "GET",
+  });
 
   useEffect(() => {
     setCommitmentSelectValue(
@@ -44,6 +56,9 @@ const Display: React.FC = () => {
       schoolOptions.filter(school => searchParams.get("school")?.includes(school.value))
     );
   }, [searchParams, commitmentOptions, skillOptions, schoolOptions]);
+
+  if (loading) return <LoadingScreen />;
+  if (!data) return <NotRegisteredErrorScreen />;
 
   const onSearchTextChange = (event: any) => {
     setSearchText(event.target.value);
