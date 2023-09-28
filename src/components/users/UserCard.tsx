@@ -26,14 +26,14 @@ const UserCard: React.FC<UserCardType> = (props: UserCardType) => {
       onClick={onOpen}
     >
       <Flex flexDirection="column">
-        <Text fontSize="3xl" fontWeight="bold" mb="2">
+        <Text fontSize="2xl" fontWeight="bold" mb="2">
           {name}
         </Text>
-        <Tag width="fit-content" alignSelf="right">
+        <Tag width="fit-content" alignSelf="right" mb="2">
           {Avatars[school] && <Avatar src={Avatars[school]} size="xs" />}
           <TagLabel>{school}</TagLabel>
         </Tag>
-        <Tag width="fit-content">{year}</Tag>
+        <Tag width="fit-content" mb="2">{year}</Tag>
         <Divider borderColor="gray.300" borderWidth="2px" mb="2" />
         <Flex alignItems="center" flexWrap="wrap" mb="2" height="60px">
           <Tag
@@ -67,7 +67,6 @@ const UserCard: React.FC<UserCardType> = (props: UserCardType) => {
         <Text fontSize="sm" color="gray.500" mb="2" height="45px" isTruncated>
           {description}
         </Text>
-        <Divider borderColor="gray.300" borderWidth="2px" />
         <UserModal
           isOpen={isOpen}
           onOpen={onOpen}

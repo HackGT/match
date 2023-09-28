@@ -26,7 +26,7 @@ const TeamCard: React.FC<TeamCardType> = props => {
           onClick={onOpen}
         >
           <Flex flexDirection="column">
-            <Text fontSize="3xl" fontWeight="bold" mb="1">
+            <Text fontSize="2xl" fontWeight="bold" mb="1">
               {name}
             </Text>
             <Divider borderColor="gray.300" borderWidth="2px" mb="2" />
