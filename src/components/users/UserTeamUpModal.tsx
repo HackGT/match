@@ -128,8 +128,8 @@ const UserTeamUpModal: React.FC<any> = (props: any) => {
           <ModalCloseButton />
           <ModalBody>
             <Grid
-              templateColumns="1fr 1fr"
-              gap={4}
+              templateColumns={{ base: "1fr", md: "1fr 1fr" }}
+              gap="4"
               alignContent="flex-start"
               alignItems={"flex-start"}
             >

@@ -10,14 +10,19 @@ import {
   Grid,
   Textarea,
   useToast,
+  Box,
+  Card,
+  Text,
+  Divider,
+  Flex,
+  Tag,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import axios from "axios";
 import { apiUrl, Service, handleAxiosError, useAuth } from "@hex-labs/core";
-import TeamCard from "./TeamCard";
 
 const TeamUpModal: React.FC<any> = (props: any) => {
-  const { isOpen, onClose, name, members } = props;
+  const { isOpen, onClose, name, members, description } = props;
   const [message, setMessage] = useState("");
   const { user } = useAuth();
   const toast = useToast();
@@ -92,12 +97,46 @@ const TeamUpModal: React.FC<any> = (props: any) => {
           <ModalCloseButton />
           <ModalBody>
             <Grid
-              templateColumns="1fr 1fr"
-              gap={4}
+              templateColumns={{ base: "1fr", md: "1fr 1fr" }}
+              gap="4"
               alignContent="flex-start"
               alignItems={"flex-start"}
             >
-              <TeamCard {...props} />
+              <Card p="4" height={300} boxShadow="md">
+                <Text fontSize="2xl" fontWeight="bold" mb="1">
+                  {name}
+                </Text>
+                <Divider borderColor="gray.300" borderWidth="2px" mb="2" />
+
+                <Flex alignItems="flex-start" flexWrap="wrap" mb="2">
+                  {members.map((member: any) => (
+                    <Tag
+                      key={member?.userId}
+                      bg="blue.400"
+                      color="white"
+                      borderRadius="md"
+                      px="2"
+                      py="1"
+                      mr="2"
+                      mb="2"
+                    >
+                      <Text fontSize="sm">{member ? member.name : ""}</Text>
+                    </Tag>
+                  ))}
+                </Flex>
+
+                <Box fontSize="sm" color="gray.500" mb="2" maxHeight="80px" overflowY="auto">
+                  {description}
+                </Box>
+
+                <Divider borderColor="gray.300" borderWidth="2px" />
+
+                <Flex justifyContent="flex-start" alignItems="center" mt="2">
+                  <Tag bg="purple.400" color="white" borderRadius="md" px="2" py="1">
+                    Members: {members.length}
+                  </Tag>
+                </Flex>
+              </Card>
               <Textarea
                 placeholder="Introduce yourself and explain what you want to accomplish at this event!"
                 size="md"
