@@ -94,6 +94,7 @@ const Display: React.FC = () => {
       height={"auto"}
       top={"50px"}
       left={"2%"}
+      marginBottom={"50px"}
       boxShadow={"0px 4px 8px 0px rgba(33, 36, 41, 0.1)"}
     >
       <CardBody>

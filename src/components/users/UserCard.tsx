@@ -23,6 +23,7 @@ const UserCard: React.FC<UserCardType> = (props: UserCardType) => {
       backgroundColor="white"
       cursor="pointer"
       padding="4"
+      marginBottom="5"
       onClick={onOpen}
     >
       <Flex flexDirection="column">
@@ -33,7 +34,9 @@ const UserCard: React.FC<UserCardType> = (props: UserCardType) => {
           {Avatars[school] && <Avatar src={Avatars[school]} size="xs" />}
           <TagLabel>{school}</TagLabel>
         </Tag>
-        <Tag width="fit-content" mb="2">{year}</Tag>
+        <Tag width="fit-content" mb="2">
+          {year}
+        </Tag>
         <Divider borderColor="gray.300" borderWidth="2px" mb="2" />
         <Flex alignItems="center" flexWrap="wrap" mb="2" height="60px">
           <Tag

@@ -97,7 +97,7 @@ const TeamsDisplay: React.FC<Props> = ({ search, teamsOffset, setTeamsOffset }) 
           </Center>
         )}
       </Center>
-      <Box paddingTop={"1.5%"} paddingLeft={"5%"} paddingRight={"5%"}>
+      <Box paddingTop={"1.5%"} paddingBottom={"2.5%"} paddingLeft={"5%"} paddingRight={"5%"}>
         <br></br>
         <Flex flexWrap="wrap" justifyContent="space-evenly">
           {data?.teams.map((team: TeamCardType) => <TeamCard key={team.name} {...team} />)}

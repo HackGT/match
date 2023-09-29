@@ -23,6 +23,7 @@ const TeamCard: React.FC<TeamCardType> = props => {
           backgroundColor="white"
           cursor="pointer"
           padding="4"
+          marginBottom="5"
           onClick={onOpen}
         >
           <Flex flexDirection="column">

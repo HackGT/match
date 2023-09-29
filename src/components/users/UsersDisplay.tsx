@@ -89,7 +89,7 @@ const UsersDisplay: React.FC<Props> = ({
 
   return (
     <>
-      <Box paddingTop={"2.5%"} paddingLeft={"5%"} paddingRight={"5%"}>
+      <Box paddingTop={"2.5%"} paddingBottom={"2.5%"} paddingLeft={"5%"} paddingRight={"5%"}>
         <Flex flexWrap="wrap" justifyContent="space-evenly">
           {data?.hexathonUsers
             .filter((hUser: any) => hUser.userId !== user?.uid)
