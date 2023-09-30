@@ -38,7 +38,7 @@ const UserCard: React.FC<UserCardType> = (props: UserCardType) => {
           {year}
         </Tag>
         <Divider borderColor="gray.300" borderWidth="2px" mb="2" />
-        <Flex alignItems="center" flexWrap="wrap" mb="2" height="60px">
+        <Flex alignItems="center" flexWrap="wrap" mb="10" height="60px">
           <Tag
             bg={commitmentLevelColors[commitmentLevel]}
             color="white"

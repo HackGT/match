@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Text, Button, Input, Heading, VStack, Box } from "@chakra-ui/react";
+import { Text, Button, Input, Heading, VStack, Box, useBreakpointValue } from "@chakra-ui/react";
 import axios from "axios";
 import { apiUrl, handleAxiosError, Service, useAuth } from "@hex-labs/core";
 import { useParams } from "react-router-dom";
 
 const CreateTeamSection: React.FC = () => {
   const [teamName, setTeamName] = useState("");
+  const isMobile = useBreakpointValue({ base: true, md: false });
   const hexathon = process.env.REACT_APP_HEXATHON_ID;
   const { user } = useAuth();
 
@@ -50,7 +51,12 @@ const CreateTeamSection: React.FC = () => {
         <Heading paddingTop="20px" size="md" lineHeight="inherit">
           Create a Team
         </Heading>
-        <Input w="md" value={teamName} onChange={changeTeamName} placeholder="BeardellBears" />
+        <Input
+          w={isMobile ? "70vw" : "md"}
+          value={teamName}
+          onChange={changeTeamName}
+          placeholder="BeardellBears"
+        />
         <Button onClick={handleCreateTeam}>Create team</Button>
       </VStack>
     </Box>
