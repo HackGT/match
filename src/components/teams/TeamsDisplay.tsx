@@ -28,7 +28,7 @@ const TeamsDisplay: React.FC<Props> = ({ search, teamsOffset, setTeamsOffset }) 
   const isMobile = useBreakpointValue({ base: true, md: false });
   const [resultsText, setResultsText] = useState("Loading...");
 
-  const [{ data, error }] = useAxios({
+  const [{ data }] = useAxios({
     method: "GET",
     url: apiUrl(Service.HEXATHONS, `/teams`),
     params: {
@@ -38,7 +38,7 @@ const TeamsDisplay: React.FC<Props> = ({ search, teamsOffset, setTeamsOffset }) 
     },
   });
 
-  const [{ data: userTeamData, error: userTeamError }] = useAxios({
+  const [{ data: userTeamData }] = useAxios({
     method: "GET",
     url: apiUrl(Service.HEXATHONS, `/teams`),
     params: {
@@ -58,9 +58,6 @@ const TeamsDisplay: React.FC<Props> = ({ search, teamsOffset, setTeamsOffset }) 
       );
     }
   }, [data]);
-
-  if (error) return <ErrorScreen error={error} />;
-  if (userTeamError) return <ErrorScreen error={userTeamError} />;
 
   const onPreviousClicked = () => {
     setTeamsOffset(teamsOffset - limit);
