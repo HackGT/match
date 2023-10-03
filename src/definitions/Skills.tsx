@@ -27,6 +27,7 @@ const Skills: skillType[] = [
   { value: "SQL", label: "SQL" },
   { value: "Swift", label: "Swift" },
   { value: "TypeScript", label: "TypeScript" },
+  { value: "UI/UX Design", label: "UI/UX Design" },
 ];
 
 export default Skills;
