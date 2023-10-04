@@ -71,16 +71,16 @@ const UserTeamUpModal: React.FC<any> = (props: any) => {
         <body>
           <br>
           <p>${emailText}</p>
-          <button><a href="https://match.hexlabs.org/jointeam?team=${teamName}" style="text-decoration: none; color: #ffffff">Join Team</a></button>
+          <a href="https://match.hexlabs.org/jointeam?team=${teamName}" style="text-decoration: none; color: #ffffff">Join Team</a>
           <br>
           <p>For more information, visit Hexlabs Match.</p>
         </body>
         <style>
-        button {
+        a {
           display: inline-block;
           background-color: #4299E1;
-          padding: 12px;
-          width: 110px;
+          padding: 10px;
+          width: 100px;
           color: #ffffff;
           text-align: center;
           border: none;
