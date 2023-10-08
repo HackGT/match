@@ -67,7 +67,7 @@ const Display: React.FC = () => {
   if (!data && !userData.roles.member) return <NotRegisteredErrorScreen />;
 
   const onSearchTextChange = (event: any) => {
-    setSearchText(event.target.value);
+    setSearchText(event.target.value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&'));
     displayMode === DisplayType.USERS ? setUsersOffset(0) : setTeamsOffset(0);
   };
 
