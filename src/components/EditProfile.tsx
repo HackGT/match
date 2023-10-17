@@ -146,7 +146,7 @@ const EditProfile: React.FC = () => {
                 <Flex alignItems="start">
                   <InfoOutlineIcon m="1" boxSize={3} color="#858585" />
                   <Text fontSize="xs" color="#858585">
-                    Choose atmost 5 skills most relevant to what you intend to use during {title}
+                    Choose at most 5 skills most relevant to what you intend to use during {title}
                   </Text>
                 </Flex>
               </FormControl>
