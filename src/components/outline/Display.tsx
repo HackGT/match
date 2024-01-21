@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Card, Flex, Input, Box, CardBody, Button, useBreakpointValue } from "@chakra-ui/react";
+import { Card, Flex, Input, Box, CardBody, Button, useBreakpointValue, useDisclosure } from "@chakra-ui/react";
 import { GroupBase, OptionBase, Select } from "chakra-react-select";
 import { createSearchParams, useSearchParams } from "react-router-dom";
 import { CommitmentLevels, Schools, Skills } from "../../definitions";
@@ -9,6 +9,8 @@ import { getSearchParams } from "../../util/helpers";
 import { apiUrl, LoadingScreen, Service, useAuth } from "@hex-labs/core";
 import useAxios from "axios-hooks";
 import NotRegisteredErrorScreen from "../../screens/NotRegisteredErrorScreen";
+import { InfoOutlineIcon } from "@chakra-ui/icons";
+import UserGuide from "../UserGuide"
 
 export const limit = 50;
 
@@ -34,6 +36,8 @@ const Display: React.FC = () => {
   const skillOptions = useMemo(() => Skills, []);
   const commitmentOptions = useMemo(() => CommitmentLevels, []);
   const schoolOptions = useMemo(() => Schools, []);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [{ data, loading }] = useAxios({
     url: apiUrl(
@@ -204,6 +208,10 @@ const Display: React.FC = () => {
                   }}
                 />
               </Box>
+              <Box pl="10px" w={isMobile ? "320px" : "256px"}>
+                <InfoOutlineIcon w={9} h={9} onClick={onOpen}/>
+              </Box>
+
             </>
           )}
         </Flex>
@@ -260,6 +268,11 @@ const Display: React.FC = () => {
           />
         )}
       </CardBody>
+      <UserGuide
+          isOpen={isOpen}
+          onOpen={onOpen}
+          onClose={onClose}
+        />
     </Card>
   );
 };
