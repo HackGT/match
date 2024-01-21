@@ -212,7 +212,7 @@ const Display: React.FC = () => {
           )}
           <Spacer />
           <Box pl="10px">
-            <Tooltip label="How to use Match?">
+            <Tooltip label="How do I use Match?">
                 <InfoOutlineIcon w={10} h={10} color="#7B69EC" onClick={onOpen}/>
             </Tooltip>
           </Box>
