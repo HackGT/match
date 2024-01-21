@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Card, Flex, Input, Box, CardBody, Button, useBreakpointValue, useDisclosure, Tooltip } from "@chakra-ui/react";
+import { Card, Flex, Input, Box, CardBody, Button, useBreakpointValue, useDisclosure, Tooltip, Spacer } from "@chakra-ui/react";
 import { GroupBase, OptionBase, Select } from "chakra-react-select";
 import { createSearchParams, useSearchParams } from "react-router-dom";
 import { CommitmentLevels, Schools, Skills } from "../../definitions";
@@ -208,14 +208,14 @@ const Display: React.FC = () => {
                   }}
                 />
               </Box>
-              <Box pl="10px" w={isMobile ? "320px" : "256px"}>
-                <Tooltip label="How to use Match?">
-                  <InfoOutlineIcon w={9} h={9} color="#7B69EC" onClick={onOpen}/>
-                </Tooltip>
-              </Box>
-
             </>
           )}
+          <Spacer />
+          <Box pl="10px">
+            <Tooltip label="How to use Match?">
+                <InfoOutlineIcon w={10} h={10} color="#7B69EC" onClick={onOpen}/>
+            </Tooltip>
+          </Box>
         </Flex>
         <br></br>
         <Box
