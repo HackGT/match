@@ -10,6 +10,7 @@ import { apiUrl, LoadingScreen, Service, useAuth } from "@hex-labs/core";
 import useAxios from "axios-hooks";
 import NotRegisteredErrorScreen from "../../screens/NotRegisteredErrorScreen";
 import { InfoOutlineIcon } from "@chakra-ui/icons";
+import { MdOutlineNotificationsActive, MdOutlineNotificationsNone } from "react-icons/md";
 import UserGuide from "../UserGuide"
 
 export const limit = 50;
@@ -212,8 +213,19 @@ const Display: React.FC = () => {
           )}
           <Spacer />
           <Box pl="10px">
+            <Tooltip label="Teammate Requests">
+                <MdOutlineNotificationsNone 
+                style={{
+                  height: 40,
+                  width: 40,
+                  cursor: "pointer",
+                }}
+                onClick={onOpen} />
+            </Tooltip>
+          </Box>
+          <Box pl="10px">
             <Tooltip label="How do I use Match?">
-                <InfoOutlineIcon w={10} h={10} color="#7B69EC" onClick={onOpen}/>
+                <InfoOutlineIcon w={10} h={10} color="#7B69EC" style={{cursor: "pointer"}} onClick={onOpen}/>
             </Tooltip>
           </Box>
         </Flex>
