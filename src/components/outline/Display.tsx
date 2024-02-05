@@ -12,6 +12,7 @@ import NotRegisteredErrorScreen from "../../screens/NotRegisteredErrorScreen";
 import { InfoOutlineIcon } from "@chakra-ui/icons";
 import { MdOutlineNotificationsActive, MdOutlineNotificationsNone } from "react-icons/md";
 import UserGuide from "../UserGuide"
+import UserDrawer from "../users/UserDrawer"
 
 export const limit = 50;
 
@@ -38,7 +39,9 @@ const Display: React.FC = () => {
   const commitmentOptions = useMemo(() => CommitmentLevels, []);
   const schoolOptions = useMemo(() => Schools, []);
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const guideDisclosure = useDisclosure();
+  const notifDisclosure = useDisclosure();
+  // const { isOpen, onOpen, onClose } = guideDisclosure;
 
   const [{ data, loading }] = useAxios({
     url: apiUrl(
@@ -220,12 +223,12 @@ const Display: React.FC = () => {
                   width: 40,
                   cursor: "pointer",
                 }}
-                onClick={onOpen} />
+                onClick={notifDisclosure.onOpen} />
             </Tooltip>
           </Box>
           <Box pl="10px">
             <Tooltip label="How do I use Match?">
-                <InfoOutlineIcon w={10} h={10} color="#7B69EC" style={{cursor: "pointer"}} onClick={onOpen}/>
+                <InfoOutlineIcon w={10} h={10} color="#7B69EC" style={{cursor: "pointer"}} onClick={guideDisclosure.onOpen}/>
             </Tooltip>
           </Box>
         </Flex>
@@ -283,10 +286,15 @@ const Display: React.FC = () => {
         )}
       </CardBody>
       <UserGuide
-          isOpen={isOpen}
-          onOpen={onOpen}
-          onClose={onClose}
+          isOpen={guideDisclosure.isOpen}
+          onOpen={guideDisclosure.onOpen}
+          onClose={guideDisclosure.onClose}
         />
+      <UserDrawer
+          isOpen={notifDisclosure.isOpen}
+          onOpen={notifDisclosure.onOpen}
+          onClose={notifDisclosure.onClose}
+       />
     </Card>
   );
 };
