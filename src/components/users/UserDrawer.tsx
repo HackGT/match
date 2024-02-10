@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
   Text,
   Button,
@@ -13,19 +13,23 @@ import {
 } from "@chakra-ui/react";
 
 const UserDrawer = (props : any) => {
-    const { isOpen, onOpen, onClose } = props;
+    const { isOpen, onOpen, onClose, teamRequests } = props;
+    const cancelRef = useRef<HTMLButtonElement>(null);
+
+    console.log(teamRequests)
+
   return (
     <>
         <Drawer
         isOpen={isOpen}
         placement="right"
         onClose={onClose}
-        // finalFocusRef={cancelRef}
+        finalFocusRef={cancelRef}
       >
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader>Notifications</DrawerHeader>
+          <DrawerHeader>Team Notifications</DrawerHeader>
           <DrawerBody>
             {/* {memberRequests.length == 0 ? (
               <Text>No notifications</Text>
@@ -65,8 +69,8 @@ const UserDrawer = (props : any) => {
                     </HStack>
                   </VStack>
                 ))}
-              </VStack> 
-            )}*/}
+              </VStack>
+            )} */}
           </DrawerBody>
         </DrawerContent>
       </Drawer>
