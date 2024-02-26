@@ -10,13 +10,58 @@ import {
   DrawerHeader,
   DrawerOverlay,
   HStack,
+  useToast,
 } from "@chakra-ui/react";
+import TeamCard from "../teams/TeamCard";
+import { TeamCardType } from "../../types/TeamCard"
+import { AiOutlineMessage } from "react-icons/ai";
+import axios from "axios";
+import { Service, apiUrl, handleAxiosError } from "@hex-labs/core";
+
 
 const UserDrawer = (props : any) => {
-    const { isOpen, onOpen, onClose, teamRequests } = props;
+    const { isOpen, onOpen, onClose, teamRequests, user } = props;
     const cancelRef = useRef<HTMLButtonElement>(null);
+    const toast = useToast();
+    const hexathon = process.env.REACT_APP_HEXATHON_ID;
 
-    console.log(teamRequests)
+    console.log('team requests: ', teamRequests)
+
+    const handleAcceptTeam = async(teamName : String) => {
+      try {
+        await axios.post(apiUrl(Service.HEXATHONS, `/teams/accept-invite`), {
+          name: teamName,
+          hexathon,
+        });
+        toast({
+          title: "Success",
+          description: `You have joined ${teamName}`,
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+      } catch (e: any) {
+        handleAxiosError(e);
+      }
+    };
+
+    const handleDeclineTeam = async(teamName : String) => {
+      try {
+        await axios.post(apiUrl(Service.HEXATHONS, `/teams/reject-invite`), {
+          name: teamName,
+          hexathon,
+        });
+        toast({
+          title: "Success",
+          description: `You have declined the invite to join ${teamName}`,
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+      } catch (e: any) {
+        handleAxiosError(e);
+      }
+    };
 
   return (
     <>
@@ -31,27 +76,30 @@ const UserDrawer = (props : any) => {
           <DrawerCloseButton />
           <DrawerHeader>Team Notifications</DrawerHeader>
           <DrawerBody>
-            {/* {memberRequests.length == 0 ? (
+            {teamRequests.length == 0 ? (
               <Text>No notifications</Text>
             ) : (
               <VStack align="left">
                 <Text as="b" fontSize="18px" fontWeight="bold" color="#7B69EC">
-                  Members Requests
+                  Team Requests
                 </Text>
-                {memberRequests.map((memberRequest: any) => (
+                {teamRequests.map((teamRequest: TeamCardType) => (
                   <VStack mt={2}>
-                    <UserCard {...memberRequest.member} />
+                    <TeamCard key={teamRequest.name} {...teamRequest} />
                     <HStack>
                       <AiOutlineMessage />
-                      <Text fontSize="14px" color="black">
-                        {memberRequest.message}
-                      </Text>
+                      {teamRequest?.sentInvites?.map((invite: any) => (
+                          <Text fontSize="14px" color="black">
+                            {invite}
+                          </Text>
+                          
+                      ))}
                     </HStack>
                     <HStack mt={2} justify="space-evenly">
                       <Button
                         backgroundColor="#4CAF50"
                         size="sm"
-                        onClick={() => handleAcceptUser(memberRequest.member.email)}
+                        onClick={() => handleAcceptTeam(teamRequest.name)}
                       >
                         <Text fontSize="14px" color="black">
                           Accept
@@ -60,7 +108,7 @@ const UserDrawer = (props : any) => {
                       <Button
                         backgroundColor="#F44336"
                         size="sm"
-                        onClick={() => handleRejectUser(memberRequest.member.email)}
+                        onClick={() => handleDeclineTeam(teamRequest.name)}
                       >
                         <Text fontSize="14px" color="black">
                           Reject
@@ -70,7 +118,7 @@ const UserDrawer = (props : any) => {
                   </VStack>
                 ))}
               </VStack>
-            )} */}
+            )}
           </DrawerBody>
         </DrawerContent>
       </Drawer>

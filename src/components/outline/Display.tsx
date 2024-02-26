@@ -56,53 +56,63 @@ const Display: React.FC = () => {
     method: "GET",
   });
 
-  const teamRequests = [
-    {
-        members: [],
-        public: false,
-        hexathon: "647fee51768e521dc8ef88e0",
-        name: "Team A",
-        sentInvites: [
-            {
-                member: "65c7e7afe487b453d90d579c",
-                message: "You are invited to join our team!",
-                id: "65c80369a5a1e7bac212161d"
-            },
-            {
-                member: "65c7e716e487b453d90d5799",
-                message: "You are invited to join our team!",
-                id: "65c80369a5a1e7bac212161e"
-            }
-        ],
-        memberRequests: [],
-        id: "65c7e559e487b453d90d5794"
-    },
-    {
-        members: [],
-        public: false,
-        hexathon: "647fee51768e521dc8ef88e0",
-        name: "Team C",
-        sentInvites: [
-            {
-                member: "65c7e753e487b453d90d579a",
-                message: "Hi there",
-                id: "65c80369a5a1e7bac212161f"
-            },
-            {
-                member: "65c7e786e487b453d90d579b",
-                message: "Hello there",
-                id: "65c80369a5a1e7bac2121620"
-            },
-            {
-                member: "65c7e7afe487b453d90d579c",
-                message: "You are invited to join our team!",
-                id: "65c80369a5a1e7bac2121621"
-            }
-        ],
-        memberRequests: [],
-        id: "65c7e5f7e487b453d90d5796"
-    }
-]
+  const [{ data: inviteData, loading: inviteLoading}] = useAxios({
+    url: apiUrl(
+      Service.HEXATHONS,
+      `/teams/get-invites?hexathon=${process.env.REACT_APP_HEXATHON_ID}`
+    ),
+    method: "GET",
+  });
+
+  console.log(inviteData)
+
+//   const teamRequests = [
+//     {
+//         members: [],
+//         public: false,
+//         hexathon: "647fee51768e521dc8ef88e0",
+//         name: "Team A",
+//         sentInvites: [
+//             {
+//                 member: "65c7e7afe487b453d90d579c",
+//                 message: "You are invited to join our team!",
+//                 id: "65c80369a5a1e7bac212161d"
+//             },
+//             {
+//                 member: "65c7e716e487b453d90d5799",
+//                 message: "You are invited to join our team!",
+//                 id: "65c80369a5a1e7bac212161e"
+//             }
+//         ],
+//         memberRequests: [],
+//         id: "65c7e559e487b453d90d5794"
+//     },
+//     {
+//         members: [],
+//         public: false,
+//         hexathon: "647fee51768e521dc8ef88e0",
+//         name: "Team C",
+//         sentInvites: [
+//             {
+//                 member: "65c7e753e487b453d90d579a",
+//                 message: "Hi there",
+//                 id: "65c80369a5a1e7bac212161f"
+//             },
+//             {
+//                 member: "65c7e786e487b453d90d579b",
+//                 message: "Hello there",
+//                 id: "65c80369a5a1e7bac2121620"
+//             },
+//             {
+//                 member: "65c7e7afe487b453d90d579c",
+//                 message: "You are invited to join our team!",
+//                 id: "65c80369a5a1e7bac2121621"
+//             }
+//         ],
+//         memberRequests: [],
+//         id: "65c7e5f7e487b453d90d5796"
+//     }
+// ]
 
   useEffect(() => {
     setCommitmentSelectValue(
@@ -265,7 +275,7 @@ const Display: React.FC = () => {
           <Spacer />
           <Box pl="10px">
             <Tooltip label="Teammate Requests">
-            {teamRequests.length > 0 ? (
+            {inviteData.length > 0 ? (
                 <MdOutlineNotificationsActive
                 style={{
                   height: 40,
@@ -352,7 +362,8 @@ const Display: React.FC = () => {
           isOpen={notifDisclosure.isOpen}
           onOpen={notifDisclosure.onOpen}
           onClose={notifDisclosure.onClose}
-          teamRequests={teamRequests}
+          teamRequests={inviteData}
+          user={user}
        />
     </Card>
   );
