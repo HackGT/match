@@ -25,7 +25,7 @@ const UserDrawer = (props : any) => {
     const toast = useToast();
     const hexathon = process.env.REACT_APP_HEXATHON_ID;
 
-    console.log('team requests: ', teamRequests)
+    var invited = false
 
     const handleAcceptTeam = async(teamName : String) => {
       try {
@@ -62,6 +62,8 @@ const UserDrawer = (props : any) => {
         handleAxiosError(e);
       }
     };
+    console.log('user id: ', user.userId)
+    // .filter(invite.member.userId === user.userId)
 
   return (
     <>
@@ -88,12 +90,14 @@ const UserDrawer = (props : any) => {
                     <TeamCard key={teamRequest.name} {...teamRequest} />
                     <HStack>
                       <AiOutlineMessage />
-                      {teamRequest?.sentInvites?.map((invite: any) => (
-                          <Text fontSize="14px" color="black">
-                            {invite}
-                          </Text>
-                          
-                      ))}
+                      {teamRequest?.sentInvites?.map((invite: any) => {
+                          if (!invited && user.uid === invite.member.userId) {
+                            invited = true
+                            return <Text fontSize="14px" color="black">
+                              {invite.message}
+                            </Text>
+                          }   
+                      })}
                     </HStack>
                     <HStack mt={2} justify="space-evenly">
                       <Button
