@@ -274,7 +274,6 @@ const Display: React.FC = () => {
           )}
           <Spacer />
           <Box pl="10px">
-            <Tooltip label="Teammate Requests">
             {inviteData.length > 0 ? (
                 <MdOutlineNotificationsActive
                 style={{
@@ -292,7 +291,6 @@ const Display: React.FC = () => {
                 }}
                 onClick={notifDisclosure.onOpen} />
               )}
-            </Tooltip>
           </Box>
           <Box pl="10px">
             <Tooltip label="How do I use Match?">

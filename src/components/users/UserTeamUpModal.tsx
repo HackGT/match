@@ -73,9 +73,7 @@ const UserTeamUpModal: React.FC<any> = (props: any) => {
           <p>${emailText}</p>
           <br>
           <p>To manage your invitations, visit Hexlabs Match.</p>
-          <br>
-          <a href="https://match.hexlabs.org.
-          " style="text-decoration: none; color: #ffffff">Go to Match</a>
+          <a href="https://match.hexlabs.org" style="text-decoration: none; color: #ffffff">Go to Match</a>
         </body>
         <style>
         a {
