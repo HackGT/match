@@ -47,7 +47,13 @@ export default function UserGuide(props: any) {
             <Heading size = "md">3. Find potential teammates by filtering by skills and commitment level.</Heading>
             <Heading size = "md">4. Click on a participant's card to view more detailed profile information.</Heading>
             <Heading size = "md">5. Click "Ask to Team Up" to ask someone to join your team.</Heading>
-            <Heading size = "md">6. The participant will receive an email notification with your request and will need to go through the process of requesting to join a team.</Heading>
+            <Heading size = "md">6. The participant will receive an email notification with your request as well as see it in their personal notification center. They will then go through the steps in the Accepting a Team section below.</Heading>
+            <br />
+            <Heading size="lg" color="#7B69EC">Accepting a Team</Heading>
+            <br />
+            <Heading size = "md">1. Access the personal notification center by clicking the bell icon right next to the information icon.</Heading>
+            <Heading size = "md">2. Click the accept button on a team request to join the team. You can only accept one team.</Heading>
+            <Heading size = "md">3. Click the reject button on a team request to not join the team.</Heading>
             <br />
             <Heading size="lg" color="#7B69EC">Managing a Team</Heading>
             <br />

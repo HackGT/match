@@ -10,7 +10,9 @@ import { apiUrl, LoadingScreen, Service, useAuth } from "@hex-labs/core";
 import useAxios from "axios-hooks";
 import NotRegisteredErrorScreen from "../../screens/NotRegisteredErrorScreen";
 import { InfoOutlineIcon } from "@chakra-ui/icons";
+import { MdOutlineNotificationsActive, MdOutlineNotificationsNone } from "react-icons/md";
 import UserGuide from "../UserGuide"
+import UserDrawer from "../users/UserDrawer"
 
 export const limit = 50;
 
@@ -37,7 +39,9 @@ const Display: React.FC = () => {
   const commitmentOptions = useMemo(() => CommitmentLevels, []);
   const schoolOptions = useMemo(() => Schools, []);
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const guideDisclosure = useDisclosure();
+  const notifDisclosure = useDisclosure();
+  // const { isOpen, onOpen, onClose } = guideDisclosure;
 
   const [{ data, loading }] = useAxios({
     url: apiUrl(
@@ -51,6 +55,64 @@ const Display: React.FC = () => {
     url: apiUrl(Service.AUTH, `/permissions/${user?.uid}`),
     method: "GET",
   });
+
+  const [{ data: inviteData, loading: inviteLoading}] = useAxios({
+    url: apiUrl(
+      Service.HEXATHONS,
+      `/teams/get-invites?hexathon=${process.env.REACT_APP_HEXATHON_ID}`
+    ),
+    method: "GET",
+  });
+
+  console.log(inviteData)
+
+//   const teamRequests = [
+//     {
+//         members: [],
+//         public: false,
+//         hexathon: "647fee51768e521dc8ef88e0",
+//         name: "Team A",
+//         sentInvites: [
+//             {
+//                 member: "65c7e7afe487b453d90d579c",
+//                 message: "You are invited to join our team!",
+//                 id: "65c80369a5a1e7bac212161d"
+//             },
+//             {
+//                 member: "65c7e716e487b453d90d5799",
+//                 message: "You are invited to join our team!",
+//                 id: "65c80369a5a1e7bac212161e"
+//             }
+//         ],
+//         memberRequests: [],
+//         id: "65c7e559e487b453d90d5794"
+//     },
+//     {
+//         members: [],
+//         public: false,
+//         hexathon: "647fee51768e521dc8ef88e0",
+//         name: "Team C",
+//         sentInvites: [
+//             {
+//                 member: "65c7e753e487b453d90d579a",
+//                 message: "Hi there",
+//                 id: "65c80369a5a1e7bac212161f"
+//             },
+//             {
+//                 member: "65c7e786e487b453d90d579b",
+//                 message: "Hello there",
+//                 id: "65c80369a5a1e7bac2121620"
+//             },
+//             {
+//                 member: "65c7e7afe487b453d90d579c",
+//                 message: "You are invited to join our team!",
+//                 id: "65c80369a5a1e7bac2121621"
+//             }
+//         ],
+//         memberRequests: [],
+//         id: "65c7e5f7e487b453d90d5796"
+//     }
+// ]
 
   useEffect(() => {
     setCommitmentSelectValue(
@@ -212,8 +274,27 @@ const Display: React.FC = () => {
           )}
           <Spacer />
           <Box pl="10px">
+            {inviteData.length > 0 ? (
+                <MdOutlineNotificationsActive
+                style={{
+                  height: 40,
+                  width: 40,
+                  cursor: "pointer",
+                }}
+                onClick={notifDisclosure.onOpen} />
+                ) : (
+                <MdOutlineNotificationsNone 
+                style={{
+                  height: 40,
+                  width: 40,
+                  cursor: "pointer",
+                }}
+                onClick={notifDisclosure.onOpen} />
+              )}
+          </Box>
+          <Box pl="10px">
             <Tooltip label="How do I use Match?">
-                <InfoOutlineIcon w={10} h={10} color="#7B69EC" onClick={onOpen}/>
+                <InfoOutlineIcon w={10} h={10} color="#7B69EC" style={{cursor: "pointer"}} onClick={guideDisclosure.onOpen}/>
             </Tooltip>
           </Box>
         </Flex>
@@ -271,10 +352,17 @@ const Display: React.FC = () => {
         )}
       </CardBody>
       <UserGuide
-          isOpen={isOpen}
-          onOpen={onOpen}
-          onClose={onClose}
+          isOpen={guideDisclosure.isOpen}
+          onOpen={guideDisclosure.onOpen}
+          onClose={guideDisclosure.onClose}
         />
+      <UserDrawer
+          isOpen={notifDisclosure.isOpen}
+          onOpen={notifDisclosure.onOpen}
+          onClose={notifDisclosure.onClose}
+          teamRequests={inviteData}
+          user={user}
+       />
     </Card>
   );
 };
