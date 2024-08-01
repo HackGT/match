@@ -41,7 +41,6 @@ const UserCard: React.FC<UserCardType> = (props: UserCardType) => {
         <Flex alignItems="center" flexWrap="wrap" mb="10" height="60px">
           <Tag
             bg={commitmentLevelColors[commitmentLevel]}
-            color="white"
             borderRadius="md"
             px="2"
             py="1"
