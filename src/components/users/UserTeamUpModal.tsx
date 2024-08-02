@@ -147,7 +147,6 @@ const UserTeamUpModal: React.FC<any> = (props: any) => {
                   <Flex alignItems="center" flexWrap="wrap" mb="2" height="60px">
                     <Tag
                       bg={commitmentLevelColors[commitmentLevel]}
-                      color="white"
                       borderRadius="md"
                       px="2"
                       py="1"
