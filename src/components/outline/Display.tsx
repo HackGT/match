@@ -1,5 +1,16 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Card, Flex, Input, Box, CardBody, Button, useBreakpointValue, useDisclosure, Tooltip, Spacer } from "@chakra-ui/react";
+import {
+  Card,
+  Flex,
+  Input,
+  Box,
+  CardBody,
+  Button,
+  useBreakpointValue,
+  useDisclosure,
+  Tooltip,
+  Spacer,
+} from "@chakra-ui/react";
 import { GroupBase, OptionBase, Select } from "chakra-react-select";
 import { createSearchParams, useSearchParams } from "react-router-dom";
 import { CommitmentLevels, Schools, Skills } from "../../definitions";
@@ -11,8 +22,8 @@ import useAxios from "axios-hooks";
 import NotRegisteredErrorScreen from "../../screens/NotRegisteredErrorScreen";
 import { InfoOutlineIcon } from "@chakra-ui/icons";
 import { MdOutlineNotificationsActive, MdOutlineNotificationsNone } from "react-icons/md";
-import UserGuide from "../UserGuide"
-import UserDrawer from "../users/UserDrawer"
+import UserGuide from "../UserGuide";
+import UserDrawer from "../users/UserDrawer";
 
 export const limit = 50;
 
@@ -56,7 +67,7 @@ const Display: React.FC = () => {
     method: "GET",
   });
 
-  const [{ data: inviteData, loading: inviteLoading}] = useAxios({
+  const [{ data: inviteData, loading: inviteLoading }] = useAxios({
     url: apiUrl(
       Service.HEXATHONS,
       `/teams/get-invites?hexathon=${process.env.REACT_APP_HEXATHON_ID}`
@@ -64,55 +75,53 @@ const Display: React.FC = () => {
     method: "GET",
   });
 
-  console.log(inviteData)
-
-//   const teamRequests = [
-//     {
-//         members: [],
-//         public: false,
-//         hexathon: "647fee51768e521dc8ef88e0",
-//         name: "Team A",
-//         sentInvites: [
-//             {
-//                 member: "65c7e7afe487b453d90d579c",
-//                 message: "You are invited to join our team!",
-//                 id: "65c80369a5a1e7bac212161d"
-//             },
-//             {
-//                 member: "65c7e716e487b453d90d5799",
-//                 message: "You are invited to join our team!",
-//                 id: "65c80369a5a1e7bac212161e"
-//             }
-//         ],
-//         memberRequests: [],
-//         id: "65c7e559e487b453d90d5794"
-//     },
-//     {
-//         members: [],
-//         public: false,
-//         hexathon: "647fee51768e521dc8ef88e0",
-//         name: "Team C",
-//         sentInvites: [
-//             {
-//                 member: "65c7e753e487b453d90d579a",
-//                 message: "Hi there",
-//                 id: "65c80369a5a1e7bac212161f"
-//             },
-//             {
-//                 member: "65c7e786e487b453d90d579b",
-//                 message: "Hello there",
-//                 id: "65c80369a5a1e7bac2121620"
-//             },
-//             {
-//                 member: "65c7e7afe487b453d90d579c",
-//                 message: "You are invited to join our team!",
-//                 id: "65c80369a5a1e7bac2121621"
-//             }
-//         ],
-//         memberRequests: [],
-//         id: "65c7e5f7e487b453d90d5796"
-//     }
-// ]
+  //   const teamRequests = [
+  //     {
+  //         members: [],
+  //         public: false,
+  //         hexathon: "647fee51768e521dc8ef88e0",
+  //         name: "Team A",
+  //         sentInvites: [
+  //             {
+  //                 member: "65c7e7afe487b453d90d579c",
+  //                 message: "You are invited to join our team!",
+  //                 id: "65c80369a5a1e7bac212161d"
+  //             },
+  //             {
+  //                 member: "65c7e716e487b453d90d5799",
+  //                 message: "You are invited to join our team!",
+  //                 id: "65c80369a5a1e7bac212161e"
+  //             }
+  //         ],
+  //         memberRequests: [],
+  //         id: "65c7e559e487b453d90d5794"
+  //     },
+  //     {
+  //         members: [],
+  //         public: false,
+  //         hexathon: "647fee51768e521dc8ef88e0",
+  //         name: "Team C",
+  //         sentInvites: [
+  //             {
+  //                 member: "65c7e753e487b453d90d579a",
+  //                 message: "Hi there",
+  //                 id: "65c80369a5a1e7bac212161f"
+  //             },
+  //             {
+  //                 member: "65c7e786e487b453d90d579b",
+  //                 message: "Hello there",
+  //                 id: "65c80369a5a1e7bac2121620"
+  //             },
+  //             {
+  //                 member: "65c7e7afe487b453d90d579c",
+  //                 message: "You are invited to join our team!",
+  //                 id: "65c80369a5a1e7bac2121621"
+  //             }
+  //         ],
+  //         memberRequests: [],
+  //         id: "65c7e5f7e487b453d90d5796"
+  //     }
+  // ]
 
   useEffect(() => {
     setCommitmentSelectValue(
@@ -128,12 +137,12 @@ const Display: React.FC = () => {
     );
   }, [searchParams, commitmentOptions, skillOptions, schoolOptions]);
 
-  if (loading) return <LoadingScreen />;
+  if (loading || userLoading || inviteLoading) return <LoadingScreen />;
   // Display not registered screen if an unregistered non-member tries to access the portal
   if (!data && !userData.roles.member) return <NotRegisteredErrorScreen />;
 
   const onSearchTextChange = (event: any) => {
-    setSearchText(event.target.value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&'));
+    setSearchText(event.target.value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"));
     displayMode === DisplayType.USERS ? setUsersOffset(0) : setTeamsOffset(0);
   };
 
@@ -274,27 +283,35 @@ const Display: React.FC = () => {
           )}
           <Spacer />
           <Box pl="10px">
-            {inviteData.length > 0 ? (
-                <MdOutlineNotificationsActive
+            {inviteData?.length > 0 ? (
+              <MdOutlineNotificationsActive
                 style={{
                   height: 40,
                   width: 40,
                   cursor: "pointer",
                 }}
-                onClick={notifDisclosure.onOpen} />
-                ) : (
-                <MdOutlineNotificationsNone 
+                onClick={notifDisclosure.onOpen}
+              />
+            ) : (
+              <MdOutlineNotificationsNone
                 style={{
                   height: 40,
                   width: 40,
                   cursor: "pointer",
                 }}
-                onClick={notifDisclosure.onOpen} />
-              )}
+                onClick={notifDisclosure.onOpen}
+              />
+            )}
           </Box>
           <Box pl="10px">
             <Tooltip label="How do I use Match?">
-                <InfoOutlineIcon w={10} h={10} color="#7B69EC" style={{cursor: "pointer"}} onClick={guideDisclosure.onOpen}/>
+              <InfoOutlineIcon
+                w={10}
+                h={10}
+                color="#7B69EC"
+                style={{ cursor: "pointer" }}
+                onClick={guideDisclosure.onOpen}
+              />
             </Tooltip>
           </Box>
         </Flex>
@@ -352,17 +369,17 @@ const Display: React.FC = () => {
         )}
       </CardBody>
       <UserGuide
-          isOpen={guideDisclosure.isOpen}
-          onOpen={guideDisclosure.onOpen}
-          onClose={guideDisclosure.onClose}
-        />
+        isOpen={guideDisclosure.isOpen}
+        onOpen={guideDisclosure.onOpen}
+        onClose={guideDisclosure.onClose}
+      />
       <UserDrawer
-          isOpen={notifDisclosure.isOpen}
-          onOpen={notifDisclosure.onOpen}
-          onClose={notifDisclosure.onClose}
-          teamRequests={inviteData}
-          user={user}
-       />
+        isOpen={notifDisclosure.isOpen}
+        onOpen={notifDisclosure.onOpen}
+        onClose={notifDisclosure.onClose}
+        teamRequests={inviteData}
+        user={user}
+      />
     </Card>
   );
 };
