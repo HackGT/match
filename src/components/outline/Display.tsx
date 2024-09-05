@@ -94,6 +94,8 @@ const Display: React.FC = () => {
   if (loading || userLoading) return <LoadingScreen />;
   // Display not registered screen if an unregistered non-member tries to access the portal
   if (!data && !userData.roles.member) return <NotRegisteredErrorScreen />;
+
+  // Only gets invites for a user if they are registered
   if (data) getInvites();
   if (inviteLoading) return <LoadingScreen />;
 
