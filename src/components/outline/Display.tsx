@@ -91,13 +91,15 @@ const Display: React.FC = () => {
     );
   }, [searchParams, commitmentOptions, skillOptions, schoolOptions]);
 
-  if (loading || userLoading) return <LoadingScreen />;
+  useEffect(() => {
+    if (data) {
+      getInvites();
+    }
+  }, [data, getInvites]); 
+
+  if (loading || userLoading || inviteLoading) return <LoadingScreen />;
   // Display not registered screen if an unregistered non-member tries to access the portal
   if (!data && !userData.roles.member) return <NotRegisteredErrorScreen />;
-
-  // Only gets invites for a user if they are registered
-  if (data) getInvites();
-  if (inviteLoading) return <LoadingScreen />;
 
   const onSearchTextChange = (event: any) => {
     setSearchText(event.target.value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"));
