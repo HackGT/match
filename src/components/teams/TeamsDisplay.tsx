@@ -127,12 +127,21 @@ const TeamsDisplay: React.FC<Props> = ({ search, teamsOffset, setTeamsOffset }) 
           </Center>
         )}
       </Center>
-      <Box paddingTop={"1.5%"} paddingBottom={"2.5%"} paddingLeft={"5%"} paddingRight={"5%"}>
-        <Select placeholder="Filter by team size" onChange={e => setMemberCount(e.target.value)}>
+      <Text
+        paddingTop={"1.5%"}
+        paddingLeft={"5%"}
+        paddingRight={"5%"}
+        fontSize={"200%"}
+        fontWeight={"semibold"}
+      >
+        Filter by Team Size
+      </Text>
+      <Box paddingTop={"0.5%"} paddingBottom={"2.5%"} paddingLeft={"5%"} paddingRight={"5%"}>
+        <Select placeholder="All Teams" onChange={e => setMemberCount(e.target.value)}>
           <option value="1">1 Member</option>
           <option value="2">2 Members</option>
           <option value="3">3 Members</option>
-          <option value="4">4+ Members</option>
+          <option value="4">4 Members</option>
         </Select>
         <br></br>
         <Flex flexWrap="wrap" justifyContent="space-evenly">
