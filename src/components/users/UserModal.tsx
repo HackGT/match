@@ -62,7 +62,6 @@ export default function UserModal(props: any) {
             <Flex alignItems="center" flexWrap="wrap" mb="2">
               <Tag
                 bg={commitmentLevelColors[profile.commitmentLevel]}
-                color="white"
                 borderRadius="md"
                 px="2"
                 py="1"
