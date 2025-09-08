@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Flex, Text, Box, useBreakpointValue, Button, ButtonGroup, HStack } from "@chakra-ui/react";
+import { Flex, Text, Box, useBreakpointValue, Button, ButtonGroup, HStack, Center, Spinner } from "@chakra-ui/react";
 import { UserCardType } from "../../types/UserCard";
 import UserCard from "./UserCard";
 import { ErrorScreen, Service, apiUrl, useAuth } from "@hex-labs/core";
@@ -28,7 +28,7 @@ const UsersDisplay: React.FC<Props> = ({
   const isMobile = useBreakpointValue({ base: true, md: false });
   const [resultsText, setResultsText] = useState("Loading...");
 
-  const [{ data, error }, refetch] = useAxios({
+  const [{ data, error, loading }, refetch] = useAxios({
     method: "GET",
     url: apiUrl(Service.HEXATHONS, `/hexathon-users/${process.env.REACT_APP_HEXATHON_ID}/users`),
     params: {
@@ -63,8 +63,6 @@ const UsersDisplay: React.FC<Props> = ({
     }
   }, [data]);
 
-  if (error) return <ErrorScreen error={error} />;
-
   const onPreviousClicked = () => {
     setUsersOffset(usersOffset - limit);
   };
@@ -86,6 +84,14 @@ const UsersDisplay: React.FC<Props> = ({
     }
     return data.total > data.offset + data.hexathonUsers.length;
   }, [data]);
+
+  if (error) return <ErrorScreen error={error} />;
+  if (loading)
+    return (
+      <Center py={10}>
+        <Spinner size="xl" thickness="4px" color="#7B69EC" />
+      </Center>
+    );
 
   return (
     <>

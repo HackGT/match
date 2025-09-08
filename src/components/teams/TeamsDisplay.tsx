@@ -8,6 +8,7 @@ import {
   ButtonGroup,
   HStack,
   Center,
+  Spinner,
 } from "@chakra-ui/react";
 import { ErrorScreen, Service, apiUrl, useAuth } from "@hex-labs/core";
 import { TeamCardType } from "../../types/TeamCard";
@@ -28,7 +29,7 @@ const TeamsDisplay: React.FC<Props> = ({ search, teamsOffset, setTeamsOffset }) 
   const isMobile = useBreakpointValue({ base: true, md: false });
   const [resultsText, setResultsText] = useState("Loading...");
 
-  const [{ data }] = useAxios({
+  const [{ data, loading }] = useAxios({
     method: "GET",
     url: apiUrl(Service.HEXATHONS, `/teams`),
     params: {
@@ -38,7 +39,7 @@ const TeamsDisplay: React.FC<Props> = ({ search, teamsOffset, setTeamsOffset }) 
     },
   });
 
-  const [{ data: userTeamData }] = useAxios({
+  const [{ data: userTeamData, loading: userTeamLoading }] = useAxios({
     method: "GET",
     url: apiUrl(Service.HEXATHONS, `/teams`),
     params: {
@@ -80,6 +81,13 @@ const TeamsDisplay: React.FC<Props> = ({ search, teamsOffset, setTeamsOffset }) 
     }
     return data.total > data.offset + data.teams.length;
   }, [data]);
+
+  if (loading || userTeamLoading)
+    return (
+      <Center py={10}>
+        <Spinner size="xl" thickness="4px" color="#7B69EC" />
+      </Center>
+    );
 
   return (
     <>
