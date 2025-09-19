@@ -34,7 +34,6 @@ const TeamModal: React.FC<any> = (props: any) => {
           <ModalHeader>{name}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Divider borderColor="gray.300" borderWidth="2px" mb="2" />
             <Text>{description}</Text>
             <Divider borderColor="gray.300" borderWidth="2px" mb="2" />
             <Box>

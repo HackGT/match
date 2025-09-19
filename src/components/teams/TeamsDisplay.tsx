@@ -93,7 +93,7 @@ const TeamsDisplay: React.FC<Props> = ({ search, teamsOffset, setTeamsOffset }) 
     <>
       <Center>
         {userTeamData && (
-          <Center flexDir="column">
+          <Center flexDir="column" mt={4}>
             {userTeamData.total > 0 ? (
               <OnTeamSection team={userTeamData.teams[0]} members={userTeamData.teams[0].members} />
             ) : (

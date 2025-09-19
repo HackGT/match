@@ -1,5 +1,15 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Flex, Text, Box, useBreakpointValue, Button, ButtonGroup, HStack, Center, Spinner } from "@chakra-ui/react";
+import {
+  Flex,
+  Text,
+  Box,
+  useBreakpointValue,
+  Button,
+  ButtonGroup,
+  HStack,
+  Center,
+  Spinner,
+} from "@chakra-ui/react";
 import { UserCardType } from "../../types/UserCard";
 import UserCard from "./UserCard";
 import { ErrorScreen, Service, apiUrl, useAuth } from "@hex-labs/core";
@@ -96,7 +106,7 @@ const UsersDisplay: React.FC<Props> = ({
   return (
     <>
       <Box paddingTop={"2.5%"} paddingBottom={"2.5%"} paddingLeft={"5%"} paddingRight={"5%"}>
-        <Flex flexWrap="wrap" justifyContent="space-evenly">
+        <Flex flexWrap="wrap" justifyContent="space-evenly" gap={4}>
           {data?.hexathonUsers
             .filter((hUser: any) => hUser.userId !== user?.uid)
             .map((user: UserCardType) => <UserCard key={user.name} {...user} />)}

@@ -8,68 +8,71 @@ const TeamCard: React.FC<TeamCardType> = props => {
   const { name, members, description } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const isFull = members.length == 4;
+
   return (
     <>
-      {
-        <Box
-          borderWidth="1px"
-          borderStyle="solid"
-          rounded="lg"
-          boxShadow="lg"
-          height="315px"
-          width="300px"
-          fontWeight="bold"
-          alignItems="center"
-          backgroundColor="white"
-          cursor="pointer"
-          padding="4"
-          marginBottom="5"
-          onClick={onOpen}
-        >
-          <Flex flexDirection="column">
-            <Text fontSize="2xl" fontWeight="bold" mb="1">
-              {name}
-            </Text>
-            <Divider borderColor="gray.300" borderWidth="2px" mb="2" />
+      <Box
+        borderWidth="1px"
+        borderStyle="solid"
+        rounded="lg"
+        boxShadow="lg"
+        // height="315px"
+        width="300px"
+        alignItems="center"
+        backgroundColor="white"
+        cursor={isFull ? "not-allowed" : "pointer"}
+        p="4"
+        mb="5"
+        bg={isFull ? "gray.100" : "white"}
+        onClick={() => {
+          if (!isFull) {
+            onOpen();
+          }
+        }}
+      >
+        <Flex flexDirection="column">
+          <Text fontSize="2xl" fontWeight="bold" mb="1">
+            {name}
+          </Text>
+          <Text fontSize="sm" color="gray.500" mb="2" maxHeight="80px" overflowY="auto">
+            {description}
+          </Text>
+          <Divider borderColor="gray.300" mb="2" />
 
-            <Flex alignItems="flex-start" flexWrap="wrap" mb="2">
-              {members.map((member: any) => (
-                <Tag
-                  key={member?.userId}
-                  bg="blue.400"
-                  color="white"
-                  borderRadius="md"
-                  px="2"
-                  py="1"
-                  mr="2"
-                  mb="2"
-                >
-                  <Text fontSize="sm">{member ? member.name : ""}</Text>
-                </Tag>
-              ))}
-            </Flex>
-
-            <Box fontSize="sm" color="gray.500" mb="2" maxHeight="80px" overflowY="auto">
-              {description}
-            </Box>
-
-            <Divider borderColor="gray.300" borderWidth="2px" />
-
-            <Flex justifyContent="flex-start" alignItems="center" mt="2">
-              <Tag bg="purple.400" color="white" borderRadius="md" px="2" py="1">
-                Members: {members.length}
+          <Flex alignItems="flex-start" flexWrap="wrap" mb="2">
+            {members.map((member: any) => (
+              <Tag
+                key={member?.userId}
+                bg="blue.400"
+                color="white"
+                borderRadius="md"
+                px="2"
+                py="1"
+                mr="2"
+                mb="2"
+              >
+                <Text fontSize="sm">{member ? member.name : ""}</Text>
               </Tag>
-            </Flex>
-            <TeamModal
-              isOpen={isOpen}
-              onClose={onClose}
-              name={name}
-              members={members}
-              description={description}
-            />
+            ))}
           </Flex>
-        </Box>
-      }
+
+          <Divider borderColor="gray.300" />
+
+          <Flex justifyContent="flex-start" alignItems="center" mt="2">
+            <Tag bg="purple.400" color="white" borderRadius="md" px="2" py="1">
+              Members: {members.length}
+            </Tag>
+          </Flex>
+          <TeamModal
+            isOpen={isOpen}
+            onClose={onClose}
+            name={name}
+            members={members}
+            description={description}
+          />
+        </Flex>
+      </Box>
     </>
   );
 };

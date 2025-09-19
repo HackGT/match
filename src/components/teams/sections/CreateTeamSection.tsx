@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 
 const CreateTeamSection: React.FC = () => {
   const [teamName, setTeamName] = useState("");
+  const [loading, setLoading] = useState(false);
   const isMobile = useBreakpointValue({ base: true, md: false });
   const hexathon = process.env.REACT_APP_HEXATHON_ID;
   const { user } = useAuth();
@@ -16,6 +17,7 @@ const CreateTeamSection: React.FC = () => {
 
   const handleCreateTeam = async () => {
     try {
+      setLoading(true);
       await axios.post(apiUrl(Service.HEXATHONS, "/teams/"), {
         name: teamName,
         hexathon,
@@ -26,38 +28,40 @@ const CreateTeamSection: React.FC = () => {
       window.location.reload();
     } catch (err: any) {
       handleAxiosError(err);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <Box
-      width={{ base: "80vw", md: "60vw" }}
-      marginTop="40px"
+      maxW="md"
+      p={4}
       borderRadius="2px"
       boxShadow={{
         base: "rgba(0, 0, 0, 0.15) 0px 0px 6px 1px",
       }}
-      paddingBottom="30px"
     >
       <VStack>
         <Heading textAlign="center" padding="20px 15px 0px 15px" size="md" lineHeight="inherit">
           You are not currently on a team.
         </Heading>
         <Text textAlign="center" padding="20px 20px 10px 20px">
-          Create a team or have your teammate add you to their team by email.
+          Create a team or browse teams created by fellow hackers and ask to team up!
         </Text>
       </VStack>
       <VStack spacing="20px" paddingBottom="30px">
         <Heading paddingTop="20px" size="md" lineHeight="inherit">
           Create a Team
         </Heading>
-        <Input
-          w={isMobile ? "70vw" : "md"}
-          value={teamName}
-          onChange={changeTeamName}
-          placeholder="BeardellBears"
-        />
-        <Button onClick={handleCreateTeam}>Create team</Button>
+        <Input value={teamName} onChange={changeTeamName} placeholder="BeardellBears" />
+        <Button
+          onClick={handleCreateTeam}
+          isLoading={loading}
+          isDisabled={teamName.trim().length === 0}
+        >
+          Create team
+        </Button>
       </VStack>
     </Box>
   );
