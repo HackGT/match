@@ -25,7 +25,7 @@ export const App = () => {
   }
 
   if (!loggedIn) {
-    window.location.href = `https://login.hexlabs.org?redirect=${window.location.href}`;
+    window.location.href = `https://login.hexlabs.org/login?redirect=${window.location.href}`;
     return <LoadingScreen />;
   }
 
