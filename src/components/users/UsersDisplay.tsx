@@ -9,12 +9,14 @@ import {
   HStack,
   Center,
   Spinner,
+  Tag,
 } from "@chakra-ui/react";
-import { UserCardType } from "../../types/UserCard";
+import { UserCardType, UserProfileType } from "../../types/UserCard";
 import UserCard from "./UserCard";
 import { ErrorScreen, Service, apiUrl, useAuth } from "@hex-labs/core";
 import useAxios from "axios-hooks";
 import { limit } from "../outline/Display";
+import { getMatchScore } from "../../util/matching";
 
 interface Props {
   skills: string[];
@@ -23,6 +25,7 @@ interface Props {
   search: string;
   usersOffset: number;
   setUsersOffset: any;
+  currentProfile?: UserProfileType;
 }
 
 const UsersDisplay: React.FC<Props> = ({
@@ -32,11 +35,13 @@ const UsersDisplay: React.FC<Props> = ({
   search,
   usersOffset,
   setUsersOffset,
+  currentProfile,
 }) => {
   const { user } = useAuth();
 
   const isMobile = useBreakpointValue({ base: true, md: false });
   const [resultsText, setResultsText] = useState("Loading...");
+  const [showMatches, setShowMatches] = useState(false);
 
   const [{ data, error, loading }, refetch] = useAxios({
     method: "GET",
@@ -95,6 +100,21 @@ const UsersDisplay: React.FC<Props> = ({
     return data.total > data.offset + data.hexathonUsers.length;
   }, [data]);
 
+  const displayedUsers = useMemo(() => {
+    const users: (UserCardType & { matchScore: number })[] = (data?.hexathonUsers || [])
+      .filter((hUser: UserCardType) => hUser.userId !== user?.uid)
+      .map((hUser: UserCardType) => ({
+        ...hUser,
+        matchScore: getMatchScore(hUser.profile, currentProfile),
+      }));
+
+    return showMatches
+      ? users
+          .filter(matchedUser => matchedUser.matchScore > 0)
+          .sort((firstUser, secondUser) => secondUser.matchScore - firstUser.matchScore)
+      : users;
+  }, [currentProfile, data, showMatches, user?.uid]);
+
   if (error) return <ErrorScreen error={error} />;
   if (loading)
     return (
@@ -106,10 +126,17 @@ const UsersDisplay: React.FC<Props> = ({
   return (
     <>
       <Box paddingTop={"2.5%"} paddingBottom={"2.5%"} paddingLeft={"5%"} paddingRight={"5%"}>
+        <Flex alignItems="center" justifyContent="space-between" mb={4}>
+          <Text fontWeight="semibold">{showMatches ? "Your best matches" : "All hackers"}</Text>
+          <Button size="sm" variant={showMatches ? "solid" : "outline"} onClick={() => setShowMatches(!showMatches)}>
+            {showMatches ? "Show everyone" : "Best matches"}
+          </Button>
+        </Flex>
         <Flex flexWrap="wrap" justifyContent="space-evenly" gap={4}>
-          {data?.hexathonUsers
-            .filter((hUser: any) => hUser.userId !== user?.uid)
-            .map((user: UserCardType) => <UserCard key={user.name} {...user} />)}
+          {displayedUsers.map((user: UserCardType) => <UserCard key={user.userId || user.name} {...user} />)}
+          {showMatches && displayedUsers.length === 0 && (
+            <Tag colorScheme="purple" p={3}>Complete your profile and add skills to discover matches.</Tag>
+          )}
         </Flex>
       </Box>
       <Box px={{ base: "4", md: "6" }} pb="5">

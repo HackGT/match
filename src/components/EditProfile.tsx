@@ -25,7 +25,7 @@ import {
   handleAxiosError,
 } from "@hex-labs/core";
 import axios from "axios";
-import { CommitmentLevels, Skills } from "../definitions";
+import { CommitmentLevels, ExperienceLevels, Skills, TeamStyles } from "../definitions";
 import { skillType } from "../definitions/Skills";
 import { commitmentLevelType } from "../definitions/CommitmentLevels";
 import { GroupBase, Select } from "chakra-react-select";
@@ -43,6 +43,8 @@ const EditProfile: React.FC = () => {
   const userId = user?.uid;
   const [skills, setSkills] = useState<string[]>([]);
   const [commitmentLevel, setCommitmentLevel] = useState<string>("");
+  const [experienceLevel, setExperienceLevel] = useState<string>("");
+  const [teamStyle, setTeamStyle] = useState<string>("");
 
   const [{ data, loading, error }, refetch] = useAxios({
     url: apiUrl(Service.HEXATHONS, `/hexathon-users/${hexathonId}/users/${userId}`),
@@ -64,10 +66,14 @@ const EditProfile: React.FC = () => {
         ) || []
       );
       setCommitmentLevel(data.profile.commitmentLevel);
+      setExperienceLevel(data.profile.experienceLevel || "");
+      setTeamStyle(data.profile.teamStyle || "");
       reset({
         ...data.profile,
-        skills,
-        commitmentLevel,
+        skills: data.profile.skills,
+        commitmentLevel: data.profile.commitmentLevel,
+        experienceLevel: data.profile.experienceLevel || "",
+        teamStyle: data.profile.teamStyle || "",
       });
     }
   }, [data, reset]);
@@ -84,6 +90,8 @@ const EditProfile: React.FC = () => {
         ...values,
         skills: skills,
         commitmentLevel: commitmentLevel,
+        experienceLevel,
+        teamStyle,
       };
       await axios.patch(
         apiUrl(Service.HEXATHONS, `/hexathon-users/${hexathonId}/users/${userId}/profile`),
@@ -124,6 +132,8 @@ const EditProfile: React.FC = () => {
   };
 
   const handleChangeCommitmentLevel = (e: any) => setCommitmentLevel(e.value);
+  const handleChangeExperienceLevel = (e: any) => setExperienceLevel(e?.value || "");
+  const handleChangeTeamStyle = (e: any) => setTeamStyle(e?.value || "");
 
   return (
     <Container mt="8" width="25%" minW="300px">
@@ -161,6 +171,26 @@ const EditProfile: React.FC = () => {
                   onChange={handleChangeCommitmentLevel}
                   name="commitmentLevel"
                   value={CommitmentLevels.find(commLvl => commitmentLevel === commLvl.value)}
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel>Experience level</FormLabel>
+                <Select
+                  options={ExperienceLevels}
+                  placeholder="Choose your level"
+                  onChange={handleChangeExperienceLevel}
+                  name="experienceLevel"
+                  value={ExperienceLevels.find(level => level.value === experienceLevel)}
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel>What kind of team sounds best?</FormLabel>
+                <Select
+                  options={TeamStyles}
+                  placeholder="Choose a team vibe"
+                  onChange={handleChangeTeamStyle}
+                  name="teamStyle"
+                  value={TeamStyles.find(style => style.value === teamStyle)}
                 />
               </FormControl>
               <FormControl>

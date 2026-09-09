@@ -5,6 +5,22 @@ This project was bootstrapped with
 
 In the project directory, you can run:
 
+### Environment variables
+
+Create a local env file before starting the app:
+
+```powershell
+Copy-Item .env.example .env.local
+```
+
+Open `.env.local` and replace the placeholder values:
+
+- `REACT_APP_FIREBASE_API_KEY`: the Web API key from Firebase Console > Project settings > Your apps.
+- `REACT_APP_HEXATHON_ID`: the hexathon ID used by the Hex Labs API.
+- `REACT_APP_EVENT_NAME`: the event name shown in the profile form.
+
+Then restart the dev server with `yarn start`. Create React App only reads environment variables when the server starts.
+
 ### `yarn start`
 
 Runs the app in the development mode.<br /> Open
