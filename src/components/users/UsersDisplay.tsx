@@ -66,7 +66,7 @@ const UsersDisplay: React.FC<Props> = ({
 
   useEffect(() => {
     if (!showMatches) return;
-
+    setUsersOffset(0);
     let cancelled = false;
     const fetchAllUsers = async () => {
       setMatchesLoading(true);
