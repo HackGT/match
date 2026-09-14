@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import axios from "axios";
 import {
   Flex,
   Text,
@@ -42,6 +43,9 @@ const UsersDisplay: React.FC<Props> = ({
   const isMobile = useBreakpointValue({ base: true, md: false });
   const [resultsText, setResultsText] = useState("Loading...");
   const [showMatches, setShowMatches] = useState(false);
+  const [allUsers, setAllUsers] = useState<UserCardType[]>([]);
+  const [matchesLoading, setMatchesLoading] = useState(false);
+  const [matchesError, setMatchesError] = useState<Error>();
 
   const [{ data, error, loading }, refetch] = useAxios({
     method: "GET",
@@ -59,6 +63,60 @@ const UsersDisplay: React.FC<Props> = ({
   useEffect(() => {
     refetch();
   }, []);
+
+  useEffect(() => {
+    if (!showMatches) return;
+
+    let cancelled = false;
+    const fetchAllUsers = async () => {
+      setMatchesLoading(true);
+      setMatchesError(undefined);
+
+      try {
+        const users: UserCardType[] = [];
+        let offset = 0;
+        let total: number | undefined;
+
+        do {
+          const response = await axios.get(
+            apiUrl(Service.HEXATHONS, `/hexathon-users/${process.env.REACT_APP_HEXATHON_ID}/users`),
+            {
+              params: {
+                skills,
+                commitmentLevel,
+                school,
+                search,
+                offset,
+              },
+            }
+          );
+          const page = response.data;
+          const pageUsers: UserCardType[] = page.hexathonUsers || [];
+
+          users.push(...pageUsers);
+          total = page.total;
+          offset += pageUsers.length;
+
+          if (pageUsers.length === 0) break;
+        } while (total === undefined || offset < total);
+
+        if (!cancelled) setAllUsers(users);
+      } catch (requestError) {
+        if (!cancelled) {
+          setMatchesError(
+            requestError instanceof Error ? requestError : new Error("Unable to load matches")
+          );
+        }
+      } finally {
+        if (!cancelled) setMatchesLoading(false);
+      }
+    };
+
+    fetchAllUsers();
+    return () => {
+      cancelled = true;
+    };
+  }, [commitmentLevel?.join(","), school?.join(","), search, showMatches, skills?.join(",")]);
 
   useEffect(() => {
     if (!data) {
@@ -101,22 +159,33 @@ const UsersDisplay: React.FC<Props> = ({
   }, [data]);
 
   const displayedUsers = useMemo(() => {
-    const users: (UserCardType & { matchScore: number })[] = (data?.hexathonUsers || [])
+    const sourceUsers = showMatches ? allUsers : data?.hexathonUsers || [];
+    const users: (UserCardType & { matchScore: number })[] = sourceUsers
       .filter((hUser: UserCardType) => hUser.userId !== user?.uid)
       .map((hUser: UserCardType) => ({
         ...hUser,
         matchScore: getMatchScore(hUser.profile, currentProfile),
       }));
 
-    return showMatches
-      ? users
-          .filter(matchedUser => matchedUser.matchScore > 0)
-          .sort((firstUser, secondUser) => secondUser.matchScore - firstUser.matchScore)
-      : users;
-  }, [currentProfile, data, showMatches, user?.uid]);
+    if (!showMatches) return users;
 
-  if (error) return <ErrorScreen error={error} />;
-  if (loading)
+    return users
+      .filter(matchedUser => matchedUser.matchScore > 0)
+      .sort((firstUser, secondUser) => secondUser.matchScore - firstUser.matchScore)
+      .slice(usersOffset, usersOffset + limit);
+  }, [allUsers, currentProfile, data, showMatches, user?.uid, usersOffset]);
+
+  const totalMatches = useMemo(
+    () =>
+      allUsers.filter(
+        hUser =>
+          hUser.userId !== user?.uid && getMatchScore(hUser.profile, currentProfile) > 0
+      ).length,
+    [allUsers, currentProfile, user?.uid]
+  );
+
+  if (error || matchesError) return <ErrorScreen error={error || matchesError} />;
+  if (loading || matchesLoading)
     return (
       <Center py={10}>
         <Spinner size="xl" thickness="4px" color="#7B69EC" />
@@ -143,7 +212,11 @@ const UsersDisplay: React.FC<Props> = ({
         <HStack spacing="3" justify="space-between">
           {!isMobile && (
             <Text color="muted" fontSize="sm">
-              {resultsText}
+              {showMatches
+                ? `Showing ${totalMatches === 0 ? 0 : usersOffset + 1} to ${
+                    usersOffset + displayedUsers.length
+                  } of ${totalMatches} best matches`
+                : resultsText}
             </Text>
           )}
           <ButtonGroup
@@ -155,7 +228,15 @@ const UsersDisplay: React.FC<Props> = ({
             <Button isDisabled={!hasPrevious} onClick={onPreviousClicked} variant="outline">
               Previous
             </Button>
-            <Button isDisabled={!hasNext} onClick={onNextClicked} variant="outline">
+            <Button
+              isDisabled={
+                showMatches
+                  ? usersOffset + displayedUsers.length >= totalMatches
+                  : !hasNext
+              }
+              onClick={onNextClicked}
+              variant="outline"
+            >
               Next
             </Button>
           </ButtonGroup>
