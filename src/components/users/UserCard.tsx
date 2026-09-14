@@ -4,10 +4,11 @@ import { UserCardType } from "../../types/UserCard";
 import UserModal from "./UserModal";
 import Avatars from "../../definitions/Avatars";
 import { commitmentLevelColors } from "../../definitions/CommitmentLevels";
+import { ExperienceLevels, TeamStyles } from "../../definitions";
 
 const UserCard: React.FC<UserCardType> = (props: UserCardType) => {
   const { name, profile, email } = props;
-  const { description, school, year, skills, commitmentLevel } = profile;
+  const { description, school, year, skills, commitmentLevel, experienceLevel, teamStyle } = profile;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -48,7 +49,10 @@ const UserCard: React.FC<UserCardType> = (props: UserCardType) => {
               </Text>
             </Tag>
           )}
+          {experienceLevel && <Tag>{ExperienceLevels.find(level => level.value === experienceLevel)?.label}</Tag>}
         </Flex>
+        {teamStyle && <Text fontSize="sm" color="gray.600" mb="2">{TeamStyles.find(style => style.value === teamStyle)?.label}</Text>}
+        {props.matchScore ? <Tag colorScheme="purple" width="fit-content" mb="2">{props.matchScore} match points</Tag> : null}
         <Text fontSize="sm" color="gray.500" overflowY="auto" mb="2">
           {description}
         </Text>

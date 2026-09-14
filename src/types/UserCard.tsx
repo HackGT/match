@@ -2,6 +2,19 @@ export interface UserListType {
   users: UserCardType[];
 }
 
+export type UserProfileType = {
+  matched?: boolean;
+  school: string;
+  year: string;
+  major: string;
+  description: string;
+  commitmentLevel: string;
+  skills: string[];
+  experienceLevel?: string;
+  teamStyle?: string;
+  isJudging?: boolean;
+};
+
 export type UserCardType = {
   userId?: string;
   email?: string;
@@ -12,14 +25,6 @@ export type UserCardType = {
   validAddress?: string;
   trackingLabel?: string;
   purchasedSwagItems?: Object;
-  profile: {
-    matched?: boolean;
-    school: string;
-    year: string;
-    major: string;
-    description: string;
-    commitmentLevel: string;
-    skills: string[];
-    isJudging?: boolean;
-  };
+  profile: UserProfileType;
+  matchScore?: number;
 };

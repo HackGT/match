@@ -359,6 +359,7 @@ const Display: React.FC = () => {
             search={searchText as string}
             usersOffset={usersOffset}
             setUsersOffset={setUsersOffset}
+            currentProfile={data?.profile}
           />
         ) : (
           <TeamsDisplay
