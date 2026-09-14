@@ -82,6 +82,7 @@ const UsersDisplay: React.FC<Props> = ({
             apiUrl(Service.HEXATHONS, `/hexathon-users/${process.env.REACT_APP_HEXATHON_ID}/users`),
             {
               params: {
+                matched: true,
                 skills,
                 commitmentLevel,
                 school,
