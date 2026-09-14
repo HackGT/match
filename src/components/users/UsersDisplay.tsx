@@ -185,7 +185,7 @@ const UsersDisplay: React.FC<Props> = ({
   );
 
   if (error || matchesError) return <ErrorScreen error={error || matchesError} />;
-  if (loading || matchesLoading)
+  if ((!showMatches && loading) || matchesLoading)
     return (
       <Center py={10}>
         <Spinner size="xl" thickness="4px" color="#7B69EC" />
